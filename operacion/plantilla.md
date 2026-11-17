@@ -5,17 +5,17 @@
 
 **Último arranque:** 2026-11-17
 
-| Agente | Puesto | Sesión (título real) | Disponible | Confirmado | Notas |
+| Agente | Puesto | Sesión | Disponible | Confirmado | Notas |
 |---|---|---|---|---|---|
-| Federico | Director (CEO) | Federico-CEO | sí | 2026-11-17 | |
-| Menchu | Relación con clientes | Bienvenida Menchu | sí | 2026-11-17 | |
-| Reme | Requisitos | Bienvenida Reme | sí | 2026-11-17 | Sin dónde guardar requisitos hasta que se decidan los expedientes (§15). |
-| Lola | Diseño UX/UI | Bienvenida Lola | sí | 2026-11-17 | |
-| Paco | Desarrollo web | Bienvenido Paco | sí | 2026-11-17 | No puede construir webs reales hasta que se decida la plataforma (§15). |
-| Puri | Calidad (QA) | Bienvenida Puri | sí | 2026-11-17 | |
-| Chema | Marketing y SEO | Chema-Marketing/Seo | sí | 2026-11-17 | |
+| Federico | Director (CEO) | Federico · CEO | sí | 2026-11-17 | |
+| Menchu | Relación con clientes | Menchu · Clientes | sí | 2026-11-17 | |
+| Reme | Requisitos | Reme · Requisitos | sí | 2026-11-17 | Sin dónde guardar requisitos hasta que se decidan los expedientes (§15). |
+| Lola | Diseño UX/UI | Lola · Diseño | sí | 2026-11-17 | |
+| Paco | Desarrollo web | Paco · Desarrollo | sí | 2026-11-17 | No puede construir webs reales hasta que se decida la plataforma (§15). |
+| Puri | Calidad (QA) | Puri · Calidad | sí | 2026-11-17 | |
+| Chema | Marketing y SEO | Chema · Marketing y SEO | sí | 2026-11-17 | |
 
-Ningún título de sesión sigue todavía el formato de §13.3 («Nombre · Puesto»).
+Títulos de sesión renombrados al formato de §13.3 el 2026-11-17, con el visto bueno de Iván.
 
 **Áreas sin agente:** finanzas (facturas, cobros, impagos). Va directo a Iván.
 
