@@ -3,10 +3,17 @@
 Pensado para un cliente que no sabe de tecnología: casillas que se marcan con
 un clic, recuadros de color donde escribir y avisos visuales. Si mañana es una
 skill, esto es lo que se reutiliza; el contenido va en cada expediente.
+
+Para guardar, mejor `guardar(doc, ruta)` que `doc.save(ruta)`: no machaca un
+documento que alguien tenga abierto.
 """
+from datetime import datetime, timezone
+from pathlib import Path
+
 from docx import Document
 from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
+from docx.opc.constants import RELATIONSHIP_TYPE as RT
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt, RGBColor
@@ -20,8 +27,9 @@ FONDO_PROPUESTA = "EAF5EC"   # textos que proponemos nosotros
 FONDO_AVISO = "FDECEC"
 
 
-def nuevo_documento(fuente="Calibri"):
+def nuevo_documento(fuente="Calibri", titulo="", autor="", idioma="es-ES"):
     doc = Document()
+    _propiedades(doc, titulo, autor, idioma)
     seccion = doc.sections[0]
     seccion.page_height, seccion.page_width = Cm(29.7), Cm(21)
     for margen in ("left_margin", "right_margin"):
@@ -48,13 +56,83 @@ def nuevo_documento(fuente="Calibri"):
     return doc
 
 
+def _propiedades(doc, titulo, autor, idioma):
+    """Quita lo que deja la plantilla de python-docx: autor «python-docx», fecha de
+    2013, idioma inglés (Word marcaría todo el texto como faltas) y una miniatura
+    en blanco que es lo que enseña el Finder o el correo como vista previa."""
+    ahora = datetime.now(timezone.utc).replace(microsecond=0, tzinfo=None)
+    p = doc.core_properties
+    p.title, p.author, p.last_modified_by = titulo, autor, autor
+    p.comments, p.language, p.revision = "", idioma, 1
+    p.created = p.modified = ahora
+    lang = doc.styles.element.find(f"{qn('w:docDefaults')}/{qn('w:rPrDefault')}/{qn('w:rPr')}/{qn('w:lang')}")
+    if lang is not None:
+        lang.set(qn("w:val"), idioma)
+        lang.set(qn("w:eastAsia"), idioma)
+    tema = doc.settings.element.find(qn("w:themeFontLang"))
+    if tema is not None:
+        tema.set(qn("w:val"), idioma)
+    paquete = doc.part.package
+    for rid, rel in list(paquete.rels.items()):
+        if rel.reltype == RT.THUMBNAIL:
+            paquete.rels.pop(rid)
+
+
+def documento_abierto(ruta):
+    """Fichero de bloqueo si alguien tiene abierto el documento, o None.
+
+    Word crea «~$» + el nombre (con los dos primeros caracteres sustituidos si el
+    nombre es largo) y LibreOffice «.~lock.<nombre>#»."""
+    ruta = Path(ruta)
+    for nombre in (f"~${ruta.name}", f"~${ruta.name[2:]}", f".~lock.{ruta.name}#"):
+        if (ruta.parent / nombre).exists():
+            return ruta.parent / nombre
+    return None
+
+
+def guardar(doc, ruta):
+    """Guarda, salvo que el documento esté abierto en Word o LibreOffice."""
+    bloqueo = documento_abierto(ruta)
+    if bloqueo:
+        raise SystemExit(f"No se guarda {ruta}: está abierto ({bloqueo.name}). Ciérralo y vuelve a generarlo.")
+    doc.save(str(ruta))
+    return ruta
+
+
+# Word valida el orden de los hijos de tblPr y tcPr (el esquema los define en
+# secuencia) y puede dar el documento por dañado si no cuadra; LibreOffice lo
+# perdona. Por eso no se hace append(): se coloca cada pieza en su sitio.
+_ORDEN = {
+    "tblPr": ("tblStyle", "tblpPr", "tblOverlap", "bidiVisual", "tblStyleRowBandSize",
+              "tblStyleColBandSize", "tblW", "jc", "tblCellSpacing", "tblInd", "tblBorders",
+              "shd", "tblLayout", "tblCellMar", "tblLook", "tblCaption", "tblDescription"),
+    "tcPr": ("cnfStyle", "tcW", "gridSpan", "hMerge", "vMerge", "tcBorders", "shd", "noWrap",
+             "tcMar", "textDirection", "tcFitText", "vAlign", "hideMark"),
+}
+
+
+def _colocar(padre, elemento):
+    """Pone `elemento` en `padre` respetando el orden del esquema y sin duplicarlo."""
+    orden = _ORDEN[padre.tag.split("}")[1]]
+    nombre = elemento.tag.split("}")[1]
+    for viejo in padre.findall(elemento.tag):
+        padre.remove(viejo)
+    despues = orden[orden.index(nombre) + 1:]
+    for hijo in padre:
+        if hijo.tag.split("}")[1] in despues:
+            hijo.addprevious(elemento)
+            return elemento
+    padre.append(elemento)
+    return elemento
+
+
 def _sombrear(celda, color):
     tcPr = celda._tc.get_or_add_tcPr()
     sombra = OxmlElement("w:shd")
     sombra.set(qn("w:val"), "clear")
     sombra.set(qn("w:color"), "auto")
     sombra.set(qn("w:fill"), color)
-    tcPr.append(sombra)
+    _colocar(tcPr, sombra)
 
 
 def _bordes(tabla, color="D0D7DE", grosor=4):
@@ -66,7 +144,7 @@ def _bordes(tabla, color="D0D7DE", grosor=4):
         b.set(qn("w:sz"), str(grosor))
         b.set(qn("w:color"), color)
         bordes.append(b)
-    tblPr.append(bordes)
+    _colocar(tblPr, bordes)
 
 
 def _margen_celdas(tabla, cm=0.2):
@@ -77,7 +155,7 @@ def _margen_celdas(tabla, cm=0.2):
         m.set(qn("w:w"), str(int(cm * 567)))
         m.set(qn("w:type"), "dxa")
         mar.append(m)
-    tblPr.append(mar)
+    _colocar(tblPr, mar)
 
 
 def _fila_entera(fila, cabecera=False):
@@ -89,12 +167,9 @@ def _fila_entera(fila, cabecera=False):
 
 
 def _anchos(tabla, anchos_cm):
-    # Word mira el ancho de las celdas; LibreOffice, la rejilla (tblGrid) y el layout fijo.
+    # Word mira el ancho de las celdas; LibreOffice, la rejilla (tblGrid) y el
+    # layout fijo, que ya pone python-docx al quitar el autofit.
     tabla.autofit = False
-    tblPr = tabla._tbl.tblPr
-    layout = OxmlElement("w:tblLayout")
-    layout.set(qn("w:type"), "fixed")
-    tblPr.append(layout)
     for col, ancho in zip(tabla._tbl.tblGrid.findall(qn("w:gridCol")), anchos_cm):
         col.set(qn("w:w"), str(int(ancho * 567)))
     for fila in tabla.rows:
@@ -244,9 +319,15 @@ def propuesta_texto(doc, titulo, texto):
     return c
 
 
-def imagen(doc, ruta, ancho_cm, pie=None):
+def imagen(doc, ruta, ancho_cm, pie=None, descripcion=None):
+    """Imagen centrada. `descripcion` es el texto alternativo (lo que lee un
+    lector de pantalla); si no se da, se usa el pie."""
     doc.add_picture(str(ruta), width=Cm(ancho_cm))
     doc.paragraphs[-1].alignment = WD_ALIGN_PARAGRAPH.CENTER
+    alternativo = descripcion or pie
+    if alternativo:
+        for docpr in doc.paragraphs[-1]._p.iter(qn("wp:docPr")):
+            docpr.set("descr", alternativo)
     if pie:
         p = doc.add_paragraph(pie)
         p.alignment = WD_ALIGN_PARAGRAPH.CENTER

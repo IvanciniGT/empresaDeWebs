@@ -1,72 +1,121 @@
 ---
 name: cuestionario-cliente
-description: "Prepara el cuestionario Word editable que se envía a un cliente nuevo: lo que ya sabemos de él para que lo valide, lo que nos falta para que lo complete y los textos que le proponemos para que los apruebe. Úsala cuando el expediente tiene la información pública recopilada."
+description: "Decide qué se le pregunta a un cliente nuevo y cuándo (B1 antes del presupuesto, B2 al contratar), monta el cuestionario desde el catálogo de preguntas y convierte las respuestas en requisitos del expediente. Úsala cuando el expediente tiene la información pública recopilada y otra vez cuando llegan las respuestas."
 ---
 
 # cuestionario-cliente
 
-> **BORRADOR v0.1** · Escrito por Federico · **Dueña: Reme** (los textos propuestos, de Chema) · En revisión (ronda 1)
+> **BORRADOR v0.2 · revisado por Reme** · Dueña: Reme · Textos de ayuda: Chema ·
+> Maquetación: Lola · Generador: Paco · En revisión (ronda 1)
+
+## La regla que lo decide todo
+
+Cada pregunta tiene un **para qué**: un destino concreto en el presupuesto, en
+los requisitos, en los textos, en el diseño o en el contacto. **Si no lo tiene,
+se quita.**
+
+- **B1 · Conoceros** (antes del presupuesto): solo lo que puede cambiar el
+  **plan, el precio o el plazo**, lo necesario para hablar con el cliente, los
+  datos públicos que tiene que validar y los mínimos de Iván en versión corta.
+- **B2 · Al contratar** (tras aceptar el presupuesto): todo lo demás, más los
+  bloques según el tipo de web.
+
+Las preguntas, con su ID, su para qué y su destino, están en
+[preguntas.md](preguntas.md). El formato de requisitos, en
+[plantilla-requisitos.md](plantilla-requisitos.md).
 
 ## Cuándo
 
-Cuando el expediente ya tiene lo publicado sobre el cliente. Es la
-**primera batería** de preguntas. La segunda, específica del tipo de web que
-quiera, se hace cuando sepamos qué quiere.
+| Momento | Qué se hace |
+|---|---|
+| Expediente con lo público **y previo de precio hecho** | Montar B1 |
+| Llegan las respuestas de B1 | Pasarlas a requisitos y a presupuesto |
+| El cliente acepta el presupuesto | Montar B2 |
+| Llegan las respuestas de B2 | Completar los requisitos |
 
-## Entrada
+El previo va **antes** que B1 porque dice qué preguntas deciden el plan de este
+cliente.
 
-- Expediente con datos comprobados y por confirmar.
-- Textos propuestos por Chema (frase principal, quiénes somos y por qué venir).
+## Montar B1
 
-## Contenido (primera batería)
+1. **Partir del catálogo:** núcleo común + bloque de sector. Si el sector no
+   tiene bloque, el genérico. No se inventan opciones.
+2. **«Lo que ya sabemos»:** solo filas que estén en el expediente. Los datos
+   «a confirmar» se presentan como «lo que hemos visto» y se preguntan. Las
+   ausencias, como «no hemos encontrado».
+3. **Quitar lo que ya está respondido** con fuente primaria en el expediente.
+4. **Añadir las preguntas que marque el previo** como decisivas, si faltan.
+5. **Pedir a Federico:** a Chema, los textos de ayuda; a Lola, la maquetación;
+   a Paco, el generador con los ID del catálogo.
+6. **Comprobar antes de pasarlo a Puri:**
+   - 4 páginas como máximo (`soffice --headless --convert-to pdf` y `pdfinfo`);
+   - cada pregunta tiene su ID del catálogo;
+   - la versión del cuestionario («B1 v0.2») va en el pie;
+   - lleva la cláusula de protección de datos;
+   - nada marcado [PROPUESTA] ni afirmaciones sin fuente.
 
-| # | Bloque | Qué se pide |
-|---|---|---|
-| 1 | Lo que ya sabemos | Validar los datos comprobados (casilla «¿Correcto?» y hueco para corregir) |
-| 2 | Contacto | Persona, móvil, WhatsApp, correo; qué contacto se muestra en la web |
-| 3 | Datos legales | Titular y NIF para el aviso legal |
-| 4 | Quiénes sois | Nombres, historia, años, equipo, qué os define |
-| 5 | Servicios y precios | Qué hacen, precio y duración; cita y formas de pago |
-| 6 | Objetivos | Para qué quieren la web, cliente típico, idiomas |
-| 7 | Opiniones | Permiso para mostrar sus reseñas de Google |
-| 8 | Textos propuestos | Aprobar o cambiar |
-| 9 | Fotos, vídeo y logotipo | Qué tienen y consejos para hacerlas |
-| 10 | Presencia en internet | Ficha de Google, redes, dominio |
-| 11 | Gustos | Webs que les gustan o no, colores |
+## Pasar las respuestas a requisitos
 
-Lo imprescindible para empezar va marcado con ★.
+1. **El original no se toca:** Menchu lo guarda en `clientes/<negocio>/recibido/`.
+   Si se respondió por teléfono, Menchu anota las respuestas con su ID.
+2. **Sacar las respuestas por ID.** Con el lector automático cuando Paco lo
+   tenga. Mientras tanto, a mano.
+3. **Repartirlas por destino:**
 
-## Pasos
+   | Destino | Qué se hace |
+   |---|---|
+   | `DATO` | Al expediente §1, con fuente «cliente, B1 vX, fecha». Sale de «a confirmar». |
+   | `PRECIO` | Al borrador de presupuesto (skill `previo-precio`). |
+   | `REQ` | Requisito `R-xx` con origen y criterio de aceptación. |
+   | `CONT`, `DIS` | Fila en «Contenido y materiales», y aviso a Federico para Chema o Lola. |
+   | `CONTACTO` | Al expediente. |
+   | `LEGAL` | Al expediente; nunca a mensajes ni a código. |
 
-1. Copiar el generador de un cliente anterior (`generar_cuestionario.py`) y
-   adaptar el contenido al negocio.
-2. Rellenar «Lo que ya sabemos» **solo** con datos del expediente.
-3. Incluir los textos de Chema en recuadro verde, con casillas para aprobar o cambiar.
-4. Generar el Word: `.venv/bin/python clientes/<negocio>/generar_cuestionario.py`.
-5. Convertirlo a PDF con LibreOffice para revisarlo a ojo
-   (`soffice --headless --convert-to pdf`).
+4. **Lo que falta o es ambiguo** va a «Falta saber» y se pide a Federico. **No
+   se supone la respuesta.** Una ★ sin respuesta bloquea el presupuesto.
+5. **Versiones:** v0.x mientras se negocia; **v1.0 cuando el cliente aprueba
+   el presupuesto**. Desde ahí, solo cambia mediante el control de cambios (`C-xx`).
+6. **Anotar en el historial del expediente y avisar a Federico** (§13.2.6:
+   escribir en el expediente no es avisar).
 
 ## Reglas
 
-1. **Pocas preguntas, las justas.** Lo que no sirve para la web o el presupuesto, fuera.
-2. **Que se entienda sin nosotros delante:** sin jerga, ejemplos en cada pregunta abierta.
-3. **Código de colores fijo:** gris, lo que sabemos; naranja, para que escriba;
-   verde, nuestras propuestas.
-4. **Nunca pedir contraseñas** (§12); se dice en el propio documento.
-5. **Sin precios ni plazos** marcados como [PROPUESTA].
-6. **Ofrecer siempre la alternativa de hacerlo por teléfono.**
+1. **Pocas preguntas, las justas.** B1: 4 páginas como máximo y unos 15
+   minutos. Si una pregunta nueva entra, otra sale o pasa a B2.
+2. **Se entiende sin nosotros delante:** sin jerga y con un ejemplo en cada
+   pregunta abierta.
+3. **No se pide lo que aún no hace falta.** Los datos legales y el NIF se piden
+   al contratar, no antes (§12: solo los datos que hacen falta).
+4. **Cada pregunta, una sola cosa.** Nada de «rodeadla», columnas con dos
+   lecturas ni la misma pregunta en dos bloques.
+5. **Nada que el cliente no pueda corregir** en «lo que ya sabemos».
+6. **Ningún dato ni afirmación sin fuente,** tampoco en las introducciones
+   («los negocios que publican precios reciben más llamadas» necesita fuente o
+   se quita).
+7. **Nunca pedir contraseñas** (§12), y decirlo en el documento.
+8. **Sin precios ni plazos** marcados [PROPUESTA].
+9. **Siempre la alternativa por teléfono,** con las mismas preguntas y los mismos ID.
+10. **Aprobar textos no se hace en el cuestionario,** sino en la fase de textos
+    (§13.5, paso 4), con sus 2 rondas.
 
 ## Herramientas
 
-- `herramientas/docx_util.py`: casillas clicables, huecos, recuadros, tablas y textos propuestos.
+- `herramientas/docx_util.py` (de Paco): casillas, huecos y tablas. Las
+  casillas son controles de contenido de Word (`w14:checkbox`) y se pueden
+  leer automáticamente: probado el 2026-11-17 con una copia en la que se
+  simularon 3 casillas marcadas; se leyeron las 3 y ninguna más.
+- Pendiente (pedido a Paco): ID en cada control y un lector de respuestas.
 
 ## Salida
 
-- `entregables/Cuestionario - <negocio>.docx`
+- `clientes/<negocio>/entregables/Cuestionario B1 - <negocio>.docx` (y luego B2).
+- `clientes/<negocio>/requisitos.md`, desde [plantilla-requisitos.md](plantilla-requisitos.md).
 
-## Dudas abiertas (para la revisión)
+## Dudas abiertas
 
-- ¿Diez páginas es demasiado? ¿Qué se puede quitar o dejar para la segunda batería?
-- ¿Los datos legales van aquí o al contratar?
-- ¿Una plantilla general con bloques por sector (peluquería, cafetería, taller…)?
-- ¿Cómo pasan las respuestas del Word a requisitos en el expediente?
+- **Formato:** Word, formulario propio o teléfono guiado. Lo decide Iván
+  (revisión, §6).
+- **Cláusula de protección de datos** del cuestionario: necesita el nombre de
+  la empresa y un texto revisado por un profesional (§15).
+- **Opiniones de Google:** ¿basta el permiso del negocio para mostrarlas, o
+  hace falta algo más? Es una duda legal.

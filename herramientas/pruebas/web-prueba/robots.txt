@@ -1,0 +1,7 @@
+# robots.txt de prueba
+User-agent: *
+Disallow: /privado/
+Allow: /privado/publico.html
+Disallow: /wp-admin/
+
+Sitemap: {{BASE}}/sitemap.xml

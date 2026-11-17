@@ -1,25 +1,40 @@
 """Mapas estáticos de OpenStreetMap, sin navegador.
 
 La vista incrustada de openstreetmap.org necesita WebGL y Chrome headless no lo
-tiene, así que componemos las teselas a mano. La licencia ODbL obliga a citar
-a los colaboradores de OpenStreetMap: la atribución va dentro de la imagen.
+tiene, así que componemos las teselas a mano.
+
+Cumple la política de teselas de OSM (operations.osmfoundation.org/policies/tiles):
+User-Agent propio, caché local de al menos 7 días con petición condicional al
+caducar, y atribución visible. En un PDF la atribución tiene que llevar impresa
+la dirección openstreetmap.org/copyright, así que va dentro de la imagen.
 
 Uso:
   .venv/bin/python herramientas/mapa.py LAT LON salida.png [zoom]
   .venv/bin/python herramientas/mapa.py LAT LON salida.png ZOOM puntos.json RADIO_M
       puntos.json: lista de [dx_m, dy_m, destacado, nombre] relativa a LAT, LON.
+
+Variables de entorno (opcionales):
+  OSM_TESELAS  plantilla de URL del servidor de teselas (por defecto, el de OSM)
+  OSM_CACHE    carpeta de la caché (por defecto ~/Library/Caches/empresaDeWebs/teselas-osm)
 """
-import io
 import json
 import math
+import os
 import subprocess
 import sys
+import time
+from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
-AGENTE = "empresaDeWebs-prueba/0.1 (ivan.osuna.ayuste@gmail.com)"
+AGENTE = "empresaDeWebs/0.2 (+mailto:ivan.osuna.ayuste@gmail.com)"
+# La política pide poder cambiar de servidor sin tocar el código.
+SERVIDOR = os.environ.get("OSM_TESELAS", "https://tile.openstreetmap.org/{z}/{x}/{y}.png")
+CACHE = Path(os.environ.get("OSM_CACHE", Path.home() / "Library/Caches/empresaDeWebs/teselas-osm"))
+CADUCIDAD_S = 7 * 24 * 3600
 TESELA = 256
 ROJO, NARANJA, AZUL = (200, 30, 45), (181, 90, 30), (30, 42, 58)
+ATRIBUCION = "© Colaboradores de OpenStreetMap · openstreetmap.org/copyright"
 
 
 def _a_pixel(lat, lon, zoom):
@@ -30,12 +45,27 @@ def _a_pixel(lat, lon, zoom):
 
 
 def _descargar(x, y, zoom):
+    fichero = CACHE / str(zoom) / str(x) / f"{y}.png"
+    if fichero.exists() and time.time() - fichero.stat().st_mtime < CADUCIDAD_S:
+        return Image.open(fichero).convert("RGB")
+    fichero.parent.mkdir(parents=True, exist_ok=True)
+    temporal = fichero.with_suffix(".descarga")
     # curl y no urllib: el Python de python.org en macOS no trae certificados raíz.
-    datos = subprocess.run(
-        ["curl", "-sf", "-m", "20", "-A", AGENTE, f"https://tile.openstreetmap.org/{zoom}/{x}/{y}.png"],
-        capture_output=True, check=True,
-    ).stdout
-    return Image.open(io.BytesIO(datos)).convert("RGB")
+    # Con -z, si la tesela no ha cambiado, el servidor responde 304 sin enviarla.
+    orden = ["curl", "-sS", "-m", "20", "-A", AGENTE, "-o", str(temporal), "-w", "%{http_code}"]
+    if fichero.exists():
+        orden += ["-z", str(fichero)]
+    codigo = subprocess.run(orden + [SERVIDOR.format(z=zoom, x=x, y=y)],
+                            capture_output=True, text=True, check=True).stdout.strip()
+    if codigo == "304":
+        temporal.unlink(missing_ok=True)
+        fichero.touch()
+    elif codigo == "200":
+        temporal.replace(fichero)
+    else:
+        temporal.unlink(missing_ok=True)
+        raise RuntimeError(f"El servidor de teselas ha respondido {codigo} para {zoom}/{x}/{y}")
+    return Image.open(fichero).convert("RGB")
 
 
 def _fuente(tam):
@@ -69,7 +99,7 @@ def componer(lat, lon, zoom, ancho, alto, apagar=0.0):
 def atribucion(lienzo):
     dibujo = ImageDraw.Draw(lienzo)
     ancho, alto = lienzo.size
-    texto = "© Colaboradores de OpenStreetMap"
+    texto = ATRIBUCION
     fuente = _fuente(14)
     caja = dibujo.textbbox((0, 0), texto, font=fuente)
     w, h = caja[2] - caja[0], caja[3] - caja[1]
