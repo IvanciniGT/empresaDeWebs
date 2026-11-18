@@ -212,4 +212,4 @@ ENCARGO:     E-xxx (si lo hay)
 - **Resultado:** carpeta `operacion/` en este repositorio, en Markdown y con git.
 - **Pendiente de Iván:** actualizar el punto de AGENTS.md §15.
 
-<!-- Siguiente ID libre: A-013 -->
+<!-- Siguiente ID libre: A-016 -->
