@@ -6,3 +6,5 @@ __pycache__/
 clientes/*/maquetas/
 # Ficheros de bloqueo de Word/Office
 ~$*
+# Datos personales del cliente: nunca a git, el repositorio es público (A-009, A-013)
+clientes/*/privado/
