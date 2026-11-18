@@ -227,8 +227,9 @@ prueba('html_a_pdf: avisa de la imagen rota y de la fuente que no carga', async 
   assert.match(stderr, /no ha cargado \S*imagen-que-no-existe\.png/, 'no avisa del fallo de red');
   assert.match(stderr, /imagen rota: imagen-que-no-existe\.png/, 'no avisa de la imagen sin dibujar');
   assert.match(stderr, /fuente sin cargar: Fuente Inexistente/);
-  // La que no lleva alt avisa; la decorativa (alt="") no: solo un aviso de alt.
-  assert.equal((stderr.match(/imagen sin texto alternativo \(alt\): tesela\.png/g) ?? []).length, 1, 'el aviso de alt no distingue alt vacío de alt ausente');
+  // La que no lleva alt avisa; la decorativa (alt="", con otro src para que el aviso no se funda) no.
+  assert.match(stderr, /imagen sin texto alternativo \(alt\): tesela\.png$/m, 'no avisa de la imagen sin alt');
+  assert.doesNotMatch(stderr, /alternativo \(alt\): tesela\.png\?decorativa/, 'trata alt="" (decorativa) como si faltara');
   await assert.rejects(ejecutar('node', [path.join(HERRAMIENTAS, 'html_a_pdf.mjs'), path.join(AQUI, 'pdf-prueba.html'), pdf, '--estricto']));
 });
 
@@ -271,6 +272,26 @@ prueba('mapa: guarda las teselas 7 días y al caducar pregunta si han cambiado',
     const p = await pixeles(path.join(SALIDA, 'mapa-3.png'));
     assert.deepEqual([p.ancho, p.alto], [1200, 700]);
   } finally { await servidor.cerrar(); }
+});
+
+prueba('mapa: los puntos no tapan las etiquetas de los anillos', async () => {
+  // Sin red: un mapa liso en vez de teselas. Mismo mapa con y sin un punto debajo
+  // de la etiqueta de 250 m: dentro de la etiqueta no debe cambiar ni un píxel.
+  const codigo = `
+import sys
+sys.path.insert(0, ${JSON.stringify(HERRAMIENTAS)})
+import mapa
+from PIL import Image, ImageChops
+mapa.componer = lambda lat, lon, z, a, h, apagar=0: (Image.new("RGB", (a, h), (236, 232, 224)), lambda dx, dy: (a / 2 + dx / 2, h / 2 - dy / 2), 2.0)
+c, r = 550, 125
+mapa.mapa_competencia(39, -1.8, sys.argv[1], 16, [], 1000)
+mapa.mapa_competencia(39, -1.8, sys.argv[2], 16, [[60, 2 * (r - 20), False, "debajo"], [-500, 0, True, "lejos"]], 1000)
+a, b = Image.open(sys.argv[1]).convert("RGB"), Image.open(sys.argv[2]).convert("RGB")
+etiqueta = (c + 10, c - r + 10, c + 60, c - r + 30)
+print("igual" if ImageChops.difference(a.crop(etiqueta), b.crop(etiqueta)).getbbox() is None else "tapada")
+print("pinta" if ImageChops.difference(a, b).getbbox() else "sin puntos")`;
+  const { stdout } = await ejecutar(PYTHON, ['-c', codigo, path.join(SALIDA, 'mapa-sin.png'), path.join(SALIDA, 'mapa-con.png')]);
+  assert.deepEqual(stdout.trim().split('\n'), ['igual', 'pinta'], 'un punto tapa la etiqueta del anillo de 250 m');
 });
 
 // ───────────────────────────── docx_util

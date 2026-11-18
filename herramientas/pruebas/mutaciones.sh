@@ -53,6 +53,8 @@ mutar "sin texto alternativo en imagen()" docx_util.py 'docpr.set("descr", alter
 mutar "guardar() sin mirar si está abierto" docx_util.py "    bloqueo = documento_abierto(ruta)" "    bloqueo = None" "docx_util: no guarda"
 
 # Ronda 1b
+mutar "puntos encima de las etiquetas del mapa" mapa.py "        dibujo.text((c + 8, c - r + 6), etiqueta, fill=(*TINTA, 255), font=fuente)" "        dibujo.text((c + 8, c - r + 6), etiqueta, fill=(*TINTA, 255), font=fuente)
+        [_forma(dibujo, *a_px(dx, dy), barberia=bool(d)) for dx, dy, d, _n in puntos]" "mapa: los puntos"
 mutar "alt vacío tratado como si faltara" html_a_pdf.mjs "filter((i) => !i.hasAttribute('alt'))" "filter((i) => !i.getAttribute('alt'))" "html_a_pdf: avisa"
 mutar "captura sin recorte de zona" captura.mjs "const captura = o.elemento || o.recorte" "const captura = false" "captura: --elemento"
 mutar "instalar.sh sin comprobar la suma" instalar.sh 'if [[ "$(shasum -a 256 "$destino" | cut -d'"'"' '"'"' -f1)" != "$suma" ]]; then' 'if false; then' "instalado: si una descarga"

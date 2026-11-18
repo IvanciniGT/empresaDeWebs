@@ -10,7 +10,8 @@ ha llegado a quien lo necesitaba (el cliente, Iván u otro agente).
 
 | ID | Cliente | Agente | Encargo | Estado | Plazo | Bloqueo / siguiente paso | Enlace |
 |---|---|---|---|---|---|---|---|
-| E-017 | Peluquería Hermanos Cotillas (r2, simulado) | Menchu | Ronda 2 · Fase 0: primer contacto simulado y expediente abierto | en curso | 2026-11-18 | — | [ronda 2](../procesos/ronda-2/arranque.md) |
+| E-018 | Peluquería Hermanos Cotillas (r2, simulado) | Chema | Ronda 2 · Fase 1: investigar y guion de captura para Iván | en curso | 2026-11-18 | Iván: 9 capturas | [ronda 2](../procesos/ronda-2/arranque.md) |
+| E-017 | Peluquería Hermanos Cotillas (r2, simulado) | Menchu | Ronda 2 · Fase 0: primer contacto simulado y expediente abierto | hecho | 2026-11-18 | — | [ronda 2](../procesos/ronda-2/arranque.md) |
 | E-016 | interno | Paco | Dos detalles de herramientas: mutación de alt vacío y etiquetas del mapa | en curso | 2026-11-18 | — | [consolidación](../procesos/ronda-1/consolidacion.md) |
 | E-015 | interno | Menchu | Arreglar los importantes de la revisión de Puri a sus plantillas | hecho | 2026-11-18 | R01 y R02 dependen de Iván (A-010 y plazo de 5 días) | [revisión](../procesos/ronda-1/revision-plantillas-menchu.md) |
 | E-014 | interno | Puri | Revisar una vez las plantillas de Menchu y el guion de la tanda A (A-012) | hecho | 2026-11-18 | — | [ronda 1b](../procesos/ronda-1/ronda-1b.md) |
@@ -27,4 +28,4 @@ ha llegado a quien lo necesitaba (el cliente, Iván u otro agente).
 | E-006 | interno | Puri | Revisar el primer envío del caso simulado y revisar-entregable (ronda 1) | hecho (ronda 1) | 2026-11-17 | Ronda 1b tras las decisiones de Iván | [encargo](../procesos/ronda-1/encargo-puri.md) |
 | E-007 | interno | Menchu | Revisar primer-contacto y primer-envio (ronda 1) | hecho (ronda 1) | 2026-11-17 | Ronda 1b tras las decisiones de Iván | [encargo](../procesos/ronda-1/encargo-menchu.md) |
 
-<!-- Siguiente ID libre: E-018 -->
+<!-- Siguiente ID libre: E-019 -->

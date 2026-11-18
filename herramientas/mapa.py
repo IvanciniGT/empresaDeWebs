@@ -154,19 +154,23 @@ def mapa_competencia(lat, lon, salida, zoom, puntos, radio_m):
     capa = Image.new("RGBA", lienzo.size, (0, 0, 0, 0))
     dibujo = ImageDraw.Draw(capa)
     fuente = _fuente(27)
-    for anillo in (250, 500, 1000, radio_m):
+    c = lado / 2
+    anillos = (250, 500, 1000, radio_m)
+    for anillo in anillos:
         r = anillo / mpp
-        c = lado / 2
         dibujo.ellipse((c - r, c - r, c + r, c + r), outline=(*TINTA, 170), width=2)
-        etiqueta = f"{anillo} m" if anillo < 1000 else f"{anillo / 1000:g} km".replace(".", ",")
-        caja = dibujo.textbbox((c + 8, c - r + 6), etiqueta, font=fuente)
-        dibujo.rounded_rectangle((caja[0] - 5, caja[1] - 3, caja[2] + 5, caja[3] + 3), 6, fill=(255, 255, 255, 230))
-        dibujo.text((c + 8, c - r + 6), etiqueta, fill=(*TINTA, 255), font=fuente)
     for dx, dy, destacado, _nombre in puntos:
         if math.hypot(dx, dy) > radio_m or (dx, dy) == (0, 0):
             continue
         x, y = a_px(dx, dy)
         _forma(dibujo, x, y, barberia=bool(destacado))
+    # Las etiquetas, al final y con fondo opaco: si no, los puntos las tapan.
+    for anillo in anillos:
+        r = anillo / mpp
+        etiqueta = f"{anillo} m" if anillo < 1000 else f"{anillo / 1000:g} km".replace(".", ",")
+        caja = dibujo.textbbox((c + 8, c - r + 6), etiqueta, font=fuente)
+        dibujo.rounded_rectangle((caja[0] - 5, caja[1] - 3, caja[2] + 5, caja[3] + 3), 6, fill=(255, 255, 255, 255))
+        dibujo.text((c + 8, c - r + 6), etiqueta, fill=(*TINTA, 255), font=fuente)
     lienzo = Image.alpha_composite(lienzo.convert("RGBA"), capa).convert("RGB")
     marcador(ImageDraw.Draw(lienzo), lado / 2, lado / 2)
     leyenda(lienzo)

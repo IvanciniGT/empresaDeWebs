@@ -271,3 +271,7 @@ PEDIDA POR:  Paco · 2026-11-17
 
 **Pendiente**
 - Por orden de Iván he parado las pruebas: el último pase completo (37 pruebas) estaba en verde **antes** del estilo de Lola; las piezas nuevas de `docx_util.py` se han comprobado a mano (sin errores en `revisar_docx.py`, lectura por ID correcta), pero **`mapa.py` con el estilo nuevo no lo he podido ver terminado** y las 34 mutaciones no se han repasado. Hay que lanzar `probar.mjs` y `mutaciones.sh` antes de dar esto por bueno.
+- **E-016 (2026-11-18):**
+  - Mapa: las etiquetas de los anillos ahora se dibujan después de los puntos y con fondo blanco opaco; antes los puntos las tapaban. Lo vigila una prueba nueva («los puntos no tapan las etiquetas»).
+  - La mutación del texto alternativo no se detectaba porque las dos imágenes de prueba tenían el mismo `src` y el aviso repetido se agrupaba en uno solo. Ahora la decorativa lleva otro `src` y la prueba mira cada imagen por separado.
+  - Las dos mutaciones hacen fallar su prueba. Total: 38 pruebas y 35 mutaciones. El `w:tag` se queda como «A 3.5|2».
