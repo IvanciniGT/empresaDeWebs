@@ -12,24 +12,6 @@
 > Salen de la ronda 1 de revisión ([consolidación](../procesos/ronda-1/consolidacion.md)).
 > Si te vale la propuesta, basta con «OK a A-00X».
 
-### 🔴 Urgente hoy
-
-#### A-013 · El repositorio de GitHub es público
-```
-QUÉ:         Hacer privado github.com/IvanciniGT/empresaDeWebs (o sacar de él clientes/ y operacion/)
-CLIENTE:     interno, y la Peluquería Hermanos Cotillas (negocio real que no es cliente)
-POR QUÉ:     Ya se ven el expediente de un negocio real al que nadie ha contactado, su previo de
-             precio interno, los entregables y tu correo personal (va en el User-Agent de las
-             herramientas). Con clientes de verdad serían sus datos (§10.3, §12).
-PROPUESTA:   (Paco) Hacerlo privado hoy. Ningún agente lo ha tocado: es tu cuenta. Hasta que
-             decidas, no subo nada (mis commits se quedan en local).
-ALTERNATIVA: Dos repositorios: uno público con la política y las herramientas, y otro privado
-             para clientes/ y operacion/. Ojo: lo publicado puede seguir en copias de terceros;
-             hacerlo privado no lo borra del todo.
-URGENCIA:    hoy
-PEDIDA POR:  Paco · 2026-11-17
-```
-
 ### Bloque 1 · Para la ronda 2
 
 #### A-001 · Cómo buscamos en internet
@@ -136,7 +118,7 @@ QUÉ:         Confirmar clientes/<negocio>/ en este repositorio para expedientes
              dónde van fuera de git los datos personales (NIF, fotos, audios).
 POR QUÉ:     Si un dato personal entra en el historial de git, borrarlo cuando el cliente lo pida (RGPD)
              es muy difícil.
-PROPUESTA:   Depende de A-013. Si el repositorio pasa a privado: clientes/ en git, salvo una carpeta
+PROPUESTA:   El repositorio es público (A-013). clientes/ en git, salvo una carpeta
              privado/ por cliente, excluida de git y con copia de seguridad aparte, para NIF, fotos
              de personas, audios y extracciones de webs. Lo de quien no contrata se borra a los 3 meses.
 URGENCIA:    antes del primer cliente real
@@ -219,6 +201,11 @@ ENCARGO:     E-xxx (si lo hay)
 
 
 ## Resueltas
+
+### A-013 · El repositorio de GitHub es público
+- **Decisión:** se queda público. Iván lo asume: es un proyecto de formación. — 2026-11-17
+- **Consecuencia:** todo lo que entre en git es público. Con un cliente real, sus datos personales
+  no pueden ir al repositorio (ver A-009).
 
 ### A-000 · Dónde se guardan la plantilla y los encargos
 - **Decisión:** aprobada — 2026-11-17
