@@ -6,7 +6,17 @@ skill, esto es lo que se reutiliza; el contenido va en cada expediente.
 
 Para guardar, mejor `guardar(doc, ruta)` que `doc.save(ruta)`: no machaca un
 documento que alguien tenga abierto.
+
+Respuestas con ID (para leerlas después con leer_cuestionario.py): las piezas
+donde contesta el cliente aceptan `id`, el del catálogo de preguntas (por
+ejemplo «A 4.1»). Se guarda como etiqueta del control de contenido (`w:tag`):
+  - casilla y opciones → «ID|n», n = número de opción, empezando en 1;
+  - hueco → «ID»: lo que se escribe va dentro de un control de texto en línea;
+  - tabla_respuestas(ids=[…]) → «ID|título de la columna», en cada celda de respuesta;
+  - propuesta_texto → «ID|Me gusta así», «ID|Cambiadlo así» y «ID|cambio».
+Sin `id`, todo sale como antes.
 """
+import itertools
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -18,16 +28,35 @@ from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Cm, Pt, RGBColor
 
-TINTA = RGBColor(0x1E, 0x2A, 0x3A)
-ACENTO = RGBColor(0xB5, 0x5A, 0x1E)
-GRIS = RGBColor(0x5F, 0x6B, 0x7A)
+# Paleta de estilo-documentos v0.3 (Lola). Mismos nombres que en estilo.css;
+# los contrastes están comprobados en esa skill: si cambia uno, se repite.
+VERSION_ESTILO = "estilo v0.3"
+FUENTE = "Arial"   # la tiene cualquier aparato que abra un Word; el Word no incrusta fuentes
+ANCHO_CM = 16.6    # A4 con márgenes de 2,2 cm
+TINTA = RGBColor.from_string("1E2A3A")
+ACENTO = RGBColor.from_string("9C4A14")
+GRIS = RGBColor.from_string("56606D")
+BIEN = RGBColor.from_string("24693F")
+ATENCION = RGBColor.from_string("8A5A00")
+MAL = RGBColor.from_string("B3261E")
 FONDO_RESPUESTA = "FFF4E0"   # donde escribe el cliente
 FONDO_SABEMOS = "EEF2F6"     # lo que ya hemos encontrado
 FONDO_PROPUESTA = "EAF5EC"   # textos que proponemos nosotros
-FONDO_AVISO = "FDECEC"
+FONDO_AVISO = "FBE4E2"
+
+# tipo: (etiqueta, fondo, color de la barra y de la etiqueta). Informa la
+# etiqueta; el color solo ayuda (se tiene que entender en blanco y negro).
+BLOQUES = {
+    "como":      ("CÓMO CONTESTAR", "F4F6F9", "1E2A3A"),
+    "sabemos":   ("LO QUE HEMOS ENCONTRADO", FONDO_SABEMOS, "56606D"),
+    "escribid":  ("ESCRIBID AQUÍ", FONDO_RESPUESTA, "9C4A14"),
+    "propuesta": ("NUESTRA PROPUESTA", FONDO_PROPUESTA, "24693F"),
+    "aviso":     ("IMPORTANTE", FONDO_AVISO, "B3261E"),
+}
+ESTADOS = {"si": ("Sí", BIEN), "medias": ("A medias", ATENCION), "no": ("No", MAL)}
 
 
-def nuevo_documento(fuente="Calibri", titulo="", autor="", idioma="es-ES"):
+def nuevo_documento(fuente=FUENTE, titulo="", autor="", idioma="es-ES"):
     doc = Document()
     _propiedades(doc, titulo, autor, idioma)
     seccion = doc.sections[0]
@@ -37,14 +66,14 @@ def nuevo_documento(fuente="Calibri", titulo="", autor="", idioma="es-ES"):
     seccion.top_margin, seccion.bottom_margin = Cm(2), Cm(2)
     estilos = doc.styles
     normal = estilos["Normal"]
-    normal.font.name, normal.font.size, normal.font.color.rgb = fuente, Pt(10.5), TINTA
+    normal.font.name, normal.font.size, normal.font.color.rgb = fuente, Pt(11), TINTA
     normal.element.rPr.rFonts.set(qn("w:eastAsia"), fuente)
     normal.paragraph_format.space_after = Pt(4)
     normal.paragraph_format.line_spacing = 1.15
-    for nivel, tam in ((1, 18), (2, 13), (3, 11)):
+    for nivel, tam, color in ((1, 20, ACENTO), (2, 14, ACENTO), (3, 12, TINTA)):
         e = estilos[f"Heading {nivel}"]
         e.font.name, e.font.size, e.font.bold = fuente, Pt(tam), True
-        e.font.color.rgb = ACENTO if nivel == 1 else TINTA
+        e.font.color.rgb = color
         # Los títulos usan la fuente del tema (Calibri Light); se quita para que manden los nuestros.
         rfonts = e.element.rPr.rFonts
         for atributo in ("w:asciiTheme", "w:hAnsiTheme", "w:eastAsiaTheme", "w:cstheme"):
@@ -177,10 +206,64 @@ def _anchos(tabla, anchos_cm):
             celda.width = Cm(ancho)
 
 
-def casilla(parrafo, marcada=False):
+_ids_control = itertools.count(1001)
+
+
+def _identificar(sdtPr, etiqueta):
+    """Etiqueta (w:tag) y número único (w:id) del control. Van antes del tipo de control."""
+    if etiqueta is None:
+        return
+    tag = OxmlElement("w:tag")
+    tag.set(qn("w:val"), str(etiqueta))
+    sdtPr.append(tag)
+    numero = OxmlElement("w:id")
+    numero.set(qn("w:val"), str(next(_ids_control)))
+    sdtPr.append(numero)
+
+
+def _control_de_texto(parrafo, etiqueta, ayuda="Escribid aquí"):
+    """Convierte lo que haya en el párrafo en un control de texto EN LÍNEA con
+    etiqueta. En línea y no de bloque: LibreOffice saca el texto de los de bloque
+    al guardar (comprobado), y estos los conserva con su etiqueta.
+    Si el párrafo está vacío, muestra `ayuda` en gris, que desaparece al escribir."""
+    if etiqueta is None:
+        return
+    p = parrafo._p
+    runs = p.findall(qn("w:r"))
+    sdt = OxmlElement("w:sdt")
+    sdtPr = OxmlElement("w:sdtPr")
+    _identificar(sdtPr, etiqueta)
+    if not runs:
+        sdtPr.append(OxmlElement("w:showingPlcHdr"))
+    texto = OxmlElement("w:text")
+    texto.set(qn("w:multiLine"), "1")
+    sdtPr.append(texto)
+    sdt.append(sdtPr)
+    contenido = OxmlElement("w:sdtContent")
+    sdt.append(contenido)
+    if runs:
+        for r in runs:
+            contenido.append(r)
+    else:
+        r = OxmlElement("w:r")
+        rPr = OxmlElement("w:rPr")
+        rPr.append(OxmlElement("w:i"))
+        color = OxmlElement("w:color")
+        color.set(qn("w:val"), "8A94A3")
+        rPr.append(color)
+        r.append(rPr)
+        t = OxmlElement("w:t")
+        t.text = ayuda
+        r.append(t)
+        contenido.append(r)
+    p.append(sdt)
+
+
+def casilla(parrafo, marcada=False, id=None):
     """Casilla de Word de verdad (control de contenido): se marca con un clic."""
     sdt = OxmlElement("w:sdt")
     sdtPr = OxmlElement("w:sdtPr")
+    _identificar(sdtPr, id)
     cb = OxmlElement("w14:checkbox")
     chk = OxmlElement("w14:checked")
     chk.set(qn("w14:val"), "1" if marcada else "0")
@@ -210,14 +293,21 @@ def casilla(parrafo, marcada=False):
     return parrafo
 
 
-def opciones(doc, textos, por_fila=1, marcadas=()):
-    """Lista de casillas; con por_fila>1 se reparten en columnas."""
+def opciones(doc, textos, por_fila=1, marcadas=(), id=None, numeros=None):
+    """Lista de casillas. Con `id`, el número de cada opción sale a la vista (es
+    el que se usa por WhatsApp: «A 3.5: 2 y 3»). Con por_fila>1 se reparten en
+    columnas, pero estilo-documentos v0.3 las quita: en el móvil se cortan."""
+    etiqueta = (lambda n: None) if id is None else (lambda n: f"{id}|{n}")
+    numeros = id is not None if numeros is None else numeros
     if por_fila == 1:
-        for texto in textos:
+        for n, texto in enumerate(textos, start=1):
             p = doc.add_paragraph()
             p.paragraph_format.left_indent = Cm(0.3)
-            p.paragraph_format.space_after = Pt(2)
-            casilla(p, texto in marcadas)
+            p.paragraph_format.space_after = Pt(3 if numeros else 2)
+            p.paragraph_format.keep_with_next = numeros and n < len(textos)
+            casilla(p, texto in marcadas, etiqueta(n))
+            if numeros:
+                p.add_run(f"{n}  ").font.color.rgb = GRIS
             p.add_run(texto)
         return
     filas = -(-len(textos) // por_fila)
@@ -226,14 +316,14 @@ def opciones(doc, textos, por_fila=1, marcadas=()):
         celda = tabla.cell(i % filas, i // filas)
         p = celda.paragraphs[0]
         p.paragraph_format.space_after = Pt(1)
-        casilla(p, texto in marcadas)
+        casilla(p, texto in marcadas, etiqueta(i + 1))
         p.add_run(texto)
     _anchos(tabla, [16.6 / por_fila] * por_fila)
     # Sin este párrafo, Word y LibreOffice funden la tabla con la siguiente.
     doc.add_paragraph().paragraph_format.space_after = Pt(2)
 
 
-def hueco(doc, etiqueta=None, lineas=2, ayuda=None, valor=None):
+def hueco(doc, etiqueta=None, lineas=2, ayuda=None, valor=None, id=None):
     """Recuadro de color para que escriba el cliente."""
     tabla = doc.add_table(rows=1, cols=1)
     _anchos(tabla, [16.6])
@@ -250,14 +340,21 @@ def hueco(doc, etiqueta=None, lineas=2, ayuda=None, valor=None):
         r = p.add_run(("  " if etiqueta else "") + ayuda)
         r.italic, r.font.size, r.font.color.rgb = True, Pt(8.5), GRIS
     q = celda.add_paragraph(valor or "")
-    for _ in range(max(0, lineas - 1)):
-        celda.add_paragraph("")
+    if id is None:
+        for _ in range(max(0, lineas - 1)):
+            celda.add_paragraph("")
+    else:
+        # Un solo párrafo con el control, y el alto con el espaciado: sin líneas
+        # vacías fuera del control donde el cliente pueda escribir sin querer.
+        q.paragraph_format.space_after = Pt(15 * max(0, lineas - 1))
+        _control_de_texto(q, id)
     doc.add_paragraph().paragraph_format.space_after = Pt(2)
     return q
 
 
-def tabla_respuestas(doc, cabecera, filas, anchos, columnas_respuesta=(), fondo_fila=None):
-    """Tabla con cabecera oscura; las columnas de respuesta salen en color."""
+def tabla_respuestas(doc, cabecera, filas, anchos, columnas_respuesta=(), fondo_fila=None, ids=None):
+    """Tabla con cabecera oscura; las columnas de respuesta salen en color.
+    `ids`: un ID por fila (o None en las filas sin respuesta)."""
     tabla = doc.add_table(rows=1 + len(filas), cols=len(cabecera))
     tabla.alignment = WD_TABLE_ALIGNMENT.CENTER
     _bordes(tabla)
@@ -278,11 +375,15 @@ def tabla_respuestas(doc, cabecera, filas, anchos, columnas_respuesta=(), fondo_
                 _sombrear(c, FONDO_RESPUESTA)
             elif fondo_fila:
                 _sombrear(c, fondo_fila)
+            id_fila = ids[f - 1] if ids else None
+            etiqueta = f"{id_fila}|{cabecera[i]}" if id_fila is not None else None
             if valor == "[ ]":
-                casilla(p)
+                casilla(p, id=etiqueta)
             elif valor:
                 r = p.add_run(str(valor))
                 r.font.size = Pt(9.5)
+            if i in columnas_respuesta and valor != "[ ]":
+                _control_de_texto(p, etiqueta, ayuda="Escribid")
     _anchos(tabla, anchos)
     doc.add_paragraph().paragraph_format.space_after = Pt(2)
     return tabla
@@ -306,17 +407,130 @@ def recuadro(doc, titulo, texto, fondo=FONDO_SABEMOS, borde="C5D0DB"):
     return c
 
 
-def propuesta_texto(doc, titulo, texto):
+def propuesta_texto(doc, titulo, texto, id=None):
     """Texto que hemos redactado nosotros para que el cliente lo apruebe o cambie."""
     c = recuadro(doc, "✍️  " + titulo + "  ·  propuesta nuestra", texto, FONDO_PROPUESTA, "A9D3B0")
     p = c.add_paragraph()
     p.paragraph_format.space_before = Pt(6)
-    casilla(p)
+    casilla(p, id=None if id is None else f"{id}|Me gusta así")
     p.add_run("Me gusta así    ")
-    casilla(p)
+    casilla(p, id=None if id is None else f"{id}|Cambiadlo así")
     p.add_run("Cambiadlo así:")
-    c.add_paragraph("")
+    _control_de_texto(c.add_paragraph(""), None if id is None else f"{id}|cambio", ayuda="Escribid aquí cómo lo queréis")
     return c
+
+
+# ───────────── Piezas de estilo-documentos v0.3 (prototipo de Lola: bloques_docx.py)
+
+
+def _barra(tabla, color):
+    """Borde fino alrededor y barra gruesa a la izquierda: se ve en blanco y negro."""
+    bordes = OxmlElement("w:tblBorders")
+    for lado, grosor in (("top", 4), ("left", 36), ("bottom", 4), ("right", 4)):
+        b = OxmlElement(f"w:{lado}")
+        b.set(qn("w:val"), "single")
+        b.set(qn("w:sz"), str(grosor))   # octavos de punto: 36 = 4,5 pt
+        b.set(qn("w:color"), color)
+        bordes.append(b)
+    _colocar(tabla._tbl.tblPr, bordes)
+
+
+def bloque(doc, tipo, lineas=(), alto=0, id=None):
+    """Recuadro con etiqueta en mayúsculas (tipos en BLOQUES).
+    `alto`: líneas para escribir. Con `id` (para «escribid»), lo que se escriba
+    va en un control con esa etiqueta y lo lee leer_cuestionario.py."""
+    etiqueta, fondo, color = BLOQUES[tipo]
+    tabla = doc.add_table(rows=1, cols=1)
+    _anchos(tabla, [ANCHO_CM])
+    _margen_celdas(tabla, 0.25)
+    _barra(tabla, color)
+    _fila_entera(tabla.rows[0])
+    celda = tabla.cell(0, 0)
+    _sombrear(celda, fondo)
+    r = celda.paragraphs[0].add_run(etiqueta)
+    r.bold, r.font.size, r.font.color.rgb = True, Pt(9), RGBColor.from_string(color)
+    for linea in lineas:
+        celda.add_paragraph(linea)
+    if id is not None:
+        q = celda.add_paragraph("")
+        q.paragraph_format.space_after = Pt(15 * max(0, alto - 1))
+        _control_de_texto(q, id)
+    else:
+        for _ in range(alto):
+            celda.add_paragraph("")
+    doc.add_paragraph().paragraph_format.space_after = Pt(2)
+    return celda
+
+
+def pregunta(doc, id, texto, ayuda=None, imprescindible=False):
+    """El ID del catálogo de Reme a la vista, para poder contestar por WhatsApp
+    citándolo. «Imprescindible» con palabra, no con ★ (Arial no lo trae)."""
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(10)
+    p.paragraph_format.keep_with_next = True
+    r = p.add_run(f"{id}   ")
+    r.bold, r.font.color.rgb = True, ACENTO
+    p.add_run(texto).bold = True
+    if imprescindible:
+        r = p.add_run("  · imprescindible")
+        r.font.size, r.font.color.rgb = Pt(10), GRIS
+    if ayuda:
+        q = doc.add_paragraph()
+        q.paragraph_format.keep_with_next = True
+        r = q.add_run(ayuda)
+        r.font.size, r.font.color.rgb = Pt(10), GRIS
+    return p
+
+
+def validar_dato(doc, id, que, valor, imprescindible=False):
+    """Lo que hemos encontrado + «1 Está bien / 2 Hay algo mal» + hueco. Nunca una
+    casilla sola: sin marcar no se sabe si es «no» o «no lo he mirado»."""
+    pregunta(doc, id, que, imprescindible=imprescindible)
+    bloque(doc, "sabemos", valor if isinstance(valor, list) else [valor])
+    opciones(doc, ["Está bien", "Hay algo mal: escribid el bueno debajo"], id=id)
+    bloque(doc, "escribid", alto=1, id=f"{id}|bueno")
+
+
+def estado(parrafo, tipo):
+    """«Sí», «A medias» o «No», en negrita y en su color. Sin símbolos: Arial no trae ✓."""
+    palabra, color = ESTADOS[tipo]
+    r = parrafo.add_run(palabra)
+    r.bold, r.font.color.rgb = True, color
+    return r
+
+
+def como_contestar(doc, minutos, preguntas, tipos=("sabemos", "escribid", "propuesta")):
+    """Primera página, antes de cualquier pregunta. `tipos`: solo los recuadros que
+    salen en ESE documento (la leyenda no explica lo que no hay)."""
+    bloque(doc, "como", [
+        f"Son {preguntas} preguntas y se tarda unos {minutos} minutos.",
+        "Podéis contestar aquí, en el Word, o por WhatsApp citando el número de la "
+        "pregunta y de la opción: «A 3.5: 2 y 3».",
+        "Lo que no sepáis, dejadlo en blanco.",
+    ])
+    explicaciones = {"sabemos": "lo que hemos encontrado: decidnos si está bien.",
+                     "escribid": "el sitio para vuestra respuesta.",
+                     "propuesta": "un texto nuestro: aprobadlo o cambiadlo.",
+                     "aviso": "algo que tenéis que saber."}
+    t = doc.add_paragraph()
+    r = t.add_run("Qué significa cada recuadro")
+    r.bold, r.font.size = True, Pt(10)
+    for tipo in tipos:
+        etiqueta, _, color = BLOQUES[tipo]
+        p = doc.add_paragraph()
+        p.paragraph_format.space_after = Pt(1)
+        r = p.add_run(etiqueta)
+        r.bold, r.font.size, r.font.color.rgb = True, Pt(9), RGBColor.from_string(color)
+        p.add_run(f"  {explicaciones[tipo]}").font.size = Pt(10)
+
+
+def pie(doc, nombre_documento):
+    """Pie para el cliente: el documento y la página. La versión del estilo va en
+    las propiedades (cp:version), que es donde la busca Iván al probar (A-007)."""
+    pie_de_pagina(doc, nombre_documento)
+    for r in doc.sections[0].footer.paragraphs[0].runs:
+        r.font.size, r.font.name = Pt(9), FUENTE
+    doc.core_properties.version = VERSION_ESTILO
 
 
 def imagen(doc, ruta, ancho_cm, pie=None, descripcion=None):

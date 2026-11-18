@@ -1,131 +1,95 @@
-# Alta de un cliente nuevo: de «quiero una web» al primer envío
+# Alta de un cliente nuevo: de «quiero una web» al presupuesto
 
-> **Borrador v0.1 · 2026-11-17 · Federico.** Escrito al hacerlo a mano con un
-> cliente simulado (Peluquería Hermanos Cotillas, Albacete). Es la semilla de
-> las skills: todavía no es un procedimiento aprobado. Cuando Iván lo dé por
-> bueno, se pide opinión a cada agente sobre su parte.
+> **v0.2 · 2026-11-18 · Federico.** Proceso acordado con los seis agentes en la
+> ronda 1 ([consolidación](ronda-1/consolidacion.md)) y con las decisiones de Iván
+> ([bandeja](../operacion/aprobaciones.md), A-001 a A-015). La v0.1 fue la que
+> hice yo a mano: Puri la rechazó con 10 errores que bloquean, 35 importantes y
+> 21 menores ([veredicto](../clientes/peluqueria-hermanos-cotillas/revisiones/2026-11-17-primer-envio.md)).
 >
-> Ejemplo completo: [clientes/peluqueria-hermanos-cotillas/](../clientes/peluqueria-hermanos-cotillas/expediente.md)
+> El **cómo** de cada fase está en la skill de su dueño, en
+> [skills-borrador/](skills-borrador/). Este documento dice **qué, quién y en
+> qué orden**.
 
-## 1. Qué recibimos y qué entregamos
+## 1. Qué entra y qué sale
 
-**Entra:** quién es, a qué se dedica y si tiene web. Poco más.
+**Entra:** alguien escribe diciendo «quiero una web».
 
-**Sale**, antes de pedir nada al cliente:
+**Sale, antes de pedirle nada más:** un mensaje por WhatsApp con un informe
+corto de su situación en internet (gratis y sin compromiso) y la tanda A de
+preguntas, las justas para darle un presupuesto cerrado.
 
-| Entregable | Formato | ¿Al cliente? | Para qué |
-|---|---|---|---|
-| Expediente con datos comprobados y por confirmar | Markdown | No | Fuente única de verdad del cliente |
-| Informe de mercado y SEO local | PDF | **Sí** | Vendernos: que vea que sabemos de su negocio |
-| Cuestionario prerrellenado con textos propuestos | Word editable | **Sí** | Que complete y valide lo que nos falta |
-| Email de primer envío | Texto | **Sí** (lo envía Menchu) | Acompañar los dos documentos |
-| Guía de estilos previa | PDF | **No** | Adelantar diseño; se entrega al contratar |
-| Previo de precio | Markdown | **No** | Priorizar y preparar el presupuesto |
+| Entregable | Dueño | ¿Al cliente? |
+|---|---|---|
+| Expediente: datos comprobados, por confirmar y «lo que intuimos» | Chema | No |
+| Previo de precio | Reme | No |
+| Informe de 2 páginas más un anexo, en A5 | Chema (contenido) y Lola (maqueta) | **Sí** |
+| Tanda A: guion de WhatsApp, y Word como copia por correo | Reme (qué se pregunta) y Menchu (cómo se dice) | **Sí** |
+| Guía de estilos previa (3–4 páginas, como hipótesis) | Lola | No, hasta que contrate |
+| Requisitos y borrador de presupuesto | Reme | No, hasta que lo apruebe Iván |
 
 ## 2. Fases
 
 ```
-0 Abrir expediente ─► 1 Recopilar ─► 2 Competencia/SEO ─┬─► 3 Cuestionario ─┐
-                                                         ├─► 4 Guía estilos  ├─► 6 QA ─► 7 Aprobación ─► 8 Envío
-                                                         └─► 5 Previo precio ┘
+0 Primer contacto ─► 1 Investigar ─┬─► 2 Competencia e informe ─┐
+                                    ├─► 3 Previo de precio ─► 4 Tanda A ─┤
+                                    └─► 5 Guía previa (interna)          ├─► 6 Revisión ─► 7 Iván ─► 8 Envío ─► 9 Seguimiento ─► 10 Requisitos y presupuesto
 ```
 
-| # | Fase | Qué se hace | Sale | Agente propuesto |
+| # | Fase | Dueño | Skill | Termina cuando |
 |---|---|---|---|---|
-| 0 | Abrir expediente | Carpeta `clientes/<negocio>/` y `expediente.md` | Expediente vacío | Federico |
-| 1 | Recopilar | Web actual (si hay), buscadores, directorios, mapas, reseñas, redes. Capturas. | Expediente con datos comprobados / a confirmar | **Chema** |
-| 2 | Competencia y SEO | Censo de competidores (OSM), marketplaces, webs de 3–5 competidores, búsquedas objetivo | Datos + informe PDF | **Chema** |
-| 3 | Cuestionario | Lo que sabemos, lo que falta, textos propuestos | Word | **Reme** (qué preguntar) + **Chema** (textos) |
-| 4 | Guía de estilos previa | Concepto, colores con contraste, tipografías, iconos, foto, tono, boceto móvil | PDF interno | **Lola** |
-| 5 | Previo de precio | Plan que encaja, escenarios, extras, prioridad | Markdown interno | **Reme** |
-| 6 | Revisión | Cada dato trazable al expediente; nada inventado; tono; [PROPUESTA] no comunicadas | Visto bueno o rechazo | **Puri** |
-| 7 | Aprobación | Iván decide si se envía | Sí / no | Federico → Iván |
-| 8 | Envío | Email con informe y cuestionario | Enviado | **Menchu** |
+| 0 | Primer contacto: se presenta como IA, comprueba el encaje y recoge lo mínimo (cinco preguntas) | Menchu | `primer-contacto` | Expediente abierto con la petición literal |
+| 1 | Investigar: su web (si la tiene, la extrae Paco), ficha y mapas, directorios, reseñas y redes. **Captura manual de Google, la hace Iván** (A-001) | Chema (+ Paco, + Iván) | `investigar-cliente`, `extraer-web-existente` | Expediente con fuentes, fechas y niveles de fiabilidad |
+| 2 | Competencia e informe: censo con Overpass (A-015), competidores con criterio, cifras calculadas por script | Chema + Lola | `estudio-competencia`, `textos-web`, `estilo-documentos` | Informe A5 generado |
+| 3 | Previo de precio: plan, escenarios y prioridad. **Va antes de la tanda A** | Reme | `previo-precio` | Qué preguntas condicionales activa |
+| 4 | Tanda A: 8 obligatorias, condicionales según el caso y la foto de la fachada, opcional | Reme + Menchu | `cuestionario-cliente`, guion en `primer-envio` | Guion y Word generados |
+| 5 | Guía previa: hipótesis de estilo con el contraste comprobado | Lola | `guia-estilos-previa` | PDF interno |
+| 6 | **Revisión hasta APROBADO**, con re-revisión de los arreglos | Puri | `revisar-entregable` | APROBADO |
+| 7 | Aprobación del primer envío | Federico → Iván | — | Iván dice sí |
+| 8 | Envío: **WhatsApp primero**, correo como copia; Iván copia y pega (A-003) | Menchu | `primer-envio` | Enviado; fecha del siguiente contacto en `encargos.md` |
+| 9 | Seguimiento: recordatorios a los 3 y a los 8 días laborables, después pausa (A-012). Respuestas, en `privado/` | Menchu | `primer-envio` | Respuestas de la tanda A recibidas, o pausa |
+| 10 | Requisitos y borrador de presupuesto | Reme | `cuestionario-cliente` (`requisitos.md`) | Borrador para Iván |
 
-Las fases 3, 4 y 5 son independientes y pueden ir en paralelo.
+Las fases 2, 3 y 5 pueden ir en paralelo. La 4 espera a la 3.
 
-## 3. Reglas que han salido al hacerlo
+## 3. Reglas
 
-1. **Dato comprobado = dos fuentes independientes que coinciden, o una
-   primaria** (el propio negocio o su ficha de Google). Lo demás va a «por
-   confirmar» y se le pregunta al cliente.
-2. **Los directorios mienten.** Más de diez fichas de la peluquería, todas con
-   textos generados por máquina que inventan servicios, un horario distinto
-   cada una y hasta el barrio. De ahí solo sirven el nombre, la dirección, el
-   teléfono y las reseñas que reproducen literalmente.
-3. **Toda afirmación del entregable tiene que poder señalarse en el
-   expediente.** Al repasar mis propios textos encontré seis frases inventadas,
-   y no puse ninguna a propósito: «el 80 %», «han abierto muchas barberías
-   nuevas», «zona con mucho paso», «unos 20 minutos», «la que más opiniones
-   tiene», «revisado por una persona». Esta regla es la principal tarea de Puri.
-4. **No afirmar ausencias que no podemos probar.** «No hemos encontrado
-   redes» no es lo mismo que «no tiene redes».
-5. **Las fotos del cliente que hay en Google no son nuestras.** Se las pedimos.
-6. **Nada marcado [PROPUESTA] llega al cliente:** ni tarifas ni plazos.
-7. **Lo que vende es lo que no se puede copiar.** Aquí, la historia familiar
-   que cuentan los propios clientes en sus reseñas. Leer las reseñas es la
-   mejor fuente de textos.
+1. **Fuentes con nivel.** Un dato está comprobado si lo da una fuente primaria (el
+   negocio o su ficha de Google) o dos independientes. **Dos copias de lo mismo
+   cuentan como una sola fuente.** Una reseña es una pista, no un dato: se
+   convierte en pregunta.
+2. **Toda afirmación sale del expediente**, y **toda cifra, de un script** sobre
+   datos guardados, con su fecha.
+3. **No se afirman ausencias** («no hemos encontrado», nunca «no tenéis»).
+4. **No se promete nada que no hagamos:** ni llamadas (A-002), ni posiciones en
+   Google, ni plazos o precios marcados [PROPUESTA].
+5. **Solo lo necesario, y cuando haga falta.** Datos legales, fotos y aprobación de
+   textos, a la tanda B, después de aceptar el presupuesto.
+6. **El repositorio es público (A-013).** Ningún dato personal en git: va a
+   `clientes/<negocio>/privado/`. Lo de quien no contrata se borra a los 3 meses.
+7. **Ningún robot contra buscadores** ni contra lo que prohíba un `robots.txt`.
+8. **Nada sale sin el APROBADO de Puri** y sin el sí de Iván.
 
 ## 4. Herramientas
 
-Todo en [herramientas/](../herramientas/), funcionando sin abrir ventanas:
+En [herramientas/](../herramientas/). Las mantiene Paco (`herramientas-comunes`).
+Pruebas: `node herramientas/pruebas/probar.mjs`. Para reconstruir lo que no está
+en git: `herramientas/instalar.sh`.
 
-| Herramienta | Qué hace | Estado |
-|---|---|---|
-| `captura.sh` | Captura de una web con Chrome sin ventana (ordenador o móvil) | ✅ Salen los avisos de cookies; no hace página completa |
-| `buscar.sh` | Búsqueda en Bing sin ventana | ⚠️ **Poco fiable**: solo vale para búsquedas muy concretas (nombre exacto del negocio) |
-| `mapa.py` | Mapa del local y mapa de competencia con OpenStreetMap | ✅ |
-| `docx_util.py` | Piezas del Word: casillas clicables, huecos, recuadros, tablas | ✅ Probado en LibreOffice; **falta abrirlo en Word** |
-| `html_a_pdf.sh` + `informe.css` | Informes PDF maquetados en HTML | ✅ |
+## 5. Cómo se mide si sale mejor
 
-Fuentes de datos que funcionan:
+Lo mide Puri con `comparar.py` (su skill, «Comparar dos versiones»):
 
-| Fuente | Para qué | Notas |
-|---|---|---|
-| OpenStreetMap (Nominatim, Overpass) | Ubicar el local y censar competidores en un radio | Gratis. Overpass a veces está saturado: reintentar con espera. Casi nunca trae la web del negocio. |
-| Treatwell (JSON-LD de sus listados) | Competidores con reserva online, nota, opiniones y precios | Muy buena fuente |
-| Directorios (mispelus, resserv…) | Reseñas literales de Google, nota y número de opiniones | Fiables solo para eso |
-| DNS (`dig`) | Saber si un dominio parece libre | No es definitivo |
+- errores por gravedad en la primera entrega;
+- afirmaciones sin fuente;
+- regresiones;
+- si llega a APROBADO y en cuántas vueltas;
+- si el cliente recibe los ocho mensajes clave.
 
-Lo que **no** funciona:
+Base (la v0.1): **10 errores que bloquean, 35 importantes y 21 menores; 36 afirmaciones sin fuente.**
 
-| Intento | Por qué falla |
-|---|---|
-| Google | Bloquea las consultas automáticas |
-| DuckDuckGo | Pide un captcha a los robots (y no hay que saltárselo) |
-| Bing sin ventana | Con búsquedas genéricas devuelve resultados al azar |
-| Booksy | No se pudo leer el listado de Albacete |
-| Vista incrustada de OpenStreetMap | Necesita WebGL, que Chrome sin ventana no tiene |
-| `urllib` de Python | Al Python de python.org le faltan los certificados raíz: usar `curl` |
+## 6. Pendiente
 
-## 5. Decisiones que necesitamos de Iván
-
-| Asunto | Opciones | Por qué importa |
-|---|---|---|
-| **Cómo buscamos en internet** | a) navegador visible (abre ventanas) · b) API de búsqueda con plan gratuito limitado · c) solo fuentes abiertas | Sin buscador fiable, la fase 1 se queda coja con clientes que tengan redes o web |
-| Nombre, teléfono y correo de la empresa | — | Los documentos llevan «[Nombre de nuestra empresa]» |
-| ¿Se envía el informe antes de contratar? | Sí (como venta) / no | Es trabajo que regalamos para vender |
-| Dónde viven los expedientes | Provisional: `clientes/<negocio>/` en este repo | Reme lo necesita (§15) |
-| ¿Quién aprueba el primer envío? | Iván siempre / Iván solo al principio | §10.2 no cubre explícitamente este envío |
-| Dominio: ¿lo incluimos en el mantenimiento? | — | Previo de precio |
-
-## 6. Skills propuestas
-
-| Skill | Dueño | Usa |
-|---|---|---|
-| `investigar-cliente` | Chema | captura.sh, OSM, directorios, reglas 1–5 |
-| `estudio-competencia` | Chema | mapa.py, Overpass, Treatwell, captura.sh, html_a_pdf.sh |
-| `cuestionario-cliente` | Reme (+ Chema para textos) | docx_util.py |
-| `guia-estilos-previa` | Lola | html_a_pdf.sh, contraste WCAG |
-| `previo-precio` | Reme | AGENTS.md §8 |
-| `primer-envio` | Menchu | plantilla de email |
-| `revisar-entregable` | Puri | reglas 3, 4 y 6, lista de comprobación |
-
-## 7. Pendiente de mejorar
-
-- Capturas sin avisos de cookies y de página completa (con un script de
-  Playwright propio y un perfil de Chrome).
-- Medir con Lighthouse las webs de la competencia (hace falta instalarlo).
-- Abrir el Word en Microsoft Word y comprobar que las casillas funcionan.
-- Sacar a plantillas el contenido fijo del cuestionario y del informe, para no
-  reescribirlos con cada cliente.
+- Política de precios (A-011): sin ella no hay presupuesto real ni respuesta a «¿cuánto cuesta?».
+- Textos legales (A-010): sin cláusula de privacidad no se puede enviar a un cliente real.
+- Nombre de la empresa, teléfono y correo (§15).
+- Pasar las skills de `procesos/skills-borrador/` a `.github/skills/` cuando la ronda 2 las valide.

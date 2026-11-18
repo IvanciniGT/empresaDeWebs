@@ -343,3 +343,174 @@ contratar; **B2-tipo**, solo si el tipo de web lo pide; **fusionar**; **fuera**.
 | 10 · Internet | Dominio | Registro | B1 solo «¿tenéis ya?» (1.7); elegirlo, en **B2** 6.10 |
 | 11 · Gustos | Webs que gustan y que no; colores | Diseño | **B2** 6.9, si Lola lo necesita |
 | Cierre | ¿Y ahora qué? | Expectativas | B1. Errata «Prefierís» y quitar «Prometemos…» |
+
+---
+
+## 8. Ronda 1b
+
+> **E-009** · 2026-11-18 · He leído:
+> - [ronda-1b.md](ronda-1b.md) y la [consolidación](consolidacion.md) (choques 1, 3 y 6);
+> - las decisiones de Iván en [aprobaciones.md](../../operacion/aprobaciones.md);
+> - las revisiones de Menchu (§5 y §8), Puri (§5), Lola (§5), Chema (§5) y Paco (§5);
+> - la skill [primer-contacto](../skills-borrador/primer-contacto/SKILL.md) de
+>   Menchu, para no preguntar dos veces lo mismo.
+
+### 8.1 La tanda A, cerrada
+
+**8 obligatorias (5 con ★), 9 condicionales y 1 opcional.** El detalle está en
+[preguntas.md](../skills-borrador/cuestionario-cliente/preguntas.md) v0.3.
+
+| # | ID | Pregunta | ★ | Por qué está (qué cambia) |
+|---|---|---|---|---|
+| 1 | A 1.1–1.4 | Confirmar nombre, dirección, teléfono y horario (un mensaje) | | Si algo no cuadra, el informe y el previo se hicieron con datos malos |
+| 2 | A 4.1 | ¿Para qué queréis la web? (8 opciones) | ★ | Plan (reservas), fuera de catálogo (vender), extras (idioma) |
+| 3 | A 3.3 | ¿Qué servicios hacéis? | ★ | Lista corta, Esencial; carta larga, Negocio |
+| 4 | A 3.5 | ¿Cómo dais las citas ahora? | ★ | Integrar una aplicación es aparte. Si es WhatsApp, botón principal (Lola) |
+| 5 | A 5.5 | ¿Qué tenéis ya? (dominio, logotipo, fotos, vídeos) | ★ | Fotografía y logotipo, aparte; sin fotos, más plazo; dominio, a trasladar |
+| 6 | A 5.4 | La ficha de Google: ¿quién la lleva? | | Si no la controlan, más plazo |
+| 7 | A 4.4 | ¿Cada cuánto cambiaríais algo? | ★ | Básico o Plus |
+| 8 | A 4.5 | ¿Para cuándo? | | Plazo y prioridad |
+
+**Condicionales**, que solo se preguntan si toca:
+
+| ID | Qué averigua |
+|---|---|
+| A 4.6 | Si el cliente elige día y hora solo (Negocio) o pide cita (Esencial). Es la que más mueve el precio |
+| A 3.4 | Qué quieren vender por internet |
+| A 4.3 | Qué idioma |
+| A 4.7 | Si se reciben currículums |
+| A 3.7 | Qué aplicación de citas usan |
+| A 5.7 | La web actual |
+| A 5.2 | Fotos con el móvil o con fotógrafo |
+| A 5.3 | Si quieren logotipo nuevo |
+| A 2.2 | Quién da el visto bueno, si son varios |
+
+**La opcional, siempre la última:** A 5.6, la foto de la fachada (choque 3).
+
+**Cómo cuento:**
+- A 1.1–1.4 es **una** pregunta: un solo mensaje que se contesta con «sí» o
+  con lo que haya que corregir.
+- Una obligatoria **no se pregunta si ya la tenemos** del primer contacto.
+
+**Estimación para Cotillas** (no sabemos sus respuestas):
+
+| | Preguntas |
+|---|---|
+| Obligatorias | 8 |
+| A 2.2, porque son dos hermanos | 1 |
+| A 4.6, si marcan cita o reserva | 1 |
+| A 5.2 y A 5.3, si no tienen fotos ni logotipo | 2 |
+| **Total** | **unas 12, más la foto** |
+
+**La propuesta de Menchu** (su revisión, §5):
+
+| Sus preguntas | Dónde quedan |
+|---|---|
+| 1, 3, 4, 5, 6 y 7 | Entran |
+| 2 (nombres y año) | Tanda B. El nombre de quien habla ya lo tiene el primer contacto |
+| 8 (redes) | Ya se pregunta en el primer contacto |
+
+Añado A 4.4 (Básico o Plus) y A 4.5 (plazo).
+
+**Le aviso a Federico, porque afecta a lo que pidió Iván.** Su lista de
+mínimos era para la primera batería. Con la regla de la tanda A, cuatro pasan
+a la tanda B: experiencia, puntos fuertes, valores y posicionamiento.
+
+- No se pierden: están en B 6.3.
+- Salen de la tanda A porque no cambian el precio y alargan la conversación
+  por WhatsApp.
+- Si Iván los quiere antes del presupuesto, hay sitio para dos más sin pasar
+  de 10.
+
+### 8.2 Lo que he cambiado
+
+| Fichero | Cambio | Por |
+|---|---|---|
+| [preguntas.md](../skills-borrador/cuestionario-cliente/preguntas.md) v0.3 | Tanda A cerrada (8.1). B1 y B2 pasan a llamarse **tanda A** y **tanda B**; el número de cada ID no cambia | Choque 1, consolidación |
+| | Retirado lo que ya recoge `primer-contacto`: nombre, móvil, correo, cuándo escribir, web y redes, «qué queréis conseguir» | Menchu |
+| | Pregunta opcional A 5.6 (foto de la fachada); ninguna otra foto antes de aceptar | Choque 3 |
+| | Tabla «lo que ha salido de la tanda A», con el porqué de cada una | — |
+| | B 6.3 con las dos preguntas de Chema (origen del nombre y la frase de las reseñas), en presente y en audios | Chema, Puri R32, A-002 |
+| | B 6.7: fachada con el rótulo y permiso por escrito para personas y niños; B 6.9 en una línea, sin «webs que os gustan» | Lola, Puri R34, choque 6 |
+| [SKILL.md](../skills-borrador/cuestionario-cliente/SKILL.md) v0.3 | Canal WhatsApp; Word solo en la copia del correo; sin llamadas | A-002, A-003 |
+| | **Comprobación de 19 puntos** antes de Puri | Puri R31–R36, R07, R27, R04; Lola; Paco |
+| | Respuestas y Word devuelto en `privado/` (antes `recibido/`, que iba a git) | Menchu 8.3.2, A-009, A-013 |
+| | Máximo de 10 obligatorias también por cliente: lo que pida el previo entra como condicional | Choque 1 |
+| [plantilla-requisitos.md](../skills-borrador/cuestionario-cliente/plantilla-requisitos.md) v0.3 | **Sin datos personales ni precios** (va a git, que es público); cita el ID, no la respuesta | A-013 |
+| | «Se comprueba así»: regla provisional (dónde se mira y qué tiene que verse) hasta que conteste Puri | — |
+| [previo-precio](../skills-borrador/previo-precio/SKILL.md) v0.3 | Tabla «qué lo cambiaría» con los ID de la tanda A | Consolidación |
+| | **Dominio dentro de la cuota**, sin importe hasta que se elija registrador | A-011 |
+| | Criterios de prioridad unidos a su pregunta de la tanda A | — |
+| | **Salida en `privado/`**, fuera de git (8.3.1) | A-013 |
+
+### 8.3 Lo que he encontrado
+
+1. **[bloquea · para Federico] Nuestra valoración interna de un negocio real
+   está publicada.**
+   - `clientes/peluqueria-hermanos-cotillas/interno/` está en git y en GitHub,
+     que es público. Lo he comprobado con `git ls-files`: está en el commit
+     e38b879.
+   - Dentro están el previo de precio («prioridad alta», «riesgo: que tarden
+     en mandar fotos», cuánto les cobraríamos) y la guía de estilos previa.
+   - La peluquería es real, no es cliente nuestro y nadie le ha pedido
+     permiso.
+   - **Propuesta:** mover `interno/` a `privado/` y dejar de publicarlo.
+     Borrarlo también del historial de git es reescribir la historia de un
+     repositorio público: lo decide Iván.
+   - En mi skill, el previo ya sale en `privado/`.
+2. **[importante · para Menchu] Los ID cambian de prefijo:** «B1 2.3» pasa a
+   ser «A 2.3». Aparece en `primer-envio` (líneas 23 y 165) y en
+   `guion-tanda-a.md` (líneas 6, 15 y 36). El número no cambia.
+3. **[menor] Una excepción a la regla de las fotos.** En A 3.3 propongo
+   aceptar «una foto de la lista de precios» como respuesta.
+   - Es lo más fácil para un negocio que la tiene colgada en la pared.
+   - No es material para la web.
+   - Si Federico lo ve contrario al choque 3, se quita y queda «escribidla
+     como os salga».
+4. **[menor] Lo que pedía Chema para la sección de textos no aplica:** la
+   aprobación de textos ya no va en el cuestionario (acuerdo de la
+   consolidación). Sus preguntas sí entran: dos en B 6.3 y la de la cita, que
+   es A 3.5.
+
+### 8.4 Lo que necesito (lo coordina Federico)
+
+| Para | Qué | Por qué |
+|---|---|---|
+| **Menchu** | El guion de WhatsApp desde la tanda A v0.3, con el prefijo «A» en los ID | Ronda 1b |
+| **Puri** | Su respuesta sobre la columna «se comprueba así» y una pasada a mi comprobación de 19 puntos | Lo pide ronda-1b |
+| **Paco** | Lo que ya pedí: `id` en casillas, opciones y huecos (`w:tag`) y `leer_cuestionario.py` | Leer las respuestas del Word por ID |
+| **Lola** | Maqueta de la copia en Word de la tanda A (una columna, ID visibles, «Está bien / Hay algo mal») | Comprobación 15–17 |
+| **Federico** | Mover `interno/` a `privado/` (8.3.1). En `alta-cliente.md`: previo antes de la tanda A, y la fase «requisitos y borrador de presupuesto» | Ficheros suyos |
+
+### 8.5 Lo que sigue pendiente de Iván
+
+| Asunto | Dónde | Por qué importa |
+|---|---|---|
+| Qué se contesta a «¿cuánto cuesta?»; creación sin mantenimiento (¿y el dominio?); mes 13 de la suscripción; si el vídeo entra en los planes | A-011, resto | **Sin esto no sale ningún presupuesto** |
+| Línea de privacidad del primer mensaje y permiso de las opiniones | A-010 | Sin la línea de privacidad no se envía nada a un cliente real |
+| Si quiere experiencia, puntos fuertes y valores **antes** del presupuesto | 8.1 | Hay sitio para dos preguntas más |
+| Borrar `interno/` del historial público | 8.3.1 | El repositorio es público |
+
+### 8.7 Notas de Menchu sobre el catálogo (su §8.6) → v0.3.1
+
+| # | Nota | Decisión | Por qué y qué he cambiado |
+|---|---|---|---|
+| 1 | A 4.1 (opciones 3 y 4) y A 4.6 piden lo mismo dos veces | **Aceptada** | Tiene razón: el cliente tenía que distinguir dos veces lo mismo, y la primera sin contexto. A 4.1 tiene ahora una sola opción, «que puedan pedir o reservar cita desde la web», y pasa de 8 opciones a 7. **A 4.6 es la única que decide Esencial o Negocio** |
+| 2 | A 4.1 repite el «qué queréis conseguir» del primer contacto | **Aceptada** como lo hace ella | La pregunta se mantiene: el literal no siempre dice si quieren reservas, vender o idiomas, y eso cambia el precio. Lo añado al catálogo: si el primer contacto ya lo dijo, se cita y se pregunta solo «¿algo más de esto?» |
+| 3 | A 5.7 son dos preguntas | **Aceptada, con otro arreglo** | Rompía mi propia regla (una pregunta, una sola cosa), y dos mensajes con el mismo ID no se distinguen al anotar. **La parto en dos:** A 5.7 (quién os la lleva y si la pagáis: plazo) y A 5.8 (qué queréis conservar: trabajo). Pasan a ser **10 condicionales**. Las obligatorias siguen siendo 8 |
+| 4 | A 3.4: ¿paro la conversación si quieren vender por internet? | **Aceptada** (confirmado por Federico) | El catálogo decía «antes de seguir con el presupuesto», y se leía como «antes de seguir». Ahora dice: Menchu avisa a Federico en el momento, **sigue con el resto** salvo que él diga que pare, y el presupuesto no se cierra hasta que decida Iván |
+| 5 | A 1.3 va a `DATO`, que acaba en git | **Aceptada** | `DATO` es ahora solo para datos del negocio que son públicos o que quiere publicar. Un móvil personal, o el nombre de un autónomo que no está en el rótulo, va a `PRIVADO`. En A 1.3 queda escrito el caso del móvil personal |
+
+**Otro cambio:** las condiciones nombran la opción y no su número («A 4.1
+marca *vender productos por internet*»). Al fusionar las opciones 3 y 4, los
+números cambiaron:
+
+| Opción | Antes | Ahora |
+|---|---|---|
+| Vender productos por internet | 5 | 4 |
+| Otro idioma | 6 | 5 |
+| Buscar personal | 7 | 6 |
+| Otra cosa | 8 | 7 |
+
+`previo-precio` (v0.3.1) ya usa los nombres. **El guion de Menchu tiene que
+actualizar** «si = 3 o 4», «si = 5», «si = 6» y «si = 7», y añadir A 5.8.

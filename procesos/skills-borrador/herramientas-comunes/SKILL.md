@@ -5,7 +5,7 @@ description: "Mantiene las herramientas compartidas de la empresa en herramienta
 
 # herramientas-comunes
 
-> **BORRADOR v0.2 · revisado por Paco** · 2026-11-17 · **Dueño: Paco**
+> **BORRADOR v0.3 · revisado por Paco** · 2026-11-18 · **Dueño: Paco**
 > Cambios respecto a v0.1 y motivos: [procesos/ronda-1/revision-paco.md](../../ronda-1/revision-paco.md) §4.
 
 ## Cuándo
@@ -130,3 +130,19 @@ Si aparece un caso real que falla, se añade aquí como trampa nueva.
 - **Medir webs (Lighthouse):** propuesto a Iván (revisión §7).
 - **Búsqueda en internet:** sin herramienta hasta que Iván decida (revisión §6).
 - `informe.css`, `docx_util.py` y `mapa.py` con la guía de estilo de Lola, cuando se apruebe.
+
+## Novedades v0.3 (ronda 1b)
+
+| Herramienta | Qué hace | Cómo se llama |
+|---|---|---|
+| `instalar.sh` / `desinstalar.sh` / `INSTALACIONES.md` | Lo de A-008, dentro de `herramientas/` | `herramientas/instalar.sh [componente]` |
+| `estilo.css` + `iconos.py` | Estilo común de los PDF (Lola, v0.3), A5, Inter, «página X de Y»; iconos Lucide en línea | `<link href="…/herramientas/estilo.css">` · `iconos.svg("check")` |
+| `docx_util.py` | Paleta v0.3, Arial 11; piezas `bloque`, `pregunta`, `validar_dato`, `estado`, `como_contestar`, `pie`; `id` en casillas, huecos y tablas (`w:tag` = «A 3.5|2») | igual que antes |
+| `leer_cuestionario.py` | Respuestas del Word por ID a Markdown; avisa de lo escrito fuera de los recuadros; no escribe donde iría a git | `python3 herramientas/leer_cuestionario.py recibido.docx --original enviado.docx --catalogo preguntas.md -o privado/respuestas.md` |
+| `overpass.mjs` | Overpass por `overpass.private.coffee` (A-015), guarda consulta, respuesta y metadatos; no repite; espera 30 s ante 429 | `node herramientas/overpass.mjs consulta.overpassql carpeta` |
+| `ortografia.py` | hunspell + es_ES + `diccionarios/empresa.txt` | `python3 herramientas/ortografia.py fichero` |
+| `transcribir.sh` | Notas de voz en local con whisper.cpp; se niega a escribir donde iría a git | `herramientas/transcribir.sh audio.opus` |
+| `medir_web.mjs` | Lighthouse en móvil y ordenador; `--con-medidores` para nuestras webs (§11) | `node herramientas/medir_web.mjs URL carpeta` |
+| `captura.mjs` | `--elemento SEL` y `--recorte X,Y,ANCHO,ALTO` (capturas recortadas) | — |
+| `html_a_pdf.mjs` | Avisa también de imágenes sin `alt` | — |
+| `mapa.py` | Estilo v0.3: «Vosotros», peluquerías ● y barberías ■, leyenda dentro, Inter | igual que antes |

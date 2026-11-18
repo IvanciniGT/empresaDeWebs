@@ -1,159 +1,221 @@
 ---
 name: primer-envio
-description: "Envía a un cliente nuevo, una vez aprobado por Iván, lo que hemos preparado (el informe y las preguntas para el presupuesto) por el canal que prefiere, normalmente WhatsApp. Le ofrece contestar de la forma que le cueste menos y hace el seguimiento con un calendario fijo hasta recibir las respuestas o dejarlo en pausa. Úsala cuando el informe y las preguntas han pasado la revisión de Puri y la aprobación de Iván."
+description: "Envía a un cliente nuevo, una vez aprobado por Iván, el informe gratuito y las preguntas de la tanda A (las justas para el presupuesto) por WhatsApp, con copia por correo. Le hace las preguntas por el chat, de una en una, recoge las respuestas con su ID del catálogo y hace el seguimiento con dos recordatorios (a los 3 y a los 8 días laborables) hasta tenerlas todas o dejar el alta en pausa. Úsala cuando el informe y la tanda A han pasado la revisión de Puri y la aprobación de Iván."
 ---
 
 # primer-envio
 
-> **BORRADOR v0.2 · revisado por Menchu** · 2026-11-17 · **Dueña: Menchu**
-> Sobre la v0.1 de Federico. Lo marcado **[PENDIENTE IVÁN]** no se usa con
-> clientes hasta que Iván lo decida.
+> **BORRADOR v0.4 · revisado por Menchu** · 2026-11-18 · **Dueña: Menchu** ·
+> con el [guion de la tanda A](guion-tanda-a.md) v0.4 (catálogo v0.3.1) ·
+> v0.4: arreglados R03, R04 y R08–R10 de la [revisión de Puri](../../ronda-1/revision-plantillas-menchu.md)
+>
+> Incorpora las decisiones de Iván **A-002** (sin llamadas), **A-003** (WhatsApp
+> primero, correo como copia; Iván copia y pega), **A-004** (cómo se nombra a
+> Iván), **A-005** (informe de 2 páginas más un anexo, gratis y sin compromiso),
+> **A-009** y **A-013** (datos personales en `privado/`) y **A-012**
+> (recordatorios y plantillas aprobadas una vez), y la resolución del choque 3
+> (la foto de la fachada).
+>
+> Lo marcado **[PENDIENTE]** no se usa con clientes hasta que se decida. Las
+> plantillas se usan cuando Puri las haya revisado e Iván las haya aprobado
+> **una vez** (A-012).
 
 ## Cuándo
 
-Cuando el informe y las preguntas de la **tanda A** (las justas para
-presupuestar) están **revisados por Puri y aprobados por Iván**.
+Cuando el informe y la tanda A (en la versión del catálogo que diga el guion) están **revisados
+por Puri hasta APROBADO y aprobados por Iván**, como muy tarde el día que le
+prometí al cliente en el primer contacto (plazo interno en
+[primer-contacto](../primer-contacto/SKILL.md#plazo-interno-del-alta-propuesta--ajustar-con-la-ronda-2)).
 
 **Objetivo:** que el cliente conteste a la tanda A con el menor esfuerzo
 posible, sin perseguirle ni dejarle olvidado.
 
-**Fuera de esta skill:** las fotos, el logotipo, los datos legales y los textos
-para la web. Van en la **tanda B**, después de que acepte el presupuesto.
+**Fuera de esta skill:** las fotos (salvo la de la fachada, que es opcional), el
+logotipo, los datos legales y la aprobación de los textos. Todo eso va en la
+**tanda B**, después de que acepte el presupuesto.
+
+## Qué apruebo yo y qué aprueba Iván
+
+| Mensaje | Aprobación |
+|---|---|
+| El primer envío de cada cliente (informe y mensajes) | **Iván, cliente a cliente**, después del APROBADO de Puri |
+| Las preguntas del guion de la tanda A, los recordatorios, el aviso de retraso y las respuestas de «Si dice…» | **Una vez**: Puri las revisa e Iván las aprueba (A-012). Después las adapto al cliente sin cambiar el fondo |
+| Cualquier mensaje que no salga de una plantilla aprobada | Iván, a través de Federico |
 
 ## Antes de enviar · comprobación
 
-- [ ] He leído el expediente entero: nombre del negocio, con quién hablo, trato
-      (tú/usted, singular/plural), canal y momento preferidos, y lo que le
-      prometí en el primer contacto.
-- [ ] Puri ha dado el visto bueno e Iván lo ha aprobado (por medio de Federico).
-- [ ] No queda ningún hueco por rellenar: `[Empresa]`, teléfono, correo, nombres.
-- [ ] Nada interno: ni guía de estilos ni previo de precio.
+- [ ] He leído `expediente.md`, `privado/contacto.md` y `privado/contactos.md`:
+      nombre del negocio, con quién hablo, trato (tú/usted, singular/plural),
+      mejor momento para escribirle, si usa correo y qué le prometí.
+- [ ] Puri ha dado APROBADO e Iván lo ha aprobado (por medio de Federico).
+- [ ] No queda ningún hueco por rellenar: `[Empresa]`, número, correo, nombres, días.
+- [ ] Nada interno: ni guía de estilos, ni previo de precio, ni el anexo si
+      Chema lo ha marcado como interno.
 - [ ] Nada en [PROPUESTA]: ni precios ni plazos.
-- [ ] **Todo lo que prometo lo podemos cumplir.** Si ofrezco una llamada,
-      alguien la hará. Si digo un día, ese día escribo.
-- [ ] Cada dato de mis mensajes se puede señalar en el expediente: cifras,
-      años, número de páginas…
+- [ ] **Todo lo que prometo lo podemos cumplir.** Ninguna llamada (A-002). Si
+      digo un día, ese día escribo.
+- [ ] **Las cifras de mis mensajes están copiadas literalmente del informe
+      aprobado**, nunca de memoria, y escritas igual que en él (Puri, R03 y R43).
+- [ ] Digo «la asistente», no «el asistente» (R58).
 - [ ] Es horario laboral (lunes a viernes, de 9:00 a 20:00) y, si me lo dijo,
       el momento que prefiere el cliente.
 
-## Canal
+## Canal (A-003)
 
-| Lo que dijo en el primer contacto | Envío |
+| Lo que sé del primer contacto | Envío |
 |---|---|
-| WhatsApp, o no dijo nada | **WhatsApp**: mensajes cortos y el PDF del informe |
-| Correo | **Correo**: el informe y el cuestionario adjuntos |
-| Nos dio las dos cosas | WhatsApp, y el correo con los adjuntos como copia «para el ordenador» |
+| Tiene WhatsApp (lo normal) | **WhatsApp**: mensajes cortos, el informe en PDF y las preguntas por el chat |
+| Tiene WhatsApp y nos dio un correo | WhatsApp, y **copia por correo** con el informe y la tanda A en Word, «para el ordenador» |
+| Solo correo | Correo con los dos adjuntos, ofreciéndole seguir por WhatsApp |
 
-[PENDIENTE IVÁN] Cómo se envía de verdad. Hoy no tengo acceso a WhatsApp ni al
-correo: redacto los mensajes y los envía quien decida Iván.
+Yo redacto cada envío en `clientes/<negocio>/privado/mensajes/AAAA-MM-DD-NN.md`,
+con cada mensaje de WhatsApp en su propio bloque y los adjuntos indicados.
+**Iván lo copia y lo envía.** Si cambia algo, me lo dice y lo anoto: el
+cliente ha recibido lo que envió él.
 
 ## Plantillas · WhatsApp
 
-Cuatro mensajes cortos, uno detrás de otro. Una idea en cada uno.
+Cuatro mensajes cortos, uno detrás de otro, con una idea en cada uno.
 
 **1 · Quién soy y qué le mando**
 
 > Hola, [nombre]. Soy Menchu, de [Empresa], la asistente de IA con la que
-> hablasteis el [día]. Ya tenemos lo que os prometí: hemos mirado todo lo que
-> hay publicado sobre [negocio] y os lo hemos resumido en este informe.
-> [Es gratis y sin compromiso.]
+> hablasteis el [día]. Como os dije, hemos mirado lo que hay publicado sobre
+> [negocio] y os lo hemos resumido en un informe corto. Es gratis y sin
+> compromiso.
 >
 > 📎 [informe en PDF]
 
-[PENDIENTE IVÁN] «Es gratis y sin compromiso»: solo si Iván confirma que el
-informe se regala.
+Si Chema y Lola entregan la primera página como imagen, va **antes** del PDF:
+se ve sin abrir nada.
 
-**2 · Lo bueno y lo que se puede mejorar.** Un dato de cada, sacados del
-informe aprobado y que se puedan rastrear en el expediente.
+**2 · Lo bueno y lo que se puede mejorar.** Un dato de cada, **copiados del
+informe aprobado**.
 
-> Lo bueno: [p. ej. «vuestros clientes os ponen un 4,8 sobre 5 en Google»].
-> Lo que se puede mejorar: [p. ej. «cuando buscamos vuestro nombre salen más de
-> diez páginas con datos que no habéis escrito vosotros, y algunos están mal»].
+> Lo bueno: [dato del informe].
+> Lo que se puede mejorar: [dato del informe].
 
-**3 · Cómo prefiere contestar**
+**3 · Lo que necesito y cómo**
 
-> Para preparar el presupuesto me faltan [N] preguntas cortas. Casi todo ya
-> está rellenado: solo tenéis que corregir y completar. ¿Cómo os viene mejor?
->
-> 1️⃣ Os las hago por aquí, de una en una, cuando tengáis un rato.
-> 2️⃣ Os mando un documento para rellenar en el ordenador.
-> [3️⃣ Os llama Iván y lo habláis en un rato.]
+> Para prepararos el presupuesto me faltan unas [N] preguntas cortas. La
+> primera es para confirmar lo que ya tenemos de vosotros; la mayoría de las
+> demás se contestan eligiendo una opción. Os las hago por aquí, de una en
+> una, cuando tengáis un rato: podéis contestar entre cliente y cliente.
+> [Si nos dio correo: «Si lo preferís, os he mandado al correo un documento
+> para rellenarlo en el ordenador».]
 
-[PENDIENTE IVÁN] La opción 3 solo existe si Iván decide hacer llamadas.
-
-**4 · Qué pasa después y cuándo vuelvo**
+**4 · Qué pasa después, y la primera pregunta**
 
 > Con eso os preparamos un presupuesto cerrado, por escrito y sin letra
-> pequeña. Si el [día del recordatorio 1] no sé nada, os escribo para ver
-> qué tal.
+> pequeña. ¿Empezamos? [pregunta 1 del guion]
 
-## Plantilla · correo
+Si el cliente no contesta, la siguiente vez que le escribo es el
+recordatorio 1 (día +3).
 
-**Asunto:** [Negocio]: lo que hemos visto de vuestra web
+## Plantilla · correo (copia, o envío principal si solo hay correo)
+
+**Asunto:** [Negocio]: lo que hemos visto, y unas preguntas para el presupuesto
 
 > Hola, [nombre]:
 >
 > Soy Menchu, de [Empresa]. Soy una asistente de inteligencia artificial: os
-> atiendo yo, y lo importante lo revisa y aprueba [Iván, el responsable]. Si
-> preferís hablar con él, decídmelo.
+> atiendo yo, y lo importante (presupuestos, publicar vuestra web) lo revisa y
+> aprueba Iván, el responsable. Si preferís hablar con él, decídmelo.
 >
 > Nos escribisteis el [día] porque queríais una web. Antes de pediros nada,
-> hemos hecho los deberes y os mandamos dos cosas:
+> hemos hecho los deberes. Os mando dos cosas, gratis y sin compromiso:
 >
-> **1. Un informe sobre cómo os encuentran en internet.** Lo bueno: [dato].
-> Lo que se puede mejorar: [dato].
+> **1. Un informe corto sobre cómo os encuentran en internet.** Lo bueno:
+> [dato del informe]. Lo que se puede mejorar: [dato del informe].
 >
-> **2. [N] preguntas para el presupuesto**, con casi todo ya rellenado. Solo
-> tenéis que corregir y completar. Si os resulta más cómodo, os las hago por
-> WhatsApp, de una en una, en el [número].
+> **2. Unas [N] preguntas cortas para el presupuesto.** La primera es para
+> confirmar lo que ya tenemos de vosotros; la mayoría de las demás se
+> contestan eligiendo una opción. [Si hay WhatsApp: «Son las mismas que os
+> estoy haciendo por WhatsApp: contestad por donde os resulte más cómodo».
+> Si no: «Si os resulta más cómodo, os las hago por WhatsApp, de una en una, en
+> el [número]».]
 >
 > Con vuestras respuestas os preparamos un presupuesto cerrado, por escrito y
-> sin letra pequeña. [Todo esto es gratis y sin compromiso.]
->
-> Si el [día] no sé nada, os escribo para ver qué tal.
+> sin letra pequeña.
 >
 > Un saludo,
 > Menchu · Asistente de IA · [Empresa]
 > [WhatsApp] · [correo]
 
+## Las preguntas de la tanda A
+
+Las hago siguiendo el [guion de la tanda A](guion-tanda-a.md):
+
+- **qué** se pregunta lo decide Reme: como mucho 10 obligatorias, y las
+  condicionales solo si toca;
+- **cómo** se dice por WhatsApp, y en qué orden, yo.
+
+El guion v0.3 sale del catálogo v0.3.1: 8 obligatorias, 10 condicionales y la
+foto de la fachada (A 5.6), opcional y siempre la última. A Cotillas, con la
+regla del guion, se le anunciarían unas 9: las 8 obligatorias más A 2.2,
+porque son dos hermanos. Las demás condicionales dependen de sus respuestas.
+Si el catálogo cambia de versión, el guion se
+revisa antes de usarlo: [medir_guion.py](medir_guion.py) lo comprueba y falla
+mientras no coincidan.
+
+La foto de la fachada es la única que pido antes del presupuesto. Si la manda,
+se guarda en `privado/fotos/` y aviso a Federico para Lola. Las demás fotos,
+con los tamaños de Lola, van en la tanda B.
+
 ## Recoger las respuestas
+
+Cada respuesta se anota **con su ID del catálogo** («A 3.5») en
+`privado/respuestas-tanda-a.md`, **literal**, con la fecha y el canal (formato
+en el [guion](guion-tanda-a.md#cómo-se-anotan-las-respuestas)). Así Reme
+puede rastrear cada requisito hasta su origen.
 
 | Cómo contesta | Qué hago |
 |---|---|
-| Por WhatsApp, pregunta a pregunta | Mando una pregunta y espero la respuesta. Con cada respuesta: «Gracias, apuntado. Me quedan [N].» |
-| Con el documento | Lo guardo en el expediente y paso las respuestas, literales, al formato de Reme |
+| Por WhatsApp, pregunta a pregunta | Con cada respuesta: «Gracias, apuntado. Me quedan [N].» Y la siguiente pregunta |
+| Varias de golpe, o desordenadas | Las reparto por ID y solo pregunto lo que falte |
+| Con el Word | Guardo el original **intacto** en `privado/recibido/` y paso las respuestas por ID |
 | Con una foto del papel rellenado | Igual. Si algo no se lee, lo pregunto por el chat |
-| Con audios | [PENDIENTE IVÁN] Hoy no puedo escucharlos: le pido con amabilidad que lo escriba y aviso a Federico |
-| Corrige un dato público (el horario, por ejemplo) | Gana lo que dice el cliente, que es fuente primaria. Lo anoto como «confirmado por el cliente» |
+| Con audios | Cuando esté whisper.cpp (A-008): transcripción en local, en `privado/whatsapp/`, y anoto la respuesta. Hasta entonces, le pido que lo escriba |
+| Corrige un dato público (el horario, por ejemplo) | Gana lo que dice el cliente, que es fuente primaria. Lo anoto como «confirmado por el cliente» y aviso a Federico para el expediente |
+| «No lo sé» o lo deja en blanco | Se anota así. No insisto, salvo que la pregunta sea ★ (sin ella no hay presupuesto): entonces una sola vez, explicando por qué la necesito |
 
-Cuando la tanda A esté completa: «¡Ya está! Con esto os preparamos el
-presupuesto. Os lo mando [cuándo].» Lo anoto en el expediente y aviso a Federico.
+Cuando la tanda A está completa:
 
-## Calendario de seguimiento [PROPUESTA · decide Iván]
+> ¡Ya está, [nombre]! Con esto os preparamos el presupuesto. [PENDIENTE A-011:
+> «Os lo mando el [día]».]
+
+Lo anoto y aviso a Federico para que siga Reme. [PENDIENTE A-011] El plazo
+del presupuesto no se puede fijar hasta que haya tarifas. Mientras tanto, sin
+fecha: «en cuanto lo tengamos, os escribo».
+
+## Calendario de seguimiento (A-012)
 
 Se cuentan **días laborables** (de lunes a viernes, sin festivos), siempre
 dentro de nuestro horario y, si lo sé, en el momento que prefiere el cliente.
 
 | Día | Qué | Si contesta |
 |---|---|---|
-| 0 | Envío | — |
-| +3 | **Recordatorio 1.** Trae ya la primera pregunta, para que contestar cueste menos | Seguimos con las preguntas |
-| +8 | **Recordatorio 2 (último).** Le digo que es el último | Seguimos |
+| 0 | Envío, con la primera pregunta | — |
+| +3 | **Recordatorio 1.** Vuelve a traer la pregunta pendiente, para que contestar cueste menos | Seguimos con las preguntas |
+| +8 | **Recordatorio 2.** Le digo que es el último | Seguimos |
 | Después | **Pausa.** No vuelvo a escribir. Expediente en «En pausa · sin respuesta» y aviso a Federico | Si vuelve, seguimos donde lo dejamos |
 
-Si **contesta a medias**, el calendario vuelve a empezar desde su último
-mensaje, solo para lo que falta y con **un único** recordatorio.
+Si **contesta a medias y se para**, se cuenta desde su último mensaje, solo
+para lo que falta y con **un único** recordatorio a los 3 días laborables. Si
+tampoco contesta a ese, **pausa**, igual que al final del calendario. [PENDIENTE
+IVÁN, R10] Esto se aparta de A-012 (dos recordatorios): lo confirma Iván al
+aprobar las plantillas.
 
-La fecha del siguiente contacto va al expediente y se la paso a Federico para
-`encargos.md`. Si no la apunto, nadie me la va a recordar.
+La fecha del siguiente contacto va a `expediente.md` y se la paso a Federico
+para `encargos.md`. Si no la apunto, nadie me la va a recordar.
 
 **Recordatorio 1** (+3)
 
 > Hola, [nombre]. Soy Menchu, de [Empresa]. Sé que entre cliente y cliente no
-> hay mucho tiempo 🙂 ¿Os hago la primera pregunta? Es rápida:
-> [pregunta 1 de la tanda A]
+> hay mucho tiempo 🙂 Os dejo la pregunta por aquí, por si os pilla con un
+> momento: [pregunta pendiente]
 
-**Recordatorio 2 (último)** (+8)
+**Recordatorio 2, el último** (+8)
 
 > Hola, [nombre]. No quiero ser pesada: este es mi último mensaje. Si ahora no
 > es buen momento para la web, no pasa nada. El informe es vuestro y, cuando
@@ -166,30 +228,38 @@ La fecha del siguiente contacto va al expediente y se la paso a Federico para
 - Ni más de dos recordatorios, ni mensajes en fin de semana o fuera de horario.
 - No cambio de canal para insistir: si no contesta por WhatsApp, no le escribo
   además al correo.
+- No ofrezco una llamada para desatascarlo (A-002).
 
 ## Si dice…
 
 | Dice | Contesto | Después |
 |---|---|---|
-| «Ahora no, más adelante» | «Entendido. ¿Os parece que os escriba en [mes]?» Solo si dice que sí | Anoto la fecha. Expediente en «En pausa · retomar [fecha]». Aviso a Federico |
+| «Ahora no, más adelante» | «Entendido. ¿Os parece que os escriba en [mes]?» Solo si dice que sí | Anoto la fecha. Expediente en «En pausa · retomar [fecha]». Aviso a Federico. [PENDIENTE A-010] si podemos guardar sus datos más de 3 meses porque nos lo pide él |
 | «No nos interesa» | «Gracias por decírnoslo, [nombre]. Si alguna vez cambia, aquí estamos.» Como mucho: «Si queréis contarme por qué, nos ayuda a mejorar; si no, ningún problema.» | No insisto. Expediente en «Cerrado · no interesa». Aviso a Federico |
 | «¿Cuánto cuesta?» | La respuesta de [primer-contacto](../primer-contacto/SKILL.md#lo-que-preguntan-siempre) | — |
-| «Quiero hablar con una persona» | «Claro, se lo paso ahora mismo a [Iván].» | A Federico, sin retenerle (§9.3) |
-| Algo del informe le molesta o le parece falso | Reconozco, le doy las gracias y no discuto: «Tienes razón en revisarlo; lo compruebo y te digo.» | A Federico. Si es una queja, §9.5 |
-| Pide algo que no está en §6 | «Lo apunto y os lo confirmo.» | A Federico |
+| «¿Me llamáis?» | «Ahora mismo no hacemos llamadas, pero os voy preguntando por aquí, a vuestro ritmo.» | A-002. Si insiste en hablar con una persona, la fila siguiente |
+| «Quiero hablar con una persona» | «Claro, le paso vuestro mensaje a Iván.» | A Federico, sin retenerle (§9.3). Sin prometer una llamada |
+| Algo del informe le molesta o le parece falso | Reconozco, le doy las gracias y no discuto: «Gracias por decírnoslo; lo revisamos y os digo algo [cuándo].» | A Federico. Si es una queja, §9.5 |
+| Pide algo que no está en §6 | «Lo apunto y os lo confirmo [cuándo].» | A Federico, que fija el [cuándo] (regla en [primer-contacto](../primer-contacto/SKILL.md#lo-que-preguntan-siempre)) |
 
-## Expediente
+## Expediente (A-009, A-013)
 
-En cada contacto, una línea en el **registro de contactos**: fecha, canal, qué
-se envió o se dijo, qué se prometió y la fecha del siguiente contacto. Las
-respuestas, **literales**.
+El repositorio es público: **nada que identifique a una persona entra en git**.
 
-El estado del expediente: «Primer envío hecho», «Respondiendo», «Tanda A
-completa», «En pausa · sin respuesta», «En pausa · retomar [fecha]» o «Cerrado
-· no interesa».
+| Qué | Dónde |
+|---|---|
+| Lo que se envía y se recibe, literal (registro de contactos) | `privado/contactos.md` |
+| Respuestas de la tanda A, con su ID | `privado/respuestas-tanda-a.md` |
+| Word devuelto, fotos, chats exportados y audios | `privado/recibido/`, `privado/fotos/`, `privado/whatsapp/` |
+| Mensajes redactados para Iván | `privado/mensajes/` |
+| Estado, fechas y próximo contacto, sin datos personales | `expediente.md` |
 
-[PENDIENTE IVÁN] Dónde se guardan los documentos, fotos y audios que mande el
-cliente: fuera de git (§12).
+Estados: «Primer envío hecho», «Respondiendo», «Tanda A completa», «En pausa ·
+sin respuesta», «En pausa · retomar [fecha]» o «Cerrado · no interesa».
+
+**Si no contrata,** lo de `privado/` se borra a los 3 meses del último contacto
+(A-009). Al pasar a pausa o a cerrado, anoto en `expediente.md` la fecha de
+borrado y se la paso a Federico. Borrar lo aprueba Iván (§10.2).
 
 ## Reglas
 
@@ -198,20 +268,25 @@ cliente: fuera de git (§12).
 3. Nunca adjuntar documentos internos (guía de estilos, previo de precio).
 4. Tutear o hablar de usted, en singular o en plural, como lo haga el cliente (§9.2).
 5. Nunca pedir contraseñas (§12).
-6. No prometer nada que no podamos cumplir: llamadas, visitas, fotos, fechas.
-7. En esta fase no pido fotos, logotipo ni datos legales: van en la tanda B.
-8. Cada dato de mis mensajes se tiene que poder señalar en el expediente.
+6. No prometer nada que no podamos cumplir: **ni llamadas (A-002)**, ni visitas,
+   ni fechas que no salgan del plazo interno.
+7. En esta fase solo pido la foto de la fachada, y es opcional. El resto de
+   fotos, el logotipo y los datos legales van en la tanda B.
+8. Las cifras, copiadas del informe aprobado; cada dato de mis mensajes se
+   tiene que poder señalar en el expediente.
+9. **Nada que identifique a una persona entra en git** (A-013).
 
 ## Salida
 
-- Las respuestas de la tanda A, literales, en el expediente, y el aviso a
-  Federico para que siga Reme.
-- O bien el expediente en pausa o cerrado, con el motivo, y el aviso a Federico.
+- `privado/respuestas-tanda-a.md` completo, con los ID, y aviso a Federico
+  para que siga Reme.
+- O bien el expediente en pausa o cerrado, con el motivo y la fecha de borrado,
+  y aviso a Federico.
 
 ## Dudas abiertas
 
-- ¿Llamadas sí o no, y quién las hace? (revisión E-007, §6.1)
-- ¿Cómo envío y recibo de verdad? (§6.4)
-- ¿Se regala el informe y lo decimos? (§6.5)
-- ¿Te vale el calendario de seguimiento? (§6.7)
-- ¿Cómo entiendo los audios? (§7)
+- Las dudas del guion que he pasado a Reme (revisión de Menchu, §8.6).
+- El plazo del presupuesto (A-011, pendiente).
+- Guardar datos más de 3 meses si el cliente pide que le escribamos más
+  adelante (A-010).
+- Si el anexo del informe va al cliente o es interno: lo dirán Chema y Lola.

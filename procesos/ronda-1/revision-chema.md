@@ -324,3 +324,89 @@ medida**», sin cifras. Es lo que ya hizo Federico; solo cambia que la lista sal
 
 No he instalado nada ni he creado cuentas. Las pruebas han sido de lectura: `robots.txt`, páginas de precios y
 condiciones, una petición a salonjulia.es, consultas DNS y una petición a PageSpeed Insights.
+
+## 8. Ronda 1b
+
+> E-008 · 2026-11-18 · Skills en v0.3 con las decisiones de Iván
+> ([aprobaciones](../../operacion/aprobaciones.md)) y la [consolidación](consolidacion.md).
+
+### 8.1 Qué he cambiado
+
+| Skill | Cambio | Por |
+|---|---|---|
+| [`investigar-cliente`](../skills-borrador/investigar-cliente/SKILL.md) | **Guion de captura manual para Iván**: 9 capturas y unos 10 minutos. Lleva enlaces exactos, ventana privada, solo la ventana del navegador, sin renombrar nada y las capturas a `privado/`. Lo genera [`enlaces_captura.py`](../skills-borrador/investigar-cliente/enlaces_captura.py). | A-001 |
+| | Sin API: Google lo mira una persona; lo demás, fuentes abiertas, después de leer su `robots.txt`. | A-001 |
+| | «Reclamar esta empresa» en la ficha: si sale, la ficha no está reclamada. Responde a una duda de la v0.2. | — |
+| | **Cada cita de reseña con su prueba**, guardada en `privado/` porque lleva el nombre del autor. | Puri R30, A-009 |
+| | **Nada personal en `expediente.md`**: ni autores de reseñas ni nombres de los dueños. | A-013, A-009 |
+| | Cómo contesta el negocio a las reseñas: es su voz, y la usa `textos-web`. | Lola (tono) |
+| [`estudio-competencia`](../skills-borrador/estudio-competencia/SKILL.md) | **Cifras por script**: [`censo.py`](../skills-borrador/estudio-competencia/censo.py) genera la consulta de Overpass, calcula `cifras.json` desde la respuesta guardada (con fecha de los datos y huella) y los puntos del mapa. Ninguna cifra en la plantilla. | Puri R03–R05 |
+| | Overpass solo por la instancia que fije Paco; si no está fijada, no se lanza. | A-015 |
+| | **Informe A5: 2 páginas más un anexo.** La página 1 funciona sola (es la imagen de WhatsApp). La 2 lleva el aviso de los directorios, una o dos opiniones y la frase principal como idea. El anexo cierra con el siguiente paso y el contacto. «Gratis y sin compromiso». | A-005, Lola, Reme, Menchu |
+| | **Lo que no se regala**, escrito: 6 puntos. | consolidación |
+| | Competidores «de búsqueda» sacados de la captura de Iván, no de una API. Las búsquedas objetivo se eligen **antes** del guion, porque van dentro. | A-001 |
+| | Atribución `openstreetmap.org/copyright` en el mapa y en el anexo. | Paco |
+| [`textos-web`](../skills-borrador/textos-web/SKILL.md) | **Ficha de tono** (antes, en la guía de Lola): fuentes por orden, tratamiento, rasgos con fuente, palabras prohibidas y pares «así sí / así no» sin datos sin comprobar. | Lola, consolidación |
+| | **Frase principal de 45 caracteres como mucho**, medida, y en 2 variantes. | Lola |
+| | **Tres modos según las tandas:** muestra (informe), propuesta (tanda B) y definitivo. Los textos completos ya no van antes del presupuesto. | Reme, Menchu |
+| | **Lista de frases vigiladas** ([`frases-vigiladas.txt`](../skills-borrador/textos-web/frases-vigiladas.txt)) con [`vigilar_frases.py`](../skills-borrador/textos-web/vigilar_frases.py). Nivel B (bloquea) y R (con traza). | Puri |
+| | La historia del negocio, de sus **audios de WhatsApp** transcritos en local. | A-002, Menchu |
+
+### 8.2 Cómo he probado las tres herramientas
+
+Todas usan solo Python del sistema, sin instalar nada. Cada prueba la he comprobado
+**rompiendo el código a propósito**: si la prueba no falla, no sirve.
+
+| Herramienta | Pruebas | Mutaciones detectadas | Además |
+|---|---|---|---|
+| `censo.py` | 9 | 11 de 11 (quitar el filtro de tiendas, contar al cliente, anillos, duplicados, regex en la consulta, distancia, atribución, ejes del mapa…) | Contrastado con los datos de la ronda 1 (reconstruidos en `/tmp`): **33** a menos de 250 m (7 de caballero) y **273** en 1,5 km. Coincide con el recuento a mano de Puri y mío. |
+| `vigilar_frases.py` | 7 | 10 de 10 | Sobre el envío de la ronda 1 marca **5 B en el informe y 5 en el cuestionario**, todos errores que ya habíamos visto. Las pruebas encontraron dos cosas que he corregido: un hueco («el joven, que busca en el móvil» se escapaba) y un falso positivo (nuestra frase «Nadie puede garantizar…» bloqueaba). |
+| `enlaces_captura.py` | 8 | 9 de 9 (fuera de `privado/`, sin idioma, más de 3 búsquedas, sin comillas en redes, mapa sin centrar, sin escapar HTML…) | Guion de ejemplo generado en `/tmp` y revisado como imagen. |
+
+Ejecutar desde la raíz: `python3 -m unittest discover -s procesos/skills-borrador/<skill>/pruebas`.
+
+### 8.3 Dos hallazgos nuevos
+
+1. **En la ronda 1, el mapa y la tabla medían distinto.** `puntos-metros.json` (el mapa)
+   y `competidores-osm-1500m.json` (la tabla) difieren hasta un 1,5 %, y un local cambia
+   de anillo según cuál se mire. Con `censo.py mapa`, los dos salen del mismo cálculo.
+2. **«El vecino más cercano» era cierto solo a medias.** Hay tres peluquerías más cerca
+   (Actuall, a 41 m; My Bell, a 47 m; MG Peluqueros, a 52 m), pero **Barber Shop
+   Gentleman (79 m) sí es el más cercano de caballero**. Con el criterio de público por
+   separado, el script lo dice sin ambigüedad.
+
+### 8.4 Respuestas a otros agentes
+
+| A | Respuesta |
+|---|---|
+| **Menchu** (¿el anexo va al cliente? ¿habrá imagen de la primera página?) | **Sí, el anexo va al cliente**, dentro del mismo PDF: es nuestra transparencia sobre fuentes y límites. **Sí, habrá imagen** de la página 1 (`pagina-1.png`, con `pdftoppm`), que escribo para que se entienda sola. |
+| **Reme** (¿la historia por teléfono?) | Sin teléfono (A-002). Me vale lo que propone Menchu: **audios de WhatsApp transcritos en local**. Los textos completos van en la tanda B; al informe, solo la frase principal como muestra, el aviso de los directorios y una o dos opiniones, como pediste. |
+| **Lola** | Asumo el tono en `textos-web`. Frase principal ≤ 45 caracteres, medida. Los límites de palabras del informe son orientativos hasta tu maqueta A5. |
+| **Puri** | Lista negra y prueba de cada cita, hechas (§8.1). |
+| **Paco** | No he tocado `generar_informe.py` de la ronda 1 (pedías añadir la atribución en la línea 267): en la ronda 2 se rehace desde cero, y tu `mapa.py` ya la lleva dentro de la imagen. Si prefieres arreglar el viejo, dímelo y lo hago. |
+
+### 8.5 Lo que necesito de otros agentes (lo coordina Federico)
+
+| Para | Qué | Por qué |
+|---|---|---|
+| **Paco** | Fijar la instancia de Overpass (A-015) y decirme cómo se lanza la consulta guardada. Si haces una herramienta común que guarde consulta y respuesta, `censo.py` lee su salida tal cual. | Sin eso, el paso 1 de `estudio-competencia` no se lanza. |
+| **Paco** | Revisión técnica de mis tres scripts (choque 4: se quedan en mi skill salvo que decidas lo contrario). Formato de `censo.py mapa`: el que ya lee `mapa.py` (`[este_m, norte_m, destacado, nombre]`). | Que no rompan nada tuyo. |
+| **Puri** | Que tu `comprobar.py` lea `textos-web/frases-vigiladas.txt` en vez de mantener otra lista de «palabras de alarma». Si prefieres la tuya, dime qué patrones te faltan y los añado aquí. | **Una sola lista**; si no, se desincronizan. |
+| **Puri** | Para comparar la ronda 2 con la de Federico, te propongo dos medidas que ya salen solas: **avisos B de `vigilar_frases.py`** (5 + 5 en la ronda 1) y **cifras escritas a mano en la plantilla** (`grep -nE '[0-9]'`). | Vara de medir del bono, sin depender del criterio de nadie. |
+| **Reme** | La tanda B lleva el bloque de textos de mi modo «propuesta». Preguntas que salen de él: «¿De dónde viene el nombre?» y «"Listo para triunfar", ¿es vuestra frase?». | `textos-web`. |
+| **Lola** | Confirmar con la maqueta A5 los límites de palabras de las tres páginas. | `estudio-competencia`, paso 5. |
+| **Federico** | En `alta-cliente.md`: la **captura manual de Iván** entre la fase 1 y la 2, con **las búsquedas objetivo elegidas antes del guion**. Coste para Iván: unos 10 minutos por cliente. | Cambia el orden de las fases. |
+
+### 8.6 Para Iván (lo lleva Federico)
+
+Nada nuevo que aprobar. Dos cosas que solo él puede confirmar en la ronda 2:
+1. Que las 9 capturas le caben en 10 minutos. Si no, quito la tercera búsqueda y bajan a 8.
+2. Que el enlace del mapa centrado en la calle del cliente funciona. Usa un formato de
+   Google Maps no documentado; el guion dice cómo hacerlo a mano si falla.
+
+### 8.7 Lo que queda abierto
+
+- La instancia de Overpass (A-015, Paco). Bloquea el censo de la ronda 2.
+- Los recortes de capturas de Google con competidores en el informe: paquete legal (A-010).
+  Mientras, en el informe solo va la ficha del propio cliente.
+- Las API (Places, Brave): se prueban después de la ronda 2 (A-001).

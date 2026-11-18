@@ -9,7 +9,8 @@
  *   node herramientas/html_a_pdf.mjs entrada.html salida.pdf [--estricto]
  *
  * Antes de imprimir espera a que carguen las fuentes y las imágenes, y AVISA de
- * lo que no ha cargado (una imagen con la ruta mal, una fuente web sin conexión):
+ * lo que no ha cargado (una imagen con la ruta mal, una fuente web sin conexión)
+ * y de las imágenes sin texto alternativo (`alt`; `alt=""` vale si es decorativa):
  * con la orden de Chrome de antes, eso salía en el PDF sin que nadie se enterase.
  * Con --estricto, cualquier aviso hace que termine con error.
  */
@@ -31,9 +32,12 @@ export async function htmlAPdf(entrada, salida) {
     const sinCargar = await pestana.evaluar(() => ({
       fuentes: [...document.fonts].filter((f) => f.status === 'error').map((f) => f.family),
       imagenes: [...document.images].filter((i) => !i.naturalWidth).map((i) => i.getAttribute('src')),
+      // alt="" es válido (imagen decorativa); lo que falla es no ponerlo (AGENTS.md §11, WCAG 1.1.1).
+      sinAlt: [...document.images].filter((i) => !i.hasAttribute('alt')).map((i) => i.getAttribute('src')),
     }));
     for (const f of new Set(sinCargar.fuentes)) avisos.push(`fuente sin cargar: ${f} (saldrá otra en su lugar)`);
     for (const i of sinCargar.imagenes) avisos.push(`imagen rota: ${i}`);
+    for (const i of sinCargar.sinAlt) avisos.push(`imagen sin texto alternativo (alt): ${i}`);
     await pestana.pdf(salida);
     return [...new Set(avisos)];
   } finally {

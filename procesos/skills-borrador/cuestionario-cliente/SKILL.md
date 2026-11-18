@@ -1,121 +1,155 @@
 ---
 name: cuestionario-cliente
-description: "Decide qué se le pregunta a un cliente nuevo y cuándo (B1 antes del presupuesto, B2 al contratar), monta el cuestionario desde el catálogo de preguntas y convierte las respuestas en requisitos del expediente. Úsala cuando el expediente tiene la información pública recopilada y otra vez cuando llegan las respuestas."
+description: "Decide qué se le pregunta a un cliente nuevo y cuándo (tanda A antes del presupuesto, tanda B al aceptarlo), desde un catálogo de preguntas con ID, y convierte las respuestas en requisitos. Úsala cuando el expediente tiene la información pública y el previo de precio está hecho, y otra vez cuando llegan las respuestas."
 ---
 
 # cuestionario-cliente
 
-> **BORRADOR v0.2 · revisado por Reme** · Dueña: Reme · Textos de ayuda: Chema ·
-> Maquetación: Lola · Generador: Paco · En revisión (ronda 1)
+> **BORRADOR v0.3 · revisado por Reme · 2026-11-18** · Dueña: Reme (qué se
+> pregunta) · Guion de WhatsApp: Menchu (cómo se dice) · Maquetación del Word:
+> Lola · Herramientas: Paco · En revisión (ronda 1b)
 
 ## La regla que lo decide todo
 
-Cada pregunta tiene un **para qué**: un destino concreto en el presupuesto, en
-los requisitos, en los textos, en el diseño o en el contacto. **Si no lo tiene,
-se quita.**
+Cada pregunta tiene un **para qué**: un destino concreto en el presupuesto, el
+plazo, los requisitos, los textos o el diseño. **Si no lo tiene, se quita.**
 
-- **B1 · Conoceros** (antes del presupuesto): solo lo que puede cambiar el
-  **plan, el precio o el plazo**, lo necesario para hablar con el cliente, los
-  datos públicos que tiene que validar y los mínimos de Iván en versión corta.
-- **B2 · Al contratar** (tras aceptar el presupuesto): todo lo demás, más los
-  bloques según el tipo de web.
+- **Tanda A · para el presupuesto:** solo lo que puede cambiar **el plan, el
+  precio o el plazo**. **10 obligatorias como máximo**; el resto,
+  condicionales. Hoy son 8 obligatorias, 10 condicionales y 1 opcional (la
+  foto de la fachada).
+- **Tanda B · al aceptar el presupuesto:** todo lo demás, más los bloques
+  según el tipo de web.
 
-Las preguntas, con su ID, su para qué y su destino, están en
+Las preguntas, con su ID, condición, ★ y destino, están en
 [preguntas.md](preguntas.md). El formato de requisitos, en
 [plantilla-requisitos.md](plantilla-requisitos.md).
 
 ## Cuándo
 
-| Momento | Qué se hace |
-|---|---|
-| Expediente con lo público **y previo de precio hecho** | Montar B1 |
-| Llegan las respuestas de B1 | Pasarlas a requisitos y a presupuesto |
-| El cliente acepta el presupuesto | Montar B2 |
-| Llegan las respuestas de B2 | Completar los requisitos |
+| Momento | Qué se hace | Quién |
+|---|---|---|
+| Expediente con lo público **y previo de precio hecho** | Preparar la tanda A de este cliente | Reme |
+| Envío | Tanda A por WhatsApp, con `guion-tanda-a.md`; el Word, solo en la copia por correo | Menchu (A-003) |
+| Llegan las respuestas de A | Requisitos v0.x y borrador de presupuesto | Reme |
+| El cliente acepta el presupuesto | Preparar la tanda B | Reme |
+| Llegan las respuestas de B | Completar los requisitos | Reme |
 
-El previo va **antes** que B1 porque dice qué preguntas deciden el plan de este
-cliente.
+## Preparar la tanda A de un cliente
 
-## Montar B1
+1. **Partir del catálogo:** las 8 obligatorias, las condicionales y el bloque
+   de sector (o el genérico). No se inventan opciones.
+2. **Quitar lo que ya sabemos** con fuente primaria: lo del primer contacto
+   (`privado/contacto.md`) y lo comprobado del expediente. Se anota de dónde sale.
+3. **Confirmar, no preguntar desde cero** (A 1.1–1.4). Los datos «a confirmar»
+   se presentan como «lo que hemos visto». Las ausencias, como «no hemos
+   encontrado».
+4. **Lo que diga el previo:** si necesita saber algo que no está, se añade
+   **como condicional**, o sustituye a una obligatoria. **Nunca más de 10
+   obligatorias.** Si la pregunta sirve para otros clientes, entra en el catálogo.
+5. **Entregar a Federico** la lista del cliente (los ID y lo que se salta) para
+   Menchu. Si va también en Word, a Lola para la maqueta.
+6. **Comprobar** (abajo) y pasar a Puri.
 
-1. **Partir del catálogo:** núcleo común + bloque de sector. Si el sector no
-   tiene bloque, el genérico. No se inventan opciones.
-2. **«Lo que ya sabemos»:** solo filas que estén en el expediente. Los datos
-   «a confirmar» se presentan como «lo que hemos visto» y se preguntan. Las
-   ausencias, como «no hemos encontrado».
-3. **Quitar lo que ya está respondido** con fuente primaria en el expediente.
-4. **Añadir las preguntas que marque el previo** como decisivas, si faltan.
-5. **Pedir a Federico:** a Chema, los textos de ayuda; a Lola, la maquetación;
-   a Paco, el generador con los ID del catálogo.
-6. **Comprobar antes de pasarlo a Puri:**
-   - 4 páginas como máximo (`soffice --headless --convert-to pdf` y `pdfinfo`);
-   - cada pregunta tiene su ID del catálogo;
-   - la versión del cuestionario («B1 v0.2») va en el pie;
-   - lleva la cláusula de protección de datos;
-   - nada marcado [PROPUESTA] ni afirmaciones sin fuente.
+## Comprobación antes de Puri
+
+Todas, en el guion y en el Word:
+
+1. Como mucho **10 obligatorias**; cada condicional con su «solo si…».
+2. Cada pregunta con su **ID del catálogo** y la versión del catálogo en el pie
+   o en la cabecera («catálogo v0.3»).
+3. **Ninguna pregunta de la tanda B:** ni datos legales, ni fotos (salvo la de
+   la fachada, opcional y la última), ni aprobación de textos.
+4. **Instrucciones que se pueden seguir en ese formato** (R36): por WhatsApp,
+   contestar con un número; en Word, nada de «rodeadla».
+5. **Ningún «¿correcto?» sobre una ausencia o un dato sin confirmar** (R33):
+   «no hemos encontrado», «lo que hemos visto».
+6. **Las preguntas sobre personas, en presente** (R32). Nada de dar por hecho
+   que alguien ya no está.
+7. **Ninguna promesa sin dueño:** ni llamadas (A-002), ni ayuda con las fotos,
+   ni plazos (R07, R35).
+8. **Nada en boca del cliente** que no haya dicho él (R27).
+9. **Ninguna cifra ni frase general sin fuente** (R04, R10–R27).
+10. **El permiso de las opiniones, igual que en el expediente** (R31,
+    pendiente de A-010). Es tanda B.
+11. **Fotos con personas:** solo con permiso por escrito, y el de los padres
+    para los niños. Si no hay permiso, no salen, ni de espaldas (R34). Es tanda B.
+12. **Nunca pedir contraseñas** (§12), y decirlo.
+13. **Sin precios ni plazos [PROPUESTA].**
+14. **La línea de privacidad** (A-010), cuando exista. Mientras no exista, el
+    envío a un cliente real queda bloqueado.
+
+Solo el Word, además:
+
+15. **Los ID, visibles** junto a cada pregunta: el cliente puede contestar por
+    WhatsApp con el número (Lola).
+16. **Una sola columna:** la pregunta arriba y la respuesta debajo (Lola).
+17. **«Está bien» / «Hay algo mal»** en lugar de una casilla «¿Correcto?» (Lola).
+18. **Generado con `w.nuevo_documento(titulo=…, autor=…)` y `w.guardar(doc, ruta)`**,
+    no con `doc.save()`: así sale en es-ES, con propiedades reales, y no se
+    sobrescribe si alguien lo tiene abierto (Paco, R39, R40, R63).
+19. **`herramientas/pruebas/revisar_docx.py`** sin avisos, y Iván lo prueba en
+    Word **una vez por versión de plantilla** (A-007).
 
 ## Pasar las respuestas a requisitos
 
-1. **El original no se toca:** Menchu lo guarda en `clientes/<negocio>/recibido/`.
-   Si se respondió por teléfono, Menchu anota las respuestas con su ID.
-2. **Sacar las respuestas por ID.** Con el lector automático cuando Paco lo
-   tenga. Mientras tanto, a mano.
+1. **Las respuestas, literales, en `privado/`.** Menchu las anota con su ID en
+   `privado/respuestas-tanda-a.md` (y `-tanda-b.md`). Un Word devuelto se
+   guarda intacto en `privado/recibido/`. **Nada de esto va a git** (A-009,
+   A-013).
+2. **Leerlas por ID.** Del Word, con el lector de Paco cuando exista
+   (`leer_cuestionario.py`); mientras tanto, a mano.
 3. **Repartirlas por destino:**
 
-   | Destino | Qué se hace |
-   |---|---|
-   | `DATO` | Al expediente §1, con fuente «cliente, B1 vX, fecha». Sale de «a confirmar». |
-   | `PRECIO` | Al borrador de presupuesto (skill `previo-precio`). |
-   | `REQ` | Requisito `R-xx` con origen y criterio de aceptación. |
-   | `CONT`, `DIS` | Fila en «Contenido y materiales», y aviso a Federico para Chema o Lola. |
-   | `CONTACTO` | Al expediente. |
-   | `LEGAL` | Al expediente; nunca a mensajes ni a código. |
+   | Destino | Qué se hace | ¿En git? |
+   |---|---|---|
+   | `DATO` | Al expediente §1, con fuente «cliente, A x.y, fecha». Sale de «a confirmar». Solo datos del negocio | Sí |
+   | `PRECIO`, `PLAZO` | Al borrador de presupuesto (skill `previo-precio`) | **No**: `privado/` |
+   | `REQ` | Requisito `R-xx` en `requisitos.md`, con el ID como origen | Sí |
+   | `CONT`, `DIS` | Fila en «Contenido y materiales» y aviso a Federico para Chema o Lola | Sí |
+   | `PRIVADO` | Solo en `privado/` | **No** |
 
-4. **Lo que falta o es ambiguo** va a «Falta saber» y se pide a Federico. **No
+4. **`requisitos.md` cita el ID, nunca la respuesta literal** si lleva datos de
+   personas. Ni nombres ni teléfonos ni correos: «la persona de contacto
+   (`privado/contacto.md`)».
+5. **Lo que falta o es ambiguo** va a «Falta saber» y se pide a Federico. **No
    se supone la respuesta.** Una ★ sin respuesta bloquea el presupuesto.
-5. **Versiones:** v0.x mientras se negocia; **v1.0 cuando el cliente aprueba
-   el presupuesto**. Desde ahí, solo cambia mediante el control de cambios (`C-xx`).
-6. **Anotar en el historial del expediente y avisar a Federico** (§13.2.6:
-   escribir en el expediente no es avisar).
+6. **Versiones:** v0.x mientras se negocia; **v1.0 cuando el cliente acepta
+   el presupuesto**. Desde ahí, solo cambia con el control de cambios (`C-xx`).
+7. **Anotar en el historial del expediente y avisar a Federico** (§13.2.6).
 
 ## Reglas
 
-1. **Pocas preguntas, las justas.** B1: 4 páginas como máximo y unos 15
-   minutos. Si una pregunta nueva entra, otra sale o pasa a B2.
-2. **Se entiende sin nosotros delante:** sin jerga y con un ejemplo en cada
-   pregunta abierta.
-3. **No se pide lo que aún no hace falta.** Los datos legales y el NIF se piden
-   al contratar, no antes (§12: solo los datos que hacen falta).
-4. **Cada pregunta, una sola cosa.** Nada de «rodeadla», columnas con dos
-   lecturas ni la misma pregunta en dos bloques.
-5. **Nada que el cliente no pueda corregir** en «lo que ya sabemos».
-6. **Ningún dato ni afirmación sin fuente,** tampoco en las introducciones
-   («los negocios que publican precios reciben más llamadas» necesita fuente o
-   se quita).
-7. **Nunca pedir contraseñas** (§12), y decirlo en el documento.
-8. **Sin precios ni plazos** marcados [PROPUESTA].
-9. **Siempre la alternativa por teléfono,** con las mismas preguntas y los mismos ID.
-10. **Aprobar textos no se hace en el cuestionario,** sino en la fase de textos
-    (§13.5, paso 4), con sus 2 rondas.
+1. **Pocas preguntas, las justas.** Si entra una obligatoria, sale otra.
+2. **No preguntar lo que ya nos han dicho.**
+3. **No se pide lo que aún no hace falta** (§12): datos legales, fotos y
+   nombres, en la tanda B.
+4. **Cada pregunta, una sola cosa,** y que se pueda contestar con un número o
+   una línea.
+5. **Sin jerga,** con un ejemplo en cada pregunta abierta.
+6. **El canal es WhatsApp** (A-002, A-003). Sin llamadas. Para lo largo de
+   contar (la historia de la tanda B), audios.
+7. **Aprobar textos no se hace en el cuestionario,** sino en la fase de textos
+   (§13.5, paso 4), con sus 2 rondas.
 
 ## Herramientas
 
-- `herramientas/docx_util.py` (de Paco): casillas, huecos y tablas. Las
-  casillas son controles de contenido de Word (`w14:checkbox`) y se pueden
-  leer automáticamente: probado el 2026-11-17 con una copia en la que se
-  simularon 3 casillas marcadas; se leyeron las 3 y ninguna más.
-- Pendiente (pedido a Paco): ID en cada control y un lector de respuestas.
+- `herramientas/docx_util.py` (Paco): `nuevo_documento`, `guardar`, casillas
+  como controles de contenido (`w14:checkbox`). Las casillas se pueden leer
+  automáticamente: probado el 2026-11-17, 3 marcadas de 3 en una copia.
+- Pedido a Paco: parámetro `id` en casillas, opciones y huecos (como `w:tag`) y
+  `leer_cuestionario.py`.
+- `herramientas/pruebas/revisar_docx.py` (Paco): comprobación del Word.
 
 ## Salida
 
-- `clientes/<negocio>/entregables/Cuestionario B1 - <negocio>.docx` (y luego B2).
+- La tanda A del cliente: la lista de ID que se preguntan, a Federico para Menchu.
+- Si hay copia por correo: `clientes/<negocio>/entregables/Cuestionario A - <negocio>.docx`.
 - `clientes/<negocio>/requisitos.md`, desde [plantilla-requisitos.md](plantilla-requisitos.md).
 
 ## Dudas abiertas
 
-- **Formato:** Word, formulario propio o teléfono guiado. Lo decide Iván
-  (revisión, §6).
-- **Cláusula de protección de datos** del cuestionario: necesita el nombre de
-  la empresa y un texto revisado por un profesional (§15).
-- **Opiniones de Google:** ¿basta el permiso del negocio para mostrarlas, o
-  hace falta algo más? Es una duda legal.
+- **Columna «se comprueba así» de `requisitos.md`:** pendiente de lo que diga Puri.
+- **Línea de privacidad y permiso de las opiniones:** A-010.
+- **¿El vídeo entra en los planes?** A-011. Hasta entonces, A 5.5 pregunta si
+  tienen vídeos, pero no se promete usarlos.

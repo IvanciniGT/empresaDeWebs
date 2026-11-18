@@ -5,7 +5,7 @@ description: "Extrae y ordena la web actual de un cliente (páginas y su texto, 
 
 # extraer-web-existente
 
-> **BORRADOR v0.2 · revisado por Paco** · 2026-11-17 · **Dueño: Paco**
+> **BORRADOR v0.3 · revisado por Paco** · 2026-11-18 · **Dueño: Paco**
 > Cambios respecto a v0.0 y motivos: [procesos/ronda-1/revision-paco.md](../../ronda-1/revision-paco.md) §4.
 > Herramienta hecha y probada en local: [`herramientas/extraer_web.mjs`](../../../herramientas/extraer_web.mjs).
 > **Todavía no se ha usado con una web real.**
@@ -170,6 +170,10 @@ y comprueba, contando las peticiones que recibe cada servidor:
   pedirla al cliente o verla en su panel.
 - Si la web bloquea a los navegadores automáticos, no se esquiva (regla 3 de
   `herramientas-comunes`): se anota y se pide ayuda al cliente.
+
+## Novedades v0.3
+
+- Sin cambios de fondo. Firma `empresaDeWebs/0.3`. Para medir la web del cliente, `medir_web.mjs` (Lighthouse).
 
 ## Dudas abiertas
 

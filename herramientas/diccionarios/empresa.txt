@@ -1,0 +1,34 @@
+# Palabras buenas comunes a todos los clientes, una por línea, para ortografia.py.
+# Nada de nombres de personas ni de clientes: esas van en la lista de cada cliente.
+# Agentes de la empresa
+Chema
+Menchu
+Puri
+Reme
+# Servicios, marcas y plataformas que nombramos a menudo
+Booksy
+Business
+Console
+Facebook
+Fresha
+Google
+Instagram
+Lighthouse
+Maps
+OpenStreetMap
+Profile
+Search
+TikTok
+Treatwell
+WhatsApp
+Wix
+WordPress
+YouTube
+# Anglicismos aceptados en el sector (la RAE recoge «online» y «cookie» en cursiva)
+cookie
+cookies
+hosting
+online
+skill
+skills
+spam

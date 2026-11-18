@@ -11,7 +11,8 @@ la dirección openstreetmap.org/copyright, así que va dentro de la imagen.
 Uso:
   .venv/bin/python herramientas/mapa.py LAT LON salida.png [zoom]
   .venv/bin/python herramientas/mapa.py LAT LON salida.png ZOOM puntos.json RADIO_M
-      puntos.json: lista de [dx_m, dy_m, destacado, nombre] relativa a LAT, LON.
+      puntos.json: lista de [dx_m, dy_m, barberia, nombre] relativa a LAT, LON
+      (el tercer campo, verdadero si es barbería: sale en cuadrado).
 
 Variables de entorno (opcionales):
   OSM_TESELAS  plantilla de URL del servidor de teselas (por defecto, el de OSM)
@@ -27,13 +28,15 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
-AGENTE = "empresaDeWebs/0.2 (+mailto:ivan.osuna.ayuste@gmail.com)"
+AGENTE = "empresaDeWebs/0.3 (+mailto:ivan.osuna.ayuste@gmail.com)"
 # La política pide poder cambiar de servidor sin tocar el código.
 SERVIDOR = os.environ.get("OSM_TESELAS", "https://tile.openstreetmap.org/{z}/{x}/{y}.png")
 CACHE = Path(os.environ.get("OSM_CACHE", Path.home() / "Library/Caches/empresaDeWebs/teselas-osm"))
 CADUCIDAD_S = 7 * 24 * 3600
 TESELA = 256
-ROJO, NARANJA, AZUL = (200, 30, 45), (181, 90, 30), (30, 42, 58)
+# Paleta de estilo-documentos v0.3: acento (vosotros) y tinta (los demás).
+ACENTO, TINTA = (0x9C, 0x4A, 0x14), (0x1E, 0x2A, 0x3A)
+INTER = Path(__file__).resolve().parent / "fuentes/inter"
 ATRIBUCION = "© Colaboradores de OpenStreetMap · openstreetmap.org/copyright"
 
 
@@ -68,8 +71,8 @@ def _descargar(x, y, zoom):
     return Image.open(fichero).convert("RGB")
 
 
-def _fuente(tam):
-    for ruta in ("/System/Library/Fonts/Avenir Next.ttc", "/System/Library/Fonts/Helvetica.ttc"):
+def _fuente(tam, negrita=False):
+    for ruta in (INTER / ("Inter-SemiBold.ttf" if negrita else "Inter-Regular.ttf"), "/System/Library/Fonts/Helvetica.ttc"):
         try:
             return ImageFont.truetype(ruta, tam)
         except OSError:
@@ -107,13 +110,40 @@ def atribucion(lienzo):
     dibujo.text((ancho - w - 8, alto - h - 8), texto, fill=(60, 60, 60), font=fuente)
 
 
-def marcador(dibujo, x, y, r=16):
-    dibujo.ellipse((x - r, y - r, x + r, y + r), fill=ROJO, outline="white", width=4)
+def marcador(dibujo, x, y, r=22, etiqueta="Vosotros"):
+    """El negocio: el marcador más grande, en acento, con borde blanco y su nombre en una caja blanca."""
+    dibujo.ellipse((x - r, y - r, x + r, y + r), fill=ACENTO, outline="white", width=5)
+    if etiqueta:
+        fuente = _fuente(27, negrita=True)
+        caja = dibujo.textbbox((x + r + 10, y - 16), etiqueta, font=fuente)
+        dibujo.rounded_rectangle((caja[0] - 8, caja[1] - 6, caja[2] + 8, caja[3] + 6), 8, fill="white", outline=ACENTO, width=2)
+        dibujo.text((x + r + 10, y - 16), etiqueta, fill=ACENTO, font=fuente)
+
+
+def _forma(dibujo, x, y, barberia, r=9):
+    """Se distinguen por la forma, no solo por el color: peluquería ●, barbería ■."""
+    caja = (x - r, y - r, x + r, y + r)
+    (dibujo.rectangle if barberia else dibujo.ellipse)(caja, fill=(*TINTA, 230), outline=(255, 255, 255, 240), width=2)
+
+
+def leyenda(lienzo):
+    dibujo = ImageDraw.Draw(lienzo)
+    fuente = _fuente(27)
+    filas = (("Vosotros", None), ("Peluquería", False), ("Barbería", True))
+    ancho = max(dibujo.textbbox((0, 0), t, font=fuente)[2] for t, _ in filas) + 70
+    dibujo.rounded_rectangle((16, 16, 16 + ancho, 16 + 44 * len(filas) + 16), 10, fill="white", outline=TINTA, width=2)
+    for n, (texto, barberia) in enumerate(filas):
+        y = 16 + 16 + 44 * n + 16
+        if barberia is None:
+            dibujo.ellipse((34, y - 12, 58, y + 12), fill=ACENTO, outline="white", width=3)
+        else:
+            _forma(dibujo, 46, y, barberia, 11)
+        dibujo.text((72, y - 17), texto, fill=TINTA, font=fuente)
 
 
 def mapa_simple(lat, lon, salida, zoom=17):
     lienzo, _, _ = componer(lat, lon, zoom, 1200, 700)
-    marcador(ImageDraw.Draw(lienzo), 600, 350)
+    marcador(ImageDraw.Draw(lienzo), 600, 350, etiqueta=None)
     atribucion(lienzo)
     lienzo.save(salida)
 
@@ -123,23 +153,23 @@ def mapa_competencia(lat, lon, salida, zoom, puntos, radio_m):
     lienzo, a_px, mpp = componer(lat, lon, zoom, lado, lado, apagar=0.45)
     capa = Image.new("RGBA", lienzo.size, (0, 0, 0, 0))
     dibujo = ImageDraw.Draw(capa)
-    fuente = _fuente(18)
+    fuente = _fuente(27)
     for anillo in (250, 500, 1000, radio_m):
         r = anillo / mpp
         c = lado / 2
-        dibujo.ellipse((c - r, c - r, c + r, c + r), outline=(30, 42, 58, 170), width=2)
+        dibujo.ellipse((c - r, c - r, c + r, c + r), outline=(*TINTA, 170), width=2)
         etiqueta = f"{anillo} m" if anillo < 1000 else f"{anillo / 1000:g} km".replace(".", ",")
         caja = dibujo.textbbox((c + 8, c - r + 6), etiqueta, font=fuente)
         dibujo.rounded_rectangle((caja[0] - 5, caja[1] - 3, caja[2] + 5, caja[3] + 3), 6, fill=(255, 255, 255, 230))
-        dibujo.text((c + 8, c - r + 6), etiqueta, fill=(30, 42, 58, 255), font=fuente)
+        dibujo.text((c + 8, c - r + 6), etiqueta, fill=(*TINTA, 255), font=fuente)
     for dx, dy, destacado, _nombre in puntos:
         if math.hypot(dx, dy) > radio_m or (dx, dy) == (0, 0):
             continue
         x, y = a_px(dx, dy)
-        color = (*NARANJA, 235) if destacado else (*AZUL, 200)
-        dibujo.ellipse((x - 6, y - 6, x + 6, y + 6), fill=color, outline=(255, 255, 255, 230), width=2)
+        _forma(dibujo, x, y, barberia=bool(destacado))
     lienzo = Image.alpha_composite(lienzo.convert("RGBA"), capa).convert("RGB")
-    marcador(ImageDraw.Draw(lienzo), lado / 2, lado / 2, 18)
+    marcador(ImageDraw.Draw(lienzo), lado / 2, lado / 2)
+    leyenda(lienzo)
     atribucion(lienzo)
     lienzo.save(salida)
 

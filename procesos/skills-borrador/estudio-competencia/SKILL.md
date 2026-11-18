@@ -1,125 +1,169 @@
 ---
 name: estudio-competencia
-description: "Analiza la competencia local y el SEO local de un cliente nuevo (densidad de competidores con OpenStreetMap, competidores directos, los que Google muestra en sus búsquedas y un referente, búsquedas objetivo sin inventar volúmenes) y prepara el contenido del informe de venta de 2 páginas. Úsala cuando el expediente ya tiene la ficha de Google, la dirección y la actividad del cliente."
+description: "Analiza la competencia local y el SEO local de un cliente nuevo (censo de OpenStreetMap calculado por script, competidores directos, los que salen en Google en la captura de Iván y un referente, búsquedas objetivo sin inventar volúmenes) y escribe el contenido del informe de venta: 2 páginas más un anexo, en A5. Úsala cuando el expediente ya tiene la dirección, la actividad y el nodo de OSM del cliente."
 ---
 
 # estudio-competencia
 
-> **BORRADOR v0.2 · revisado por Chema** · 2026-11-17 · **Dueño: Chema**
-> Cambios respecto a v0.1 y motivos: [procesos/ronda-1/revision-chema.md](../../ronda-1/revision-chema.md) §4.
+> **BORRADOR v0.3 · revisado por Chema** · 2026-11-18 · **Dueño: Chema**
+> v0.2 → v0.3: decisiones de Iván A-001, A-005 y A-015; cifras por script; peticiones de
+> Puri, Lola, Reme y Menchu. Detalle en [revision-chema.md](../../ronda-1/revision-chema.md) §8.
 
 ## Cuándo
 
-Cuando el expediente (skill `investigar-cliente`) tiene la dirección, la actividad
-y, si es posible, la ficha de Google del cliente. Puede ir en paralelo con el cuestionario.
+Cuando el expediente (`investigar-cliente`) tiene la dirección, la actividad y el
+nodo de OpenStreetMap del cliente. Las búsquedas objetivo (paso 4) hacen falta
+**antes** del guion de captura de Iván, porque van dentro.
 
 ## Entrada
 
-- Expediente con coordenadas, actividad, categoría de Google y público.
-- Capturas de su presencia actual.
+- Expediente con coordenadas, id de OSM, actividad y público.
+- Capturas de Google de Iván (`privado/capturas-google/`), para los pasos 3 y 5.
 
 ## Pasos
 
-### 1. Densidad (cuántos hay alrededor)
+### 1. Censo: las cifras salen de un script, nunca del teclado
 
-1. Overpass (OpenStreetMap) en 1,5 km con **solo la actividad del cliente**:
-   para peluquerías, `shop=hairdresser` (incluye barberías con `hairdresser=barber`).
-   **Nunca** `hairdresser_supply` (tiendas de productos) ni etiquetas parecidas.
-2. Contar por anillos (250 m, 500 m, 1 km, 1,5 km) y, dentro de cada uno, cuántos son
-   del **mismo público** (para el ejemplo: barberías y peluquerías de caballero).
-3. **Comprobar una muestra:** 10 del anillo más cercano con el estado del negocio
-   (Places `businessStatus`, si está aprobado, o la captura manual). Si hay cerrados,
-   se dice «unas N, según OpenStreetMap; en una muestra de 10, X estaban cerrados».
-4. Guardar en `competencia/` los datos de OSM y la consulta usada, con la fecha.
-5. Mapa con `herramientas/mapa.py`. **Solo datos de OSM:** en la UE las condiciones de
-   Google prohíben pintar sus datos en cualquier mapa.
+```
+S=procesos/skills-borrador/estudio-competencia/censo.py
+python3 $S consulta LAT LON > clientes/<negocio>/competencia/overpass-consulta.overpassql
+#   → se lanza en la instancia de Overpass que fije herramientas-comunes (A-015)
+#     y la respuesta se guarda tal cual en competencia/overpass-respuesta.json
+python3 $S cifras competencia/overpass-respuesta.json LAT LON --cliente node/<id> > competencia/cifras.json
+python3 $S mapa competencia/cifras.json > competencia/puntos-mapa.json
+.venv/bin/python herramientas/mapa.py LAT LON competencia/mapa-competencia.png 15 competencia/puntos-mapa.json 1500
+```
 
-### 2. Elegir competidores (máximo 4 en el informe)
+- **Solo la actividad del cliente**, con etiquetas exactas: para peluquerías,
+  `shop=hairdresser` y `shop=barber`. Nunca `hairdresser_supply` ni expresiones
+  regulares (`~`), que la cuelan.
+- **Instancia de Overpass:** la que fije Paco en `herramientas-comunes` después de
+  leer sus condiciones (A-015). Si todavía no está fijada, **no se lanza**: se avisa a Federico.
+- `cifras.json` da los anillos (250 m, 500 m, 1 km y 1,5 km), el total y el
+  **mismo público**, separando lo que dice la etiqueta de OSM de lo que solo dice el
+  nombre. Da también los tres más cercanos (en total y del mismo público), los
+  excluidos con su motivo, los duplicados, la fecha de los datos de OSM y la huella
+  de la respuesta.
+- **El mapa y la tabla salen del mismo cálculo.** En la ronda 1 iban por separado y
+  diferían hasta un 1,5 %.
+- `cifras.json` **no se edita.** Si algo está mal, se corrige la consulta o los datos y se regenera.
+- Las cifras se dicen como son: «unas N, según OpenStreetMap a [fecha]». OSM puede
+  tener negocios cerrados o no tener todos. En la ronda 2 no hay forma de comprobar
+  una muestra sin API: se dice en los límites.
 
-| Tipo | Criterio | Cuántos |
+### 2. Elegir competidores (como mucho 4, y solo para el análisis interno)
+
+| Tipo | Criterio | De dónde sale |
 |---|---|---|
-| **Directos** | Mismo público y a menos de 500 m (a pie) | 1–2: el más cercano y el que mejor está en internet |
-| **De búsqueda** | Los que devuelve Google para las 2–3 búsquedas objetivo principales desde la zona (Places Text Search o captura manual) | 1–2: los que el cliente tiene que adelantar |
-| **Referente** | El mejor en digital de la ciudad con el mismo público | 0–1 |
+| **Directos** | Mismo público y a menos de 500 m | `cifras.json` → `mas_cercanos_mismo_publico` (el más cercano y el que mejor esté en internet) |
+| **De búsqueda** | Los que salen en Google para la búsqueda principal | Captura de Iván (paso 5 del guion: el mapa centrado en el local) |
+| **Referente** | El mejor en digital de la ciudad con el mismo público | Captura de Iván y su web |
 
-- **Fuera** los de otro público (unisex, señora, estética) **salvo** que salgan en «de búsqueda».
-- Un competidor con la web rota solo entra si es directo o de búsqueda: no se busca un «mal ejemplo» por buscarlo.
+- **Fuera** los de otro público (unisex, señora, estética), **salvo** que salgan en la captura de la búsqueda.
+- Una web rota solo entra si es de un competidor directo o de búsqueda.
 
-### 3. Analizar cada competidor
+### 3. Analizar cada competidor (interno, va a `competencia/`)
 
-- Ficha de Google: categoría principal, nota y opiniones (fecha), fotos, si responde a reseñas.
-- Web (si la tiene): secciones, precios, cita online o WhatsApp, cómo se ve en el móvil,
-  título, descripción, H1 y datos estructurados (`LocalBusiness` o el tipo que toque).
-  Rendimiento con PageSpeed Insights, si hay clave.
-- Redes y marketplaces que **enlaza** o que hemos encontrado (con la fuente).
-- Capturas de ordenador y de móvil, sin avisos de cookies.
+- Ficha de Google (de la captura): categoría, nota y opiniones con fecha.
+- Web: secciones, precios, cita online o WhatsApp, móvil (`captura.sh` con 390 de
+  ancho), título, descripción, H1 y datos estructurados. Rendimiento con Lighthouse
+  (A-008), cuando Paco lo instale.
+- Redes que **enlaza** o que se ven en las capturas.
 
 ### 4. Búsquedas objetivo (sin inventar volúmenes)
 
-Se eligen **por intención**, a partir de fuentes:
-1. Las **categorías de Google** de los competidores que mejor salen.
-2. Lo que **escriben de verdad** los clientes: autocompletado oficial (API de Brave, si
-   está aprobada) y palabras de las reseñas («pelar», «corte», «barba», «niño»).
-3. Si hay cuenta de Google Ads: **intervalos** del Planificador de palabras clave, a
-   nivel ciudad. Se citan como intervalo, nunca como cifra.
-4. Google Trends (manual) solo para comparar dos palabras («barbería» frente a «peluquería»).
+Se eligen por intención y de fuentes, **antes** del guion de Iván:
+1. Las palabras que usan los clientes en sus reseñas («pelar», «corte», «barba», «niño»).
+2. La categoría de Google del cliente y de los competidores directos.
+3. Actividad + ciudad y actividad + barrio.
 
-En el informe: «**prioridad estimada, no medida**». Volumen real, solo después de
-contratar (búsquedas de la ficha de Google y Search Console).
+Se eligen **tres como mucho**, con la principal primero; son las que van al guion. En
+el informe solo se nombra la principal, como «la búsqueda que más nos importa»,
+nunca con cifras. No hay volúmenes medidos hasta que contrate (A-001: sin API ni
+cuenta de Ads; Search Console y las estadísticas de la ficha, después).
 
-### 5. Contenido del informe de venta
+### 5. Contenido del informe (A-005: 2 páginas más un anexo, en A5)
 
-**Dos páginas más un anexo.** El formato es de Lola; el contenido, mío.
+Escribo el contenido; Lola lo maqueta con `estilo-documentos`; el generador **lee
+las cifras** de `competencia/cifras.json` y de `competencia/datos-informe.json`
+(abajo). Los límites de palabras son orientativos: los ajusta la maqueta de Lola.
 
-| Página | Contenido |
-|---|---|
-| **1 · Lo que ve hoy quien os busca** | Captura de Google con su nombre y con la búsqueda principal · 3 cifras comprobadas, con fecha · la conclusión en dos frases |
-| **2 · Tres cosas que os están costando clientes** y **lo que haríamos** | Los tres fallos más concretos de **su** caso (por ejemplo, horarios distintos en internet o directorios que inventan servicios) · el *qué* haríamos, no el *cómo* · siguiente paso |
-| **Anexo · Cómo lo hemos hecho** | Fuentes con fecha, límites y atribución de OSM. «Preparado con ayuda de asistentes de IA.» |
+| Página | Contenido | Límite |
+|---|---|---|
+| **1 · ¿Cómo os encuentran en internet?** (funciona sola: es la imagen que verá en WhatsApp) | Nombre del negocio · 3 o 4 cifras (2 × 2), cada una con su fuente corta · la conclusión en dos frases · «Estudio gratis y sin compromiso» | ~90 palabras |
+| **2 · Lo que hemos visto y lo que haríamos** | **Tres cosas que hemos encontrado**, de su caso y cada una con su prueba: lo que vimos y, en una frase, por qué importa, sin generalizar · el **aviso de los directorios** (Reme) · una o dos **opiniones** literales, sin autor · **una idea de frase principal** (de `textos-web`, como idea a confirmar) · **lo que haríamos**: el qué, no el cómo · **siguiente paso** | ~170 palabras y 1 captura recortada |
+| **Anexo · Cómo lo hemos hecho** | Fuentes con fecha (OSM y la fecha de sus datos; la captura de Google con fecha, hora y ciudad; los directorios) · límites · «© colaboradores de OpenStreetMap · openstreetmap.org/copyright» · «Preparado con ayuda de asistentes de IA» · **cierra con el siguiente paso y el contacto** (Lola: la última página dice qué pasa ahora) | ~180 palabras |
 
-**No se regala:** la lista completa de búsquedas objetivo, las fichas de fallos de
-cada competidor ni el plan paso a paso. Eso es el entregable de arranque cuando contrata.
-Tampoco se da un curso de SEO: una frase de explicación por término, no una página.
+**Lo que no se regala** (es el entregable de arranque, cuando contrata):
+- La lista completa de búsquedas objetivo: solo se nombra la principal.
+- El análisis de cada competidor y cómo superarlo.
+- La auditoría de citas completa: se dice «N directorios con datos distintos», no cuáles ni qué corregir.
+- Las categorías que pondríamos en su ficha de Google y los cambios concretos.
+- La estructura de la web y los textos: solo la frase principal, como muestra.
+- Nada de curso de SEO: una frase por término, no un apartado.
+
+**`competencia/datos-informe.json`**: cada dato que no sale del censo, con su fuente:
+
+```json
+{"nota_google": {"valor": "<nota>", "fuente": "privado/capturas-google/02-ficha-maps.png", "fecha": "<AAAA-MM-DD HH:MM>", "desde": "<ciudad de Iván>"},
+ "directorios_con_datos_distintos": {"valor": "<N>", "fuente": "expediente §7", "fecha": "<AAAA-MM-DD>"}}
+```
+
+### 6. Antes de pasarlo a Puri
+
+```
+python3 procesos/skills-borrador/textos-web/vigilar_frases.py <borrador.html>    # 0 avisos B; cada R justificado
+grep -nE '[0-9]' <plantilla del informe>    # en la plantilla no hay cifras: todas vienen de los JSON
+pdftoppm -f 1 -l 1 -scale-to-x 390 -scale-to-y -1 -png <informe.pdf> pagina-1   # ¿se entiende sola en el móvil?
+```
 
 ## Reglas
 
-1. **Cifras solo con fuente y fecha.** Lo que no se ha medido se dice que no se ha medido.
-2. **Nunca prometer posiciones ni resultados** (§10.3), ni siquiera de forma encubierta
-   («el primero que tenga web se queda con las búsquedas»).
-3. **Nada de ausencias** («no tiene web»), salvo las comprobadas: «su dominio no responde».
-4. **Ninguna generalización sin fuente** («los jóvenes buscan en el móvil», «quien publica
-   precios recibe más llamadas»). O se cita un estudio con enlace, o fuera.
-5. **El orden de un marketplace no es un ranking:** puede ser patrocinado.
-6. **Sin jerga:** cada término técnico, explicado en una frase.
+1. **Cada cifra sale de `cifras.json` o `datos-informe.json`, con fecha.** Ninguna se teclea en la maqueta.
+2. **Nunca prometer posiciones ni resultados** (§10.3), ni de forma encubierta.
+3. **Nada de ausencias** («no tiene web»), salvo las comprobadas («su dominio no responde»).
+4. **Ninguna frase general sobre clientes o mercado sin fuente**, ni superlativos sin contar
+   (Puri, R10–R23). La lista está en [`../textos-web/frases-vigiladas.txt`](../textos-web/frases-vigiladas.txt).
+5. **El orden de un marketplace no es un ranking.**
+6. **Sin jerga:** cada término técnico, explicado en una frase. El título no dice «SEO local».
 7. **Primero lo que tiene, después lo que le falta.**
-8. **Las capturas de competidores** sirven para analizar, nunca para copiar.
-9. **Atribución de OpenStreetMap** en mapas y fuentes. Del API de Google no se guarda ni se publica contenido (solo `place_id`).
-10. **Dominio libre:** solo se dice si se ha comprobado en el registro (dominios.es para `.es`).
-    No tener DNS no significa estar libre.
-
-## Frases que se revisan antes de entregar
-
-Buscar en el borrador y justificar o quitar: «el primero», «se queda con», «siempre»,
-«nunca», «todos», «la mayoría», «suele», «más llamadas», «más clientes», «garantiz»,
-«no tiene», «tampoco tiene», «céntric», «el que mejor», «la primera del listado».
+8. **Las capturas de competidores** sirven para analizar, nunca para copiar. En el
+   informe, recortadas y sin datos personales.
+9. **Atribución de OpenStreetMap** con `openstreetmap.org/copyright` en el mapa (`mapa.py` ya la lleva) y en el anexo.
+10. **Dominio libre:** solo se dice si se ha comprobado en el registro, no por DNS. En el
+    informe no se menciona: va al presupuesto (A-011: el dominio va dentro de la cuota).
+11. **«Gratis y sin compromiso»** (A-005), sin urgencias ni plazos inventados.
 
 ## Salida
 
-- `competencia/` con la consulta de OSM, los datos, el mapa, las capturas y una tabla de
-  competidores elegidos con el tipo y el motivo.
-- Contenido del informe (HTML o Markdown) para que Lola lo maquete y Paco lo genere.
+- `competencia/`: `overpass-consulta.overpassql`, `overpass-respuesta.json`,
+  `cifras.json`, `puntos-mapa.json`, `mapa-competencia.png`, `datos-informe.json`,
+  `competidores.md` (los elegidos, con su tipo, motivo y análisis) y capturas.
+- Contenido del informe para Lola, con cada frase trazada a su fuente.
+- `pagina-1.png` para que Menchu la mande por WhatsApp (la genera quien genere el PDF).
 
 ## Comprobación final
 
-- [ ] La consulta del censo usa solo la actividad del cliente (sin `hairdresser_supply`).
-- [ ] Cada cifra del informe sale de `competencia/` o del expediente y lleva fecha.
+- [ ] La consulta guardada usa etiquetas exactas, sin `hairdresser_supply` ni `~`.
+- [ ] `cifras.json` es la salida de `censo.py`, sin editar (su `sha256` coincide con la respuesta guardada).
+- [ ] Cada cifra del informe está en `cifras.json` o en `datos-informe.json`, con fecha.
 - [ ] Cada competidor tiene tipo (directo, de búsqueda o referente) y motivo.
-- [ ] Ninguna frase de la lista de revisión queda sin justificar.
-- [ ] Las búsquedas objetivo van como «prioridad estimada, no medida».
-- [ ] El informe cabe en 2 páginas más el anexo.
+- [ ] `vigilar_frases.py`: 0 avisos B; cada R, justificado o quitado.
+- [ ] Dos páginas más el anexo; la primera se entiende sola; el anexo acaba con el siguiente paso y el contacto.
+- [ ] Nada de la lista «Lo que no se regala».
+
+## Herramientas
+
+| Herramienta | Para qué |
+|---|---|
+| [`censo.py`](censo.py) (esta skill) | Consulta de Overpass, cifras y puntos del mapa. 9 pruebas y 11 mutaciones en `pruebas/`. |
+| `herramientas/mapa.py` | Mapa de competencia (Paco), con los puntos de `censo.py mapa`. |
+| `herramientas/captura.sh` | Webs de competidores; con 390 de ancho, como un móvil. |
+| [`../textos-web/vigilar_frases.py`](../textos-web/vigilar_frases.py) | Lista negra antes de Puri. |
 
 ## Dudas abiertas
 
-- Cobertura real de la API de Brave para negocios pequeños de España: hay que probarla.
-- Si Places Text Search se parece lo suficiente al «pack local» de Google: comparar con la captura manual en los dos primeros clientes.
-- Formato del informe para el móvil: lo decide Lola.
+- Instancia de Overpass para uso comercial (A-015): la fija Paco.
+- Si se pueden poner en el informe recortes de la captura de Google con nombres de
+  competidores: está en el paquete legal (A-010). Mientras, solo la ficha del propio cliente.
+- Los límites de palabras por página, a confirmar con la maqueta A5 de Lola.

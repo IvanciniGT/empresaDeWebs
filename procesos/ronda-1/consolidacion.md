@@ -108,3 +108,21 @@ Están en la [bandeja de aprobaciones](../../operacion/aprobaciones.md), de la A
 | **Paco** | Las peticiones de herramientas de todos (sección 5 de cada revisión) que no necesiten instalar nada |
 | **Puri** | Añadir a su lista lo que le piden Chema, Lola y Menchu |
 | **Todos** | Skills en v0.3, coherentes con esta consolidación |
+
+## 8. Cierre de la ronda 1b (2026-11-18)
+
+Consenso cerrado. Todas las skills están en v0.3 (las de Paco, en su §8), y el
+proceso está en [alta-cliente.md](../alta-cliente.md) v0.2.
+
+- **Herramientas:** 37 pruebas en verde con el estilo de Lola ya dentro, y 33 de
+  34 mutaciones detectadas. Pendiente para Paco:
+  - la mutación «alt vacío tratado como si faltara» no se detecta;
+  - en el mapa nuevo, las etiquetas de 250 m y 500 m quedan tapadas por los puntos.
+- **`w:tag` de las opciones:** «A 3.5|2» (Paco y Reme) y no «A 3.5.2» (Lola),
+  porque el punto choca con el del ID. Lo decido yo: es técnico.
+- **Chema:** en `puntos.json`, el tercer campo es ahora «es barbería».
+- **Plantillas de Menchu:** Puri las rechazó por R01 (cláusula de privacidad,
+  A-010) y R02 (plazo de 5 días sin aprobar). Las dos las decide Iván y **no
+  bloquean la ronda 2**, que es una simulación. Los importantes, ya arreglados por Menchu.
+- **A Iván:** Reme ha pasado a la tanda B experiencia, puntos fuertes, valores y
+  posicionamiento, porque no cambian el precio. Caben dos más en la tanda A si los quiere ahí.

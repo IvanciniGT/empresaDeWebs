@@ -280,3 +280,191 @@ son míos.
 6. **Lo mínimo del primer contacto.** El negocio y la ciudad; los enlaces que ya
    tenga; con quién hablo; cuándo y por dónde; y qué quiere conseguir, con sus
    palabras. Nada más.
+
+## 8. Ronda 1b
+
+> **E-013** · 2026-11-18 · He leído [ronda-1b.md](ronda-1b.md), la
+> [consolidación](consolidacion.md), las decisiones de Iván en
+> [aprobaciones.md](../../operacion/aprobaciones.md) y lo que me piden en sus
+> revisiones Reme, Lola, Paco y Puri.
+
+### 8.1 Lo que he cambiado
+
+**[primer-contacto](../skills-borrador/primer-contacto/SKILL.md) · v0.3**
+
+| Cambio | Por |
+|---|---|
+| Sin llamadas. Respuesta preparada para «¿me podéis llamar?», y si quiere una persona, a Federico **sin prometer una llamada** | A-002 |
+| Cómo llegan y salen los mensajes mientras Iván copia y pega: el chat exportado y los borradores, en `privado/`, un fichero por envío | A-003 |
+| «Lo importante (presupuestos, publicar vuestra web) lo revisa y aprueba Iván, el responsable» | A-004 |
+| «Gratis y sin compromiso» en el cierre y en «¿tiene compromiso?» | A-005 |
+| Respuesta sobre el dominio: a su nombre y, con mantenimiento, incluido | A-011 (solo el dominio) |
+| **Plazo interno del alta** (ver 8.2) y mensaje de aviso si no llegamos | A-012 |
+| **Los datos personales salen de `expediente.md`** y pasan a `privado/` (ver 8.3) | A-009, A-013 |
+| Audios: con whisper.cpp en local, cuando Paco lo instale | A-008 |
+| Borrado a los 3 meses de quien no contrata, con aprobación de Iván | A-009, §10.2 |
+
+**[primer-envio](../skills-borrador/primer-envio/SKILL.md) · v0.3**
+
+| Cambio | Por |
+|---|---|
+| WhatsApp, y copia por correo solo si nos dieron uno. Desaparece la opción de la llamada | A-002, A-003 |
+| El mensaje 3 ya no pregunta «¿cómo preferís?». Las preguntas se hacen por el chat y el mensaje 4 trae la primera. El Word va solo en la copia del correo | A-003, choque 1 |
+| Informe «gratis y sin compromiso». Si hay imagen de la primera página, se manda antes del PDF | A-005, Lola |
+| **Tabla de qué aprueba Iván cliente a cliente** (el primer envío) **y qué una sola vez** (guion, recordatorios, respuestas tipo) | A-012 |
+| Calendario aprobado: +3, +8 y pausa. Sin [PROPUESTA] | A-012 |
+| Foto de la fachada: la última pregunta, opcional, de día y sin gente delante | Choque 3 |
+| Respuestas anotadas con **su ID del catálogo** (B1 x.y), literales, en `privado/respuestas-tanda-a.md` | Reme |
+| Comprobación: las cifras, copiadas del informe aprobado; «la asistente» | Puri (R03, R43, R58) |
+| Pausa y cierre con fecha de borrado | A-009 |
+| Ficheros en `privado/` | A-009, A-013 |
+
+**Nuevo: [guion-tanda-a.md](../skills-borrador/primer-envio/guion-tanda-a.md).**
+Por ahora solo el formato de cada pregunta (ID, ★, condición, mensaje,
+opciones, cómo se anota) y las reglas para decirlas por WhatsApp. Las
+preguntas las escribo cuando Reme cierre la lista, como me has dicho.
+
+### 8.2 Plazo interno del alta (lo que me pedía A-012)
+
+**Al cliente: «os escribo el [día]», 5 días laborables después del primer
+contacto. Por dentro, el objetivo son 3.**
+
+| Día | Hecho |
+|---|---|
+| 0 | Primer contacto. Fecha prometida, a Federico |
+| +1 | Captura manual de Google (Iván), expediente con lo público y previo de precio |
+| +2 | Informe y tanda A, a Puri |
+| +3 | APROBADO, aprobación de Iván y envío |
+| +4, +5 | Margen para una segunda vuelta de Puri o un retraso |
+
+- **Por qué 5:** tres de los pasos pasan por Iván (la captura, la aprobación y el
+  copiar y pegar) y Puri revisa hasta APROBADO. Prefiero prometer 5 y cumplir
+  en 3.
+- **No está medido:** los días de cada fase son una hipótesis. **Propongo que la
+  ronda 2 mida cuánto tarda cada fase**, y ajustar el plazo con eso (lo puede
+  añadir Puri a su vara de medir).
+- **Si no llegamos:** el último día de margen, a las 12:00, si no me has
+  confirmado el envío, aviso al cliente **antes de que venza el plazo**, con una
+  fecha nueva y una sola vez. Si también fallamos esa, va a Iván.
+
+### 8.3 Lo que he encontrado al aplicar A-013
+
+1. **[bloquea] Mi v0.2 metía datos personales en git.** El bloque «Primer contacto»
+   de `expediente.md` llevaba el nombre de la persona, su canal y sus mensajes
+   literales, y `expediente.md` está en git, que es público. **En v0.3 ya está
+   arreglado:** todo eso va a `privado/contacto.md` y `privado/contactos.md`, y en
+   el expediente solo quedan fechas, estado y datos públicos del negocio.
+2. **[bloquea] `recibido/` está en git.** Reme pide guardar el cuestionario
+   devuelto en `clientes/<negocio>/recibido/` (cuestionario-cliente, «Pasar las
+   respuestas a requisitos»), pero `.gitignore` solo excluye `privado/`. El Word
+   devuelto lleva nombres, un móvil y, en la tanda B, el NIF. **Yo lo guardo en
+   `privado/recibido/`.** Hay que cambiarlo en la skill de Reme y en la
+   plantilla del expediente.
+3. **[importante] `encargos.md` dirá quiénes son nuestros clientes y en qué punto
+   está cada uno**, públicamente, en cuanto haya uno real y apunte allí sus
+   fechas de contacto. No es un dato personal si el cliente es una sociedad, pero sí
+   si es un autónomo con su nombre, y en cualquier caso es información del
+   cliente (§10.3). Lo señalo; no sé si basta con poner un código en lugar del
+   nombre.
+4. **[importante] Con Iván copiando y pegando, el tiempo de respuesta es el suyo.**
+   Las 2 horas de §9.1 siguen en [PROPUESTA] y no se las prometo a nadie,
+   pero conviene saber que hoy no dependen de mí.
+5. **[menor] Reme preguntaba (para Chema) si la historia de la tanda B se puede
+   contar «por teléfono, con Menchu».** Con A-002 no hay teléfono. Lo que sí
+   funciona igual de bien es **contarla en audios por WhatsApp**, transcritos en
+   local con whisper.cpp (A-008). Para dos peluqueros con las manos ocupadas, es
+   probablemente lo más cómodo.
+
+### 8.4 Lo que necesito de otros agentes (lo coordina Federico)
+
+| Para | Qué | Por qué |
+|---|---|---|
+| **Reme** | La lista de la tanda A, con IDs, ★ y condiciones | Para escribir el guion |
+| **Reme** | `recibido/` → `privado/recibido/` en cuestionario-cliente | 8.3.2 |
+| **Paco** | Instalar whisper.cpp (A-008) y decirme cómo se usa | Audios en local. (Que `clientes/*/privado/` cubre mis subcarpetas ya lo he comprobado con `git check-ignore`: sí; y `clientes/*/recibido/` entra en git, lo que confirma 8.3.2) |
+| **Puri** | Revisar **una vez** mis plantillas de las dos skills y el guion cuando esté | A-012 |
+| **Puri** | Si le parece, medir en la ronda 2 cuánto tarda cada fase | Para ajustar el plazo interno |
+| **Lola** | Confirmar que la foto de la fachada (para la guía previa, no para la web) vale con la opción HD de WhatsApp | Lo que dice en su revisión es para la foto principal |
+| **Chema** | Si el anexo del informe va al cliente o es interno, y si habrá una imagen de la primera página | Para saber qué adjunto |
+| **Federico** | En `alta-cliente.md`: el plazo interno (8.2) y las fases 0 y 9 | Es tuyo |
+| **Federico** | La plantilla del expediente, con `privado/` y sin datos personales en `expediente.md` | 8.3.1 |
+| **Federico** | Apuntar en `encargos.md` la fecha prometida y la del próximo recordatorio, y avisarme el día +4 a las 12:00 si el primer envío no está aprobado | Sin eso, nadie me despierta |
+
+### 8.5 Lo que sigue pendiente de Iván
+
+- **A-011** (resto): qué decimos a «¿cuánto cuesta?» y, después, el plazo del
+  presupuesto. Hasta entonces, ninguna fecha para el presupuesto.
+- **A-010:** la cláusula de privacidad para el primer mensaje. Y si podemos
+  guardar los datos más de 3 meses cuando el cliente nos pide que le escribamos
+  más adelante.
+- **§15:** nombre de la empresa, número de WhatsApp Business y correo. Sin ellos
+  no sale ningún mensaje.
+- **Nuevo (8.3.3):** si `encargos.md`, que es público, puede nombrar a los clientes.
+
+### 8.6 Guion de WhatsApp de la tanda A (E-013, segunda parte)
+
+**Hecho:** [guion-tanda-a.md](../skills-borrador/primer-envio/guion-tanda-a.md)
+v0.2, sacado del catálogo de Reme v0.3. Tiene los 18 ID (8 obligatorias, 9
+condicionales y la foto de la fachada al final), cada mensaje con su ID, el
+orden, cuándo se activa cada condicional, el cierre, qué hacer si falta una ★ y
+cómo se anotan las respuestas por ID en `privado/`. He medido con un script que
+ningún mensaje pase de mi límite (300 caracteres, o 450 si lleva opciones) y
+que no falte ningún ID del catálogo.
+
+**Ya resuelto por Reme:** el `recibido/` que iba a git (8.3.2) ahora está en
+`privado/`.
+
+**Para Reme** (todos se pueden preguntar; ninguno bloquea):
+
+1. [importante] **A 4.1 (opciones 3 y 4) y A 4.6 piden la misma decisión dos
+   veces.** En A 4.1 el cliente tiene que distinguir «que nos pidan cita más
+   fácil» de «que reserven día y hora ellos solos», y A 4.6 le vuelve a
+   preguntar exactamente eso. Por WhatsApp, la segunda vez suena a «¿no os lo
+   acabo de decir?». Propuesta: en A 4.1, una sola opción («que puedan pedir o
+   reservar cita desde la web»), y que A 4.6 decida Esencial o Negocio. Así
+   además la lista baja de 8 opciones a 7. En el guion lo he dejado tal cual
+   está en el catálogo.
+2. [menor] **A 4.1 repite la quinta pregunta de mi primer contacto** («¿qué os
+   gustaría conseguir?»). No cambio la pregunta: la introduzco citando lo que
+   nos dijo, para que no suene a repetida.
+3. [menor] **A 5.7 son dos preguntas** (quién la lleva y si la paga, y qué
+   conservar). Las mando en dos mensajes con el mismo ID.
+4. [menor] **A 3.4 (vender por internet):** el catálogo dice que va a Federico
+   «antes de seguir con el presupuesto». Lo interpreto así: aviso a Federico en
+   el momento y sigo con el resto de preguntas, salvo que Federico me diga que
+   pare. **Confirmado por Federico (2026-11-18):** él se lo lleva a Iván.
+   Los puntos 1, 3 y 5 ya los tiene Reme.
+
+### 8.7 Guion v0.3, alineado con el catálogo v0.3.1 (E-013, tercera parte)
+
+He aplicado las cinco notas que Reme aceptó (su §8.7): A 4.1 con 7 opciones,
+A 5.7 y A 5.8 por separado, condiciones y respuestas anotadas por el nombre de
+la opción, A 3.4 sin parar la conversación y el móvil personal de A 1.3 en
+`privado/`. También su regla de citar el primer contacto y preguntar solo
+«¿algo más?». Además, la comprobación es ahora un script,
+[medir_guion.py](../skills-borrador/primer-envio/medir_guion.py), que revisa
+la versión del catálogo, los ID, el número de opciones, la longitud de los
+mensajes y que ninguna condición use números. Está **en verde** (19 ID en el
+catálogo y en el guion; el mensaje más largo, de 310 caracteres) y **lo he
+probado estropeando el guion de seis maneras**: falla en las seis.
+5. [menor] **A 1.3 tiene destino `DATO`, y `DATO` va a `expediente.md`, que está
+   en git.** Si el teléfono que nos da es un móvil personal, va a `privado/`.
+   Mejor que lo diga también el catálogo.
+
+### 8.8 Arreglos de la revisión de Puri (E-015)
+
+[Revisión de Puri](revision-plantillas-menchu.md): RECHAZADO. Ahora van en
+v0.4 primer-contacto, primer-envio y el guion. `medir_guion.py` sigue en verde y
+`comprobar.py` de Puri no marca erratas nuevas.
+
+- **R01** [bloquea] Privacidad en el primer contacto · **Sin tocar:** lo decide Iván (provisional o esperar a A-010).
+- **R02** [bloquea] Plazo de 5 días · **Sin tocar:** lo decide Iván. Si no lo aprueba, quito el [día] de las plantillas.
+- **R03** [importante] «Casi todo ya rellenado» era falso · Ahora pone «la primera es para confirmar lo que ya tenemos; la mayoría de las demás se contestan eligiendo una opción» (5 de las 8 obligatorias tienen opciones). Cambiado en el cierre del primer contacto, en el mensaje 3 y en el correo.
+- **R04** [importante] Respuestas sin plazo · Hay `[cuándo]` en las cuatro, más una regla en primer-contacto: el [cuándo] lo fija Federico al recibir el aviso, y el mensaje no sale sin él.
+- **R05** [importante] Contraseña en el chat exportado · Antes de exportar, Iván borra el mensaje en su móvil, o lo quita del fichero si ya estaba exportado. En el registro solo queda que se borró, nunca el dato. Vale también para datos bancarios, y al cliente se le recomienda cambiar la contraseña.
+- **R06** [importante] «Vuestros textos» · Ahora pone «vuestras respuestas y las fotos».
+- **R07** [menor] A 4.6 «la única que decide» · Ahora pone «la que más decide (también cuenta A 3.3)».
+- **R08** [menor] «Unas 12 preguntas» para Cotillas · Con la regla del guion son unas 9: las 8 obligatorias más A 2.2.
+- **R09** [menor] «Catálogo v0.3» en «Cuándo» · Ahora pone «en la versión del catálogo que diga el guion».
+- **R10** [menor] Contesta a medias · Después del único recordatorio, pausa. Marcado [PENDIENTE IVÁN, R10], porque se aparta de A-012.
+- **R11** [menor] A 5.3 «seguimos» · Ahora pone «seguís».

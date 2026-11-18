@@ -257,3 +257,150 @@ regenerarlo conviene cerrarlo, y ese fichero no debe entrar en git.
 Nota: la ruta de `timeout` que dicen las instrucciones de la máquina
 (`/usr/local/opt/coreutils/libexec/gnubin/timeout`) no existe. Que Paco lo
 compruebe si algún script la usa.
+
+## 8. Ronda 1b
+
+> E-010 · 2026-11-18. Con A-005 (informe de 2 páginas más anexo, en A5), A-006
+> (estilo común y guía de 3–4 páginas), A-003 (WhatsApp primero), A-013
+> (repositorio público) y los choques 2, 3 y 4 de la consolidación.
+
+### Lo que he cambiado
+
+**[`estilo-documentos`](../skills-borrador/estilo-documentos/SKILL.md) → v0.3, completo**
+
+- **Qué cubre:**
+  - el informe en A5;
+  - la imagen de su página 1 para WhatsApp (PNG de 1080 px);
+  - la tanda A y la B en Word, A4 en una columna: es la copia «para el
+    ordenador», porque en el móvil se contesta por el chat;
+  - los documentos internos.
+- **Paleta:**
+  - he añadido `atencion-suave`;
+  - todos los pares que se usan, comprobados con `contraste.py`: pasan de
+    4,5 : 1, así que no hay que vigilar dónde va cada color;
+  - los nombres son iguales en CSS y en Python.
+- **Tipografía:**
+  - Inter estática en el PDF y Arial en el Word, con el porqué para la R62 de
+    Puri: lo común es la paleta, los componentes y la estructura; un Word no
+    puede contar con Inter y no incrusta nada;
+  - he subido el texto del A5 a 12 pt.
+- **Informe:**
+  - el plan de cada página, según el contenido de Chema;
+  - saltos de página **solo** al empezar la página 2 y el anexo;
+  - si algo no cabe, se recorta el texto y nunca la letra;
+  - «página X de Y» en el pie, con las cajas de margen de `@page`, probado.
+- **Word:**
+  - piezas con nombre y uso;
+  - ID de Reme a la vista («A 3.5») y opciones numeradas, para contestar por
+    WhatsApp con «A 3.5: 2 y 3»;
+  - «imprescindible» con palabras, sin ★;
+  - la versión del estilo en las propiedades del documento, no en el pie;
+  - la leyenda, solo con los recuadros que salen.
+- **Mapa** para `mapa.py`:
+  - «Vosotros» marcado;
+  - formas distintas por tipo;
+  - la leyenda dentro;
+  - etiquetas de 27 px como mínimo a 1100 px para el A5. Las de hoy, a 18 px,
+    quedarían a unos 6 pt.
+- **Lista para Paco** y comprobaciones con comandos.
+
+**Prototipos** en [`estilo-documentos/prototipo/`](../skills-borrador/estilo-documentos/prototipo/), con datos ficticios:
+
+| Fichero | Qué es | Comprobado |
+|---|---|---|
+| [`estilo.css`](../skills-borrador/estilo-documentos/prototipo/estilo.css) | El CSS común: fuentes, paleta, A5, pie y componentes | Con `html_a_pdf.mjs --estricto`: sin avisos |
+| [`muestra-informe.html`](../skills-borrador/estilo-documentos/prototipo/muestra-informe.html) | Página 1, página 2 y anexo con todos los componentes | 3 páginas A5, etiquetado, **solo Inter incrustada como TrueType (sin Type 3)**. Se lee a 390 px sin ampliar. La página 1 como PNG: 1080 × 1530 y 130 KB |
+| [`bloques_docx.py`](../skills-borrador/estilo-documentos/prototipo/bloques_docx.py) | Las piezas del Word sobre `docx_util` (el prototipo que pidió Paco) | Pasa `revisar_docx.py`. `w:tag` en cada opción (`A 3.5.1`…), `es-ES` y `cp:version`. Visto en LibreOffice: 2 páginas, una columna |
+
+**[`guia-estilos-previa`](../skills-borrador/guia-estilos-previa/SKILL.md) → v0.3**
+
+- **Plantilla dentro de la skill**, como prefería Paco. El diseño fijo está en
+  [`generar_guia.py`](../skills-borrador/guia-estilos-previa/generar_guia.py) y
+  los datos de cada cliente van en un JSON
+  ([ejemplo ficticio](../skills-borrador/guia-estilos-previa/ejemplo/datos-ejemplo.json)).
+  Sale en **3 páginas A4** con el estilo común, Fraunces e Inter de
+  `herramientas/fuentes/`, y Lucide.
+- **Las reglas, en el código:**
+  - calcula el contraste de cada papel del color: 7 pares de texto y 2 de no
+    texto;
+  - **no saca la guía** si alguno no llega, ni si la acción principal no es un
+    canal comprobado.
+
+  Lo he probado: con un gris claro se niega por 2 pares, y con «Pedir cita por
+  WhatsApp» sin comprobar, también. Si quito la comprobación, la guía sale: la
+  prueba detecta que falta.
+- **El tono pasa a Chema** (`textos-web`). La guía solo marca dónde va cada texto y cuánto cabe.
+- **Foto de la fachada (A 5.6, choque 3):** un paso nuevo, «previa con
+  fachada», que usa
+  [`colores_foto.py`](../skills-borrador/guia-estilos-previa/colores_foto.py)
+  para sacar los colores reales. Es el cuentagotas sin ventanas: colores
+  dominantes de una zona de la foto, con su contraste.
+
+  Al probarlo encontré un fallo: el método de la mediana devolvía colores que
+  no estaban en la imagen. Con 70 % marrón y 30 % blanco, sacaba un marrón
+  claro. Lo he arreglado con k-medias y lo he comprobado con dos imágenes de
+  colores conocidos: ahora salen exactos, y sin el arreglo la prueba falla.
+- **Fotos:** la lista y los tamaños pasan a la tanda B. La de la fachada de la
+  A 5.6 vale aunque sea pequeña, porque en la previa solo se mira.
+
+### Lo que hay que decidir (lo lleva Federico)
+
+- **🔴 `interno/` entra en git y el repositorio es público (A-013).** Hoy están
+  publicados:
+  - la guía previa del caso de ejemplo, en PDF;
+  - `previo-precio.md`, con nuestra estimación de precio.
+
+  Cualquiera, el propio cliente incluido, puede descargar el diseño que «no le
+  regalamos» y el precio que le pensamos pedir.
+  - Propuesta: añadir `clientes/*/interno/` a `.gitignore` y sacar del índice
+    lo que ya está. El `.gitignore` es de Federico o de Paco, no mío.
+  - Con un cliente real, además, el generador de cada cliente también es
+    público. Por eso la plantilla va en mi skill y los datos en un JSON aparte.
+  - Mientras tanto, mi skill pone el JSON y el PDF en
+    `clientes/<negocio>/privado/guia/`, que ya está fuera de git.
+
+### Lo que necesito de otros (por Federico)
+
+- **Paco:** llevar `estilo-documentos` a `herramientas/`, siguiendo la sección
+  «Para Paco» de la skill:
+  - `estilo.css`;
+  - las piezas del Word;
+  - `mapa.py`;
+  - los iconos leídos de `herramientas/iconos/`.
+
+  El formato del `w:tag`, a cerrar con Reme para `leer_cuestionario.py`.
+  También, decidir si `contraste.py` o `colores_foto.py` pasan a `herramientas/`
+  (choque 4).
+- **Chema:**
+  - escribir el informe para que cada parte quepa en su página A5;
+  - la frase principal, de 40–45 caracteres;
+  - el `alt` de cada captura y dónde va el recuadro (en %).
+- **Reme:**
+  - que la leyenda del Word solo explique los recuadros que salen;
+  - que el ID de cada pregunta lleve el prefijo de la tanda («A 3.5»), como en
+    su catálogo.
+- **Puri:** añadir a su lista:
+  - `html_a_pdf.mjs --estricto`;
+  - `pdffonts`: solo Inter, o Fraunces e Inter en la guía;
+  - que cada parte del informe quepa en su página;
+  - que no quede ningún «[Nombre de…]»;
+  - que el generador de la guía haya terminado sin negarse.
+- **Iván:** medir lo que llega por WhatsApp, normal y HD
+  (`sips -g pixelWidth -g pixelHeight`), y probar el Word (A-007).
+
+### Pruebas, sin tocar nada que no sea mío
+
+Todo lo generado ha ido a `/tmp`. Ningún dato real ni personal en el
+repositorio, porque las muestras son ficticias.
+
+**Comandos:**
+- `html_a_pdf.mjs --estricto`
+- `pdfinfo`, `pdffonts` y `pdftoppm` (página a página, a 390 px y a 1080 px)
+- `revisar_docx.py`
+- `soffice --headless --convert-to pdf`
+
+**Pruebas con resultado conocido:**
+- `contraste.py`: valores de referencia;
+- `generar_guia.py`: dos negativas, y una mutación que quita la comprobación;
+- `colores_foto.py`: dos imágenes sintéticas, y una mutación que quita el
+  arreglo.

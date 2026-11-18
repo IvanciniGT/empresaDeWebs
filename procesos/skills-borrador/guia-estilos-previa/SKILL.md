@@ -1,197 +1,218 @@
 ---
 name: guia-estilos-previa
-description: "Prepara la dirección de arte provisional e interna de un cliente nuevo antes de que contrate (concepto, paleta con contrastes WCAG comprobados también en lo que no es texto, tipografías, iconos, esquema de la primera pantalla del móvil y lista de fotos que harán falta) y la convierte en guía definitiva cuando llegan sus fotos. No se envía al cliente. Úsala cuando el expediente tiene la información pública recopilada, y otra vez cuando el cliente contrata y manda material."
+description: "Prepara la dirección de arte provisional e interna de un cliente nuevo antes de que contrate: lo que sabemos y lo que no, concepto, paleta con contrastes comprobados por papel, tipografías, iconos, esquema en grises de la primera pantalla del móvil, estructura y lista de fotos. Se genera con una plantilla a partir de un JSON y se convierte en guía definitiva cuando llegan las fotos del cliente. No se envía al cliente. Úsala cuando el expediente tiene la información pública y el previo de precio, y otra vez si llega la foto de la fachada o cuando contrata."
 ---
 
 # guia-estilos-previa
 
-> **BORRADOR v0.2 · revisado por Lola** · Dueña: Lola · En revisión (ronda 1)
->
-> Cambios respecto a la v0.1 y su porqué: [revision-lola.md](../../ronda-1/revision-lola.md) §4.
+> **BORRADOR v0.3 · Lola** · Dueña: Lola · Aprobado el alcance por Iván: **A-006**
+> (3–4 páginas, como hipótesis). Historia: [revision-lola.md](../../ronda-1/revision-lola.md) §4 y §8.
 
 ## Para qué sirve (y para qué no)
 
 Es una **hipótesis de diseño hecha sin haber visto el local**. Sirve para tres cosas:
 
 1. **Que Reme presupueste bien:** cuántas secciones, qué componentes, qué falta (fotos, logotipo).
-2. **Que Menchu sepa qué material pedir:** la lista de fotos, con tamaños.
+2. **Que Menchu sepa qué fotos pedir en la tanda B,** con tamaños.
 3. **Ganar días cuando el cliente contrate:** la definitiva parte de aquí.
 
-**No es** el diseño de la web, ni un logotipo, ni los textos. No se envía al
-cliente: «no le regalamos el diseño» (Iván). Cuanto más se parezca a una web
-terminada, más trabajo tiramos si el local no se parece a lo que imaginábamos.
+**No es** el diseño de la web, ni un logotipo, ni los textos, ni el tono.
+
+- Los textos y el **tono de comunicación son de Chema** (`textos-web`).
+- La guía no se envía al cliente: «no le regalamos el diseño» (Iván).
 
 ## Cuándo
 
-| Momento | Qué se hace | Salida |
-|---|---|---|
-| Expediente con lo público, en paralelo con el cuestionario B1 | **Previa** | PDF interno de 3–4 páginas |
-| El cliente acepta el presupuesto y manda fotos (fachada, rótulo, interior) o logotipo | **Definitiva** (ver abajo) | Guía de estilos del proyecto, para Paco |
+| Momento | Qué se hace |
+|---|---|
+| Expediente con lo público **y previo de precio hecho**, en paralelo con la tanda A | **Previa a ciegas** |
+| Llega la foto de la fachada (pregunta opcional **A 5.6**, choque 3) | **Previa con fachada:** se rehace la paleta con sus colores (abajo) |
+| El cliente acepta el presupuesto y llegan las fotos de la tanda B | **Definitiva** (al final de esta skill) |
 
 ## Entrada
 
 - Expediente: §1 datos comprobados, §2 a confirmar, §3 reseñas literales.
-- Capturas de su presencia actual y de la competencia (para **no** parecerse).
+- Informe y capturas de la competencia, para **no** parecerse.
 - Previo de precio de Reme: el plan que encaja (una página o varias).
+- Si ha llegado: la foto de la fachada, en `privado/fotos/`. La guarda Menchu
+  y Federico me avisa.
 
-## Contenido de la previa
+## Dónde van los ficheros
 
-Un PDF de **3 o 4 páginas**, sin portada a página completa y sin saltos de
-página forzados por sección.
+El repositorio es **público** (A-013) y `interno/` **sí entra en git**, así que
+la guía previa y el previo de precio que hay hoy en el caso de ejemplo se pueden
+descargar desde GitHub. Lo he elevado (revisión, §8).
 
-| # | Bloque | Qué lleva | Qué **no** lleva |
-|---|---|---|---|
-| 1 | **Lo que sabemos y lo que no** | Qué decisiones salen del expediente y cuáles son a ciegas: «sin ver fachada, rótulo, interior ni logotipo». | Afirmaciones sobre la competencia que no estén en el expediente o en el informe. |
-| 2 | **Concepto** | Dos o tres palabras, tres rasgos que transmitir y tres que evitar, cada uno con su porqué y su fuente (normalmente las reseñas). | — |
-| 3 | **Paleta provisional** | 4–6 colores con **papel**: texto, fondo, superficie, acción (botones), secundario, detalle. Código y uso. **Tabla de contrastes** completa (abajo). | Colores «por si acaso» que no tienen papel. |
-| 4 | **Tipografías** | Máximo dos familias con licencia libre, muestra y la tabla de tamaños (abajo). | Frases de ejemplo inventadas: se usa una reseña literal o un texto neutro («Horario · Servicios · Cómo llegar»). |
-| 5 | **Iconos** | El juego (Lucide, licencia ISC) y la **lista** de los que hacen falta. | Iconos dibujados a mano. |
-| 6 | **Primera pantalla en el móvil** | Esquema en grises, a baja fidelidad, con etiquetas de función: `[Frase principal · Chema]`, `[Foto: fachada]`. Cumple la regla de los tres segundos (abajo). | Textos, precios o servicios. Nada que parezca terminado. |
-| 7 | **Estructura de secciones** | Lista ordenada y una línea por sección. Tiene que cuadrar con el plan del previo de precio. | Secciones que dependen de una respuesta del cliente sin marcarlas como «si…». |
-| 8 | **Fotos que harán falta** | Lista de tomas con su uso y su tamaño mínimo (abajo). La usa Menchu en B2. | Fotos de Google o de directorios, ni siquiera «de muestra». |
-| 9 | **Riesgos y preguntas** | Lo que cambiaría la propuesta si el cliente dice X («si el rótulo es verde, cambia el acento»). Las preguntas para el cuestionario van a Reme, a través de Federico. | — |
+Mientras no se decida:
+- el JSON y el PDF del cliente van en `clientes/<negocio>/privado/guia/`, que ya está fuera de git;
+- en el repositorio solo la plantilla, que es genérica, y el ejemplo ficticio.
 
-**Fuera de la previa**, y por qué:
+## Contenido: 3 páginas A4
 
-- **Logotipo**, ni siquiera provisional. No está incluido (§6.1) y crea una
-  expectativa. Si al contratar no tienen, se propone uno tipográfico sencillo
-  en la definitiva.
-- **Tono de comunicación y textos.** Son de Chema. La guía solo dice dónde va
-  cada texto y cuánto cabe («frase principal: unos 40–45 caracteres, a
-  comprobar con el texto real»).
-- **Maqueta en alta fidelidad.** Se hace al contratar.
+Lo genera [`generar_guia.py`](generar_guia.py) a partir de un JSON. Ejemplo:
+[`ejemplo/datos-ejemplo.json`](ejemplo/datos-ejemplo.json). Usa el estilo común
+(`estilo-documentos`) con el sello INTERNO en cada sección.
+
+| Bloque | Qué lleva | Qué **no** lleva |
+|---|---|---|
+| **Cabecera** | Negocio, fecha, autora, plan que encaja. Caja: «propuesta a ciegas» o «con foto de la fachada», y que es una hipótesis | Portada a página completa |
+| **Lo que sabemos / lo que no** | Cada dato con su fuente (expediente §1, §3). Lo que no sabemos, dicho | Afirmaciones sobre la competencia que no estén en el informe |
+| **Concepto** | Nombre en dos o tres palabras. Tres rasgos que transmitir, con su porqué **y su fuente**, y tres que evitar | — |
+| **Tipografías** | Máximo dos familias con licencia libre. Muestra con texto **neutro** («Horario · Servicios · Cómo llegar»). Tabla de tamaños (regla 7) | Frases de venta inventadas |
+| **Paleta** | Un color por **papel**: `texto`, `fondo`, `superficie`, `accion`, `texto_accion`, `secundario` y `detalle`. Tabla de contrastes **calculada** para cada uso | Colores «por si acaso» |
+| **Iconos** | La lista de Lucide (ISC) que hace falta, por nombre (`phone`, `clock`, `map-pin`…) | Iconos dibujados a mano |
+| **Primera pantalla del móvil** | Esquema **en grises**, con etiquetas de función (`[Frase principal · Chema · 40–45 caracteres]`, `[Foto: fachada]`) y la línea de «fin de la primera pantalla» | Textos, precios, servicios sin comprobar, colores del cliente: nada que parezca terminado |
+| **Secciones** | Lista ordenada, una línea por sección; las que dependen de una respuesta, con «solo si…» | — |
+| **Fotos para la tanda B** | Toma, para qué y tamaño mínimo (abajo) | Fotos de Google o de directorios, ni de muestra |
+| **Riesgos y preguntas** | Qué cambiaría si el cliente dice X. Las preguntas para el cuestionario, a Reme a través de Federico | — |
+
+**Fuera de la previa:** logotipo (§6.1), tono y textos (Chema) y maqueta en alta fidelidad.
 
 ## Reglas
 
-1. **La identidad es del cliente.** Si tiene rótulo, logotipo o colores, mandan. La previa lo dice en la primera página: «propuesta a ciegas».
+1. **La identidad es del cliente.** Si tiene rótulo, logotipo o colores, mandan.
+   Sin foto de la fachada, la guía lo dice en la primera caja: «propuesta a ciegas».
 2. **Nada sin comprobar en una maqueta.** Ningún servicio, horario, canal ni
-   año que no esté en el expediente §1. Lo de §2 va marcado `[a confirmar]`.
-   Las maquetas acaban reutilizándose y lo inventado se cuela (§10.3).
-3. **La acción principal es un canal comprobado.** Si solo sabemos el
-   teléfono, el botón principal es «Llamar». WhatsApp o la reserva, solo
-   cuando el cliente confirme que los tiene. Que sepamos su teléfono fijo no
-   dice nada de si tienen WhatsApp: se pregunta, no se supone.
+   año que no esté en el expediente §1. Lo de §2 va como `[a confirmar]`.
+3. **La acción principal es un canal comprobado.** Si solo sabemos el teléfono,
+   es «Llamar». WhatsApp o la reserva, cuando el cliente lo confirme (A 3.5).
+   *El generador no deja sacar la guía si `accion_principal.comprobado` es falso.*
 4. **Regla de los tres segundos.** En la primera pantalla del móvil, sin
-   desplazar, están el **teléfono** (un toque para llamar), el **horario de
-   hoy** y **cómo llegar** (un toque para abrir el mapa).
-5. **Contraste comprobado, también en lo que no es texto** (WCAG 2.2 AA,
-   §11), con [`contraste.py`](contraste.py):
-   - Texto normal: **4,5 : 1**. Texto grande (≥ 24 px, o ≥ 18,66 px en negrita): 3 : 1.
-     Los botones a 17 px en negrita **no** son texto grande: necesitan 4,5.
-   - Bordes de campos y botones secundarios, iconos sin texto e indicador de foco: **3 : 1** con lo que tienen al lado (criterio 1.4.11).
-   - Texto sobre foto o sobre un marcador de posición rayado: se mide contra el tono **más claro** del fondo.
-   - Un par que no llega **solo** puede ser decoración.
-6. **No depender del color.** Enlaces subrayados. Errores con texto e icono, no solo en rojo.
-7. **Tamaños mínimos**, en la tabla de tipografías:
+   desplazar: **llamar** (un toque), el **horario de hoy** y **cómo llegar**
+   (un toque al mapa).
+5. **Contraste por papel, también en lo que no es texto** (WCAG 2.2 AA, §11).
+   - Texto: **4,5 : 1**, en cada uno de sus usos: texto sobre fondo y sobre
+     tarjetas, el texto del botón, los enlaces y las notas.
+   - Bordes de botones y campos, foco e iconos: **3 : 1**.
+   - Un botón de 17 px en negrita **no** es texto grande.
+   - El color de `detalle` solo puede decorar.
+   - *El generador calcula los nueve pares y no saca la guía si alguno no llega.*
+6. **No depender del color.** Enlaces subrayados; errores con texto e icono.
+7. **Tamaños mínimos** (la tabla va en la guía):
 
    | | Móvil | Ordenador |
    |---|---|---|
-   | Texto | ≥ 16 px (proponemos 17), interlineado 1,5 | 18 px, interlineado 1,5 |
+   | Texto | 17 px (mínimo 16), interlineado 1,5 | 18 px, interlineado 1,5 |
    | Notas y pies | ≥ 14 px | ≥ 14 px |
-   | Ancho de línea | — | 60–75 caracteres como máximo |
-   | Áreas de toque | **≥ 44 × 44 px** (WCAG pide 24 × 24; nosotros, más) | — |
+   | Áreas de toque | **≥ 44 × 44 px** | — |
+   | Ancho de línea | — | 60–75 caracteres |
 
 8. **Solo recursos con licencia** (§10.3), anotada al lado de cada uno.
-   Fuentes y licencias habituales: Google Fonts (SIL OFL), Lucide (ISC).
-9. **Fuentes en archivo, no desde Google.** En la web, por el RGPD (la IP del
-   visitante). En el PDF, porque si Google tarda en responder Chrome usa otra
-   fuente **sin avisar**, y porque las de Google salieron como Type 3 en el
-   PDF (probablemente por ser variables), con el texto peor extraíble. Mientras no haya fuentes en `herramientas/`, se acepta
-   Google en la previa (es interna), pero hay que comprobar con `pdffonts`
-   que salió la fuente buena.
-10. **Fotos de personas:** nada de caras de clientes ni de niños sin un
-    consentimiento por escrito con el modelo que apruebe Iván (pendiente, §15).
-    Mientras tanto: el equipo, el local y los detalles del oficio.
+   Instalados por Paco (A-008):
+   - fuentes en `herramientas/fuentes/inter/` y `herramientas/fuentes/fraunces/`, con su `OFL.txt`;
+   - iconos en `herramientas/iconos/`.
+9. **Fuentes en archivo.**
+   - En la web, por el RGPD.
+   - En el PDF, para que salga la fuente buena y no Type 3.
+   - El generador usa `herramientas/fuentes/` si la familia está. Si no, Google
+     (solo en esta guía interna) y lo avisa. Se comprueba con `pdffonts`.
+10. **Fotos de personas:** ni caras de clientes ni de niños sin un
+    consentimiento por escrito con el modelo que apruebe Iván (A-010).
 
 ## Pasos
 
-1. Leer el expediente y el previo. Apuntar qué sabemos del aspecto real del
-   local y qué no.
-2. Mirar la competencia del informe para **no parecerse**.
-3. Escribir el concepto con su porqué y su fuente.
-4. Elegir la paleta y comprobarla: todos los pares de texto **y** los de no
-   texto que se usan en el esquema.
+1. Leer el expediente, el informe y el previo. Apuntar qué sabemos del aspecto
+   real del local y qué no.
+2. Copiar `ejemplo/datos-ejemplo.json` a `clientes/<negocio>/privado/guia/datos.json` y rellenarlo:
+   - cada dato de «sabemos», con su fuente;
+   - el concepto, con su porqué;
+   - un color por papel;
+   - las tipografías, con `prefijo` si hay varios cortes, por ejemplo
+     `Fraunces72pt` para titulares;
+   - la acción principal y si está comprobada;
+   - las secciones, los riesgos y las preguntas.
+3. Probar colores sueltos mientras se elige:
+   `python3 procesos/skills-borrador/guia-estilos-previa/contraste.py "#5E6670:#F6F0E6"`.
+4. Generar:
    ```
-   python3 procesos/skills-borrador/guia-estilos-previa/contraste.py \
-     "#1F2A37:#F6F0E6" "#FFFFFF:#9A5B2E" "#9A5B2E:#F6F0E6" --minimo 3
+   .venv/bin/python procesos/skills-borrador/guia-estilos-previa/generar_guia.py \
+     clientes/<negocio>/privado/guia/datos.json \
+     "clientes/<negocio>/privado/guia/Guía de estilos previa - INTERNO - <negocio>.pdf"
    ```
-   La tabla en Markdown que devuelve va tal cual a la guía.
-5. Tipografías, tabla de tamaños y lista de iconos.
-6. Esquema de la primera pantalla y lista de secciones. Repasarlo contra las
-   reglas 2, 3 y 4.
-7. Lista de fotos con tamaños.
-8. Maquetar en HTML y pasar a PDF con `herramientas/html_a_pdf.sh`. Sello
-   «INTERNO · NO ENVIAR AL CLIENTE» en cada página.
-9. Comprobar antes de entregar (abajo) y pasarla a Federico.
+   Si se niega, dice qué par o qué regla falla: se cambia el color, no la regla.
+5. Comprobar (abajo) y pasarla a Federico.
 
-## Fotos: lista de tomas y tamaños
+## Fotos: tomas y tamaños (para la tanda B)
 
-Tamaño medido en píxeles del lado largo del archivo **tal como nos llega**:
+Medido en píxeles del lado largo del archivo **tal como nos llega**:
 
 | Uso | Mínimo | Por qué |
 |---|---|---|
-| Foto principal, a todo el ancho | **2000 px**, horizontal y con aire alrededor del motivo | En el ordenador ocupa unos 1440 px de pantalla, y en móviles de alta densidad, unos 1200. El aire permite recortarla en vertical para el móvil. |
-| Fotos de secciones y galería | **1200 px** | Se ven a la mitad del ancho como mucho. |
-| Retrato del equipo | **1000 px** | Se ve en tarjeta. |
+| Foto principal, a todo el ancho (normalmente la fachada) | **2000 px**, horizontal y con aire alrededor | En el ordenador ocupa unos 1440 px de pantalla, y en móviles de alta densidad unos 1200. El aire deja recortarla en vertical para el móvil |
+| Secciones y galería | **1200 px** | Se ven a la mitad del ancho como mucho |
+| Retrato del equipo | **1000 px** | Se ve en tarjeta |
 
-Tomas habituales: fachada de día con el rótulo · interior entero · el equipo
-junto · cada uno trabajando · detalles del oficio · fotos antiguas del negocio
-(escaneadas o fotografiadas de frente, sin reflejos).
+Tomas habituales:
+- fachada de día con el rótulo;
+- interior entero;
+- el equipo, junto;
+- cada uno trabajando;
+- detalles del oficio;
+- fotos antiguas del negocio, escaneadas o de frente y sin reflejos.
 
-**WhatsApp:** no sabemos todavía qué tamaño llega con la opción normal y con
-la HD. Hasta medirlo (ver la revisión, §7), la foto principal se pide por
-correo o como documento, y el resto, por WhatsApp con HD.
+**WhatsApp:** aún no sabemos qué tamaño llega con la opción normal y con la HD
+(está pendiente que Iván lo mida). Mientras tanto:
+- la foto principal, por correo o como documento;
+- el resto, por WhatsApp con HD.
+
+Para la foto de la fachada de la A 5.6 vale cualquiera: en la previa solo se
+mira, no se publica.
 
 ## Comprobación antes de entregar
 
-- [ ] Cada dato del cliente que aparece está en el expediente §1, o va marcado `[a confirmar]`.
-- [ ] La acción principal del esquema es un canal comprobado (regla 3).
-- [ ] Teléfono, horario de hoy y cómo llegar, en la primera pantalla (regla 4).
-- [ ] Tabla de contrastes generada con `contraste.py`, con pares de texto **y** de no texto.
-- [ ] Licencia anotada en cada fuente, icono e imagen.
+- [ ] El generador terminó sin negarse: contrastes y acción principal, bien.
+- [ ] Cada dato del cliente está en el expediente §1 con su fuente, o va como `[a confirmar]`.
+- [ ] La primera pantalla del esquema tiene llamar, el horario de hoy y cómo llegar.
+- [ ] `pdfinfo`: 3–4 páginas. `pdffonts`: solo las fuentes elegidas (sin Type 3 ni fuentes del sistema).
+- [ ] Licencia anotada en fuentes e iconos.
 - [ ] Ni logotipo, ni textos de Chema, ni fotos de terceros.
-- [ ] `pdffonts` muestra las fuentes elegidas, no otras de relleno.
-- [ ] 3–4 páginas, sello INTERNO en todas.
+- [ ] El JSON y el PDF, fuera de git.
 
-## De previa a definitiva (al contratar)
+## Con la foto de la fachada (previa) o al contratar (definitiva)
 
-1. Con las fotos de la fachada, el rótulo y el interior, **sacar los colores
-   reales** con un cuentagotas sobre la foto. Usar varias muestras, porque la
-   luz engaña. Si hay logotipo en archivo, sus colores mandan.
-2. Comparar con la previa. Si el color del cliente no da contraste para
-   texto, se usa en superficies grandes y detalles, y se oscurece **solo** su
-   versión para texto y botones. Se anota como «variante accesible de su color».
-3. Rehacer la tabla de contrastes.
-4. Anotar en la guía qué cambió respecto de la previa y por qué.
-5. Completar la guía del proyecto para Paco:
-   - componentes con todos sus estados: normal, foco visible, pulsado, desactivado, error;
+1. **Sacar los colores reales** con [`colores_foto.py`](colores_foto.py):
+   ```
+   .venv/bin/python procesos/skills-borrador/guia-estilos-previa/colores_foto.py \
+     clientes/<negocio>/privado/fotos/fachada.jpg --zona 20,10,60,20 -n 5
+   ```
+   - `--zona` recorta en % (izquierda, arriba, ancho, alto), por ejemplo solo el rótulo.
+   - Devuelve cada color con su proporción y su contraste con blanco y con negro.
+   - La luz engaña: mejor dos fotos o dos zonas del mismo elemento.
+   - Si hay logotipo en archivo, sus colores mandan.
+2. **Llevarlos al JSON**:
+   - el color del cliente pasa a ser `accion` o `detalle`;
+   - se pone `foto_fachada` con la ruta;
+   - se regenera.
+3. **Si su color no da contraste para texto,** se usa en superficies grandes y
+   detalles, y se oscurece **solo** su versión para texto y botones. Se anota en
+   `uso` como «variante accesible de su color».
+4. **Anotar qué cambió** respecto a la previa y por qué (en `riesgos`, o en el expediente).
+5. **Definitiva, al contratar:** la guía del proyecto para Paco. Lleva:
+   - componentes con todos sus estados (normal, foco visible, pulsado, desactivado y error);
    - formulario con etiquetas visibles;
    - aviso de cookies con «Rechazar» igual de visible que «Aceptar» (§11);
-   - maquetas móvil → tableta → ordenador;
+   - maquetas para móvil, tableta y ordenador;
    - espaciado en múltiplos de 8 px;
    - colores y tamaños como variables CSS;
-   - archivos de fuentes e iconos con su licencia;
+   - fuentes e iconos con su licencia;
    - fotos optimizadas.
 
-## Salida
+   El formato está por cerrar con Paco.
 
-- `interno/Guía de estilos previa - INTERNO - <negocio>.pdf`, y su HTML en `maquetas/`.
-- Al contratar: la guía definitiva del proyecto (formato a cerrar con Paco).
+## Herramientas (en esta skill)
 
-## Herramientas
+| Herramienta | Qué hace | Probado |
+|---|---|---|
+| [`contraste.py`](contraste.py) | Contraste WCAG con veredicto para texto, texto grande y no texto. `--minimo` sale con error | Con valores de referencia: 21; 4,54 frente a 4,47 |
+| [`generar_guia.py`](generar_guia.py) | La guía desde el JSON. Se niega si falla un contraste o la acción principal | El ejemplo, en 3 páginas. Con un gris claro se niega por 2 pares, y con WhatsApp sin comprobar también. Si se quita la comprobación, genera: la prueba detecta que falta |
+| [`colores_foto.py`](colores_foto.py) | Colores dominantes de una foto o zona, con su contraste | Imágenes de colores conocidos (2 y 3 colores): salen exactos. Sin el refinado por k-medias, la prueba falla |
 
-- [`contraste.py`](contraste.py): contraste WCAG con el veredicto de texto,
-  texto grande y no texto. Sin dependencias. `--minimo` sale con error si
-  algún par no llega.
-- `herramientas/html_a_pdf.sh`: de HTML a PDF con Chrome sin ventana.
-- `pdffonts` (ya instalado): comprobar qué fuentes salieron en el PDF.
+Comunes (de Paco): `herramientas/html_a_pdf.mjs`, fuentes e iconos. Paco decide
+si alguna de las mías pasa a `herramientas/` (choque 4).
 
 ## Dudas abiertas
 
-- ¿Podemos ver la fachada antes de contratar sin pedir nada al cliente?
-  Mapillary tiene fotos de calle con licencia abierta. Falta comprobar la
-  licencia exacta, si hay fotos de esa calle y si su uso automático lo permite.
-  Solo serían para mirar, nunca para publicar.
-- Formato de la guía definitiva para Paco: ¿PDF, HTML con variables CSS o las dos cosas?
-- Plantilla de la guía (diseño fijo y datos de cada cliente aparte) para no copiar
-  300 líneas de Python por cliente: la propongo a Paco en la revisión.
+- **¿`interno/` fuera de git?** Lo decide Iván (revisión, §8).
+- **Formato de la guía definitiva para Paco:** ¿PDF, HTML con variables CSS o las dos cosas?
+- **Ver la fachada sin preguntar** (fotos de calle con licencia abierta): sigue
+  sin comprobar. Con la pregunta A 5.6 pierde urgencia.

@@ -1,0 +1,59 @@
+{
+  "_nota": "Negocio FICTICIO para probar la plantilla. Los datos de un cliente real van en clientes/<negocio>/interno/ (fuera de git: ver revision-lola.md §8).",
+  "negocio": "Peluquería de Ejemplo",
+  "fecha": "18/11/2026",
+  "autora": "Lola",
+  "plan": "Esencial (una página), según el previo de precio",
+  "foto_fachada": null,
+  "sabemos": [
+    {"que": "Peluquería de caballero y niño", "fuente": "expediente §1"},
+    {"que": "Clientela de varias generaciones", "fuente": "reseñas, expediente §3"},
+    {"que": "Teléfono fijo publicado", "fuente": "expediente §1"}
+  ],
+  "no_sabemos": [
+    "Fachada, rótulo e interior: no los hemos visto",
+    "Si tienen logotipo",
+    "Si tienen WhatsApp o dan cita (tanda A, A 3.5)"
+  ],
+  "concepto": {
+    "nombre": "Oficio de barrio",
+    "transmitir": [
+      {"que": "Oficio", "porque": "Es lo que más repiten los clientes.", "fuente": "reseñas"},
+      {"que": "Confianza", "porque": "Clientes de toda la vida.", "fuente": "reseñas"},
+      {"que": "Limpio y actual", "porque": "Para no parecer un local anticuado en el móvil.", "fuente": "criterio de diseño"}
+    ],
+    "evitar": [
+      {"que": "Fotos de banco de imágenes", "porque": "Restan verdad a un negocio que vive de la confianza."},
+      {"que": "Copiar el estilo de la competencia del informe", "porque": "Hay que distinguirse, no mimetizarse."},
+      {"que": "Parecer terminado", "porque": "Es una hipótesis hasta ver el local."}
+    ]
+  },
+  "paleta": {
+    "texto":        {"nombre": "Tinta", "hex": "#1F2A37", "uso": "textos"},
+    "fondo":        {"nombre": "Papel", "hex": "#F6F0E6", "uso": "fondo general, cálido"},
+    "superficie":   {"nombre": "Blanco", "hex": "#FFFFFF", "uso": "tarjetas"},
+    "accion":       {"nombre": "Cobre", "hex": "#9A5B2E", "uso": "botón principal, enlaces"},
+    "texto_accion": {"nombre": "Blanco", "hex": "#FFFFFF", "uso": "texto del botón"},
+    "secundario":   {"nombre": "Piedra", "hex": "#5E6670", "uso": "horario, notas"},
+    "detalle":      {"nombre": "Rojo", "hex": "#9E2B25", "uso": "solo detalles decorativos"}
+  },
+  "tipografias": {
+    "titulares": {"familia": "Fraunces", "prefijo": "Fraunces72pt", "peso": 700, "licencia": "SIL OFL", "por_que": "Serifa con carácter, de rótulo clásico pero actual."},
+    "texto":     {"familia": "Inter", "licencia": "SIL OFL", "por_que": "Muy legible en el móvil, también pequeña."}
+  },
+  "iconos": ["phone", "clock", "map-pin", "scissors", "star"],
+  "accion_principal": {"etiqueta": "Llamar", "dato": "teléfono del expediente §1", "comprobado": true},
+  "secciones": [
+    {"nombre": "Portada", "que": "frase principal, llamar, horario de hoy, cómo llegar"},
+    {"nombre": "Quiénes somos", "que": "la historia, con foto del equipo"},
+    {"nombre": "Servicios", "que": "lista corta; precios si los quieren publicar"},
+    {"nombre": "Opiniones", "que": "enlace a su ficha de Google", "si": "dan permiso para mostrarlas (B 6.6)"},
+    {"nombre": "Horario y cómo llegar", "que": "con mapa"},
+    {"nombre": "Contacto y textos legales", "que": "formulario, aviso legal, privacidad y cookies"}
+  ],
+  "riesgos": [
+    "Si el rótulo o el local tienen colores propios, mandan sobre esta paleta.",
+    "Si dan cita por WhatsApp, el botón principal puede pasar a WhatsApp (con el teléfono al lado)."
+  ],
+  "preguntas": []
+}

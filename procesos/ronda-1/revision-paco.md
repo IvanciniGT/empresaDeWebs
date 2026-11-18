@@ -249,3 +249,25 @@ PEDIDA POR:  Paco · 2026-11-17
 | Búsqueda con Brave Search API (opción A de Chema) | Buscar redes y webs sin leer buscadores contra su `robots.txt` | 0 € con el crédito gratis (5 $ al mes, unas 1.000 búsquedas); **prepago**, así que el gasto nunca pasa de lo cargado | Necesita A-2. Hago `buscar_web.sh` con tope de consultas cuando se apruebe. |
 | Materiales del cliente fuera de git (Menchu) | Fotos y audios sin pérdida y sin subirlos a GitHub | 0 € | Propuesta: `~/Documents/empresaDeWebs-clientes/<negocio>/`, fuera del repositorio, con la copia de seguridad que use Iván. **Duda:** no sé qué copia de seguridad tiene esta máquina. |
 | Transcribir audios en local (Menchu, whisper.cpp) | Que las notas de voz no salgan de la máquina | 0 €; hay que instalarlo y bajar un modelo (cientos de MB; no lo he medido) | Viable sin ventanas. Lo decide Iván. |
+
+## 8. Ronda 1b
+
+> E-011 · 2026-11-18 · Detalle técnico en [herramientas-comunes v0.3](../skills-borrador/herramientas-comunes/SKILL.md) y [herramientas/INSTALACIONES.md](../../herramientas/INSTALACIONES.md).
+
+**Hecho**
+- **A-008 instalado dentro de `herramientas/`**, con sumas SHA-256, script de instalación y de desinstalación: fuentes Inter y Fraunces, Lucide, Lighthouse 13.6.0, hunspell 1.7.6 con es_ES, whisper.cpp 1.9.5 con el modelo `large-v3-turbo-q5_0` (12 s de audio en ~5 s). Lo pesado (~800 MB) fuera de git.
+- **A-015:** `overpass.mjs` contra `overpass.private.coffee` (asociación sin ánimo de lucro; sus condiciones admiten «any project», sin límite; leídas el 18/11). Guarda consulta, respuesta y metadatos con licencia.
+- **Reme:** `id` en casillas, huecos, tablas y propuestas, y `leer_cuestionario.py`. Las respuestas sobreviven a guardar el Word con LibreOffice (con controles de bloque, no: por eso van en línea). Lee el catálogo v0.3 y v0.2.
+- **Puri:** aviso de imágenes sin `alt` en el PDF; capturas recortadas; «página X de Y» comprobado en Chrome; `revisar_docx.py --json` con gravedad; `ortografia.py` para su `comprobar.py`. Su `comprobar.py` y el `contraste.py` de Lola: revisados, se quedan en sus skills (contraste comprobado con #767676 = 4,54 y #777777 = 4,47).
+- **Menchu:** `transcribir.sh`, en local y sin escribir donde iría a git.
+- **Estilo de Lola (A-006):** `estilo.css` nuevo (Inter local, A5, pie con página X de Y), `iconos.py`, paleta y piezas del Word en `docx_util.py`, mapa con formas, leyenda y «Vosotros». `informe.css` se queda para los generadores antiguos.
+- Los generadores del caso siguen funcionando; antes del estilo, sus 26 páginas salían idénticas.
+
+**Para Federico (no lo he cambiado por mi cuenta)**
+- **Lola** propone `w:tag` = «A 3.5.2»; está hecho y probado con Reme como «A 3.5|2» (el punto choca con el del ID). Propongo dejar «|».
+- **Lola:** en el Word, las casillas salen con Arial Unicode en LibreOffice (MS Gothic no está en el Mac); en Word se verá en A-007.
+- **Chema:** `estudio-competencia` debe pasar el tercer campo de `puntos.json` como «es barbería» (antes «destacado»).
+- Con la paleta nueva, el Word y el mapa del caso antiguo cambian de color al regenerarse: es lo esperado.
+
+**Pendiente**
+- Por orden de Iván he parado las pruebas: el último pase completo (37 pruebas) estaba en verde **antes** del estilo de Lola; las piezas nuevas de `docx_util.py` se han comprobado a mano (sin errores en `revisar_docx.py`, lectura por ID correcta), pero **`mapa.py` con el estilo nuevo no lo he podido ver terminado** y las 34 mutaciones no se han repasado. Hay que lanzar `probar.mjs` y `mutaciones.sh` antes de dar esto por bueno.

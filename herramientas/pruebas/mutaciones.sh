@@ -4,7 +4,7 @@
 # Una prueba que sigue pasando con el código roto da una confianza falsa.
 #
 # Uso (desde la raíz del repositorio):  herramientas/pruebas/mutaciones.sh
-# Tarda unos 8 minutos (cada extracción completa son ~60 s).
+# Tarda unos 15 minutos (cada extracción completa son ~60 s).
 # Al añadir una prueba nueva, añade aquí su mutación.
 set -uo pipefail
 REPO="$(cd "$(dirname "$0")/../.." && pwd)"
@@ -51,6 +51,25 @@ mutar "Word sin ordenar el XML de las tablas" docx_util.py "_colocar(tblPr, bord
 mutar "sin arreglar las propiedades del Word" docx_util.py "    _propiedades(doc, titulo, autor, idioma)" "    pass" "docx_util: el Word"
 mutar "sin texto alternativo en imagen()" docx_util.py 'docpr.set("descr", alternativo)' 'pass' "docx_util: el Word"
 mutar "guardar() sin mirar si está abierto" docx_util.py "    bloqueo = documento_abierto(ruta)" "    bloqueo = None" "docx_util: no guarda"
+
+# Ronda 1b
+mutar "alt vacío tratado como si faltara" html_a_pdf.mjs "filter((i) => !i.hasAttribute('alt'))" "filter((i) => !i.getAttribute('alt'))" "html_a_pdf: avisa"
+mutar "captura sin recorte de zona" captura.mjs "const captura = o.elemento || o.recorte" "const captura = false" "captura: --elemento"
+mutar "instalar.sh sin comprobar la suma" instalar.sh 'if [[ "$(shasum -a 256 "$destino" | cut -d'"'"' '"'"' -f1)" != "$suma" ]]; then' 'if false; then' "instalado: si una descarga"
+mutar "ortografía sin la lista de la empresa" ortografia.py "    if EMPRESA.exists():" "    if False:" "ortografía"
+mutar "ortografía sin filtrar siglas" ortografia.py ' and not re.fullmatch(r"[A-ZÁÉÍÓÚÑ]{2,5}", p)' '' "ortografía"
+mutar "transcribir sin mirar si va a git" transcribir.sh 'if [[ $permitir -eq 0 ]] && iria_a_git "$txt"; then' 'if false; then' "transcribir: no deja"
+mutar "medir sin bloquear medidores" medir_web.mjs "blockedUrlPatterns: conMedidores ? [] : RASTREADORES," "blockedUrlPatterns: []," "medir"
+mutar "medir sin identificarse" medir_web.mjs '} ${FIRMA}`,' '}`,' "medir"
+mutar "overpass repite consultas guardadas" overpass.mjs "if (!repetir && existsSync(rutas.meta)" "if (false && existsSync(rutas.meta)" "overpass: guarda"
+mutar "overpass sin esperar ante un 429" overpass.mjs "if (![429, 504].includes(respuesta.status) || intento > REINTENTOS) break;" "break;" "overpass: guarda"
+mutar "overpass envía datos personales" overpass.mjs "throw new Error('La consulta parece llevar un correo" "void ('La consulta parece llevar un correo" "overpass: guarda"
+mutar "overpass contra el servidor principal" overpass.mjs "https://overpass.private.coffee/api/interpreter" "https://overpass-api.de/api/interpreter" "overpass: por defecto"
+mutar "hueco sin control con ID" docx_util.py "        _control_de_texto(q, id)" "        pass" "cuestionario: cada respuesta"
+mutar "lector toma la ayuda por respuesta" leer_cuestionario.py 'ayuda = pr.find(f"{W}showingPlcHdr") is not None' 'ayuda = False' "cuestionario: sin contestar"
+mutar "lector sin ver lo escrito fuera" leer_cuestionario.py "cambios += [t for t in despues[j1:j2] if t]" "pass" "cuestionario: cada respuesta"
+mutar "lector sin rangos del catálogo" leer_cuestionario.py "range(desde, int(hasta or desde) + 1)" "range(desde, desde + 1)" "cuestionario: lee los dos"
+mutar "lector escribe en git" leer_cuestionario.py "if not permitir and iria_a_git(" "if False and iria_a_git(" "cuestionario: no escribe"
 
 echo
 if (( fallidas )); then echo "$fallidas mutaciones sin detectar"; exit 1; fi

@@ -12,6 +12,9 @@
  *   --solo-pantalla    solo lo que se ve al abrir, sin bajar
  *   --con-avisos       deja los avisos de cookies (para enseñar cómo son)
  *   --escala N         densidad de píxeles (1 en ordenador, 2 en móvil)
+ *   --elemento "SEL"   solo ese elemento (selector CSS: "header", "#precios", ".carta"…)
+ *   --recorte X,Y,ANCHO,ALTO   solo esa zona, en píxeles de la página (sin la densidad)
+ *   --margen N         con --elemento, N px de aire alrededor (por defecto 0)
  *   --json             imprime el resultado en JSON
  *
  * Los avisos de cookies se OCULTAN, no se aceptan: no damos consentimiento en
@@ -29,11 +32,18 @@ export function leerOpciones(argv) {
     else if (a === '--solo-pantalla') o.soloPantalla = true;
     else if (a === '--con-avisos') o.conAvisos = true;
     else if (a === '--json') o.json = true;
-    else if (['--ancho', '--alto', '--escala'].includes(a)) o[a.slice(2)] = Number(argv[++i]);
+    else if (['--ancho', '--alto', '--escala', '--margen'].includes(a)) o[a.slice(2)] = Number(argv[++i]);
+    else if (a === '--elemento') o.elemento = argv[++i];
+    else if (a === '--recorte') {
+      const n = String(argv[++i]).split(',').map(Number);
+      if (n.length !== 4 || n.some((x) => !Number.isFinite(x)) || n[2] <= 0 || n[3] <= 0) throw new Error('--recorte va así: X,Y,ANCHO,ALTO (por ejemplo 0,0,1366,600)');
+      o.recorte = { x: n[0], y: n[1], ancho: n[2], alto: n[3] };
+    }
     else if (a.startsWith('--')) throw new Error(`Opción desconocida: ${a}`);
     else libres.push(a);
   }
-  if (libres.length !== 2) throw new Error('Uso: captura.mjs URL salida.png [--movil] [--ancho N] [--alto N] [--solo-pantalla] [--con-avisos]');
+  if (libres.length !== 2) throw new Error('Uso: captura.mjs URL salida.png [--movil] [--ancho N] [--alto N] [--solo-pantalla] [--con-avisos] [--elemento SEL | --recorte X,Y,ANCHO,ALTO]');
+  if (o.elemento && o.recorte) throw new Error('O --elemento o --recorte, no los dos');
   [o.url, o.salida] = libres;
   if (!/^(https?|file):/.test(o.url)) o.url = `https://${o.url}`;
   return o;
@@ -53,7 +63,9 @@ async function main() {
     if (!o.soloPantalla) await pestana.recorrerHastaElFinal();
     // Algunos avisos aparecen con retraso: segunda pasada justo antes de capturar.
     if (!o.conAvisos) ocultos.push(...await pestana.ocultarAvisosCookies());
-    const captura = await pestana.capturar(o.salida, { completa: !o.soloPantalla });
+    const captura = o.elemento || o.recorte
+      ? await pestana.capturarZona(o.salida, { selector: o.elemento, caja: o.recorte, margen: o.margen ?? 0 })
+      : await pestana.capturar(o.salida, { completa: !o.soloPantalla });
     const resultado = { url: o.url, urlFinal: pagina.urlFinal, estado: pagina.estado, salida: o.salida, ...captura, avisosOcultados: ocultos };
     if (o.json) console.log(JSON.stringify(resultado, null, 2));
     else {

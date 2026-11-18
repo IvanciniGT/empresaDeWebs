@@ -1,0 +1,31 @@
+# Frases vigiladas · textos-web y estudio-competencia (Chema)
+#
+# Formato:  NIVEL expresión-regular ## motivo
+#   B = bloquea: no sale así nunca (promesa, ausencia afirmada, dato sin dueño)
+#   R = revisar: solo sale si tiene fuente en el expediente o es un hueco
+# Mayúsculas y minúsculas dan igual. Escribe las tildes como [aá] por si faltan.
+# Origen de cada línea: veredicto de Puri (R..), revisión de Chema y de Menchu (ronda 1).
+# Si añades una línea, añade una prueba en pruebas/test_vigilar_frases.py.
+
+B \bse (queda|quedan|quedar[aá]n?) con\b ## promesa de resultados encubierta (§10.3; «se queda con las búsquedas»)
+B \bgarantizad[oa]s?\b|\b(os|te|le|les) garantizamos\b|\bgarant[ií]a de (resultados|posici) ## promesa (§10.3); «Nadie puede garantizar…» sí vale
+B \bviral ## palabra prohibida en la ficha de Chema
+B \bm[aá]s (llamadas|clientes|visitas|reservas|ventas)\b ## promesa o dato sin fuente (R10–R23; «publicar precios trae más llamadas»)
+B \b(no|tampoco) (tiene|tienen|ten[eé]is|existe)\b ## ausencia afirmada: «no lo hemos encontrado en [fuentes]» (regla 5)
+B \b(os|te|le|les) llamamos\b|\bllamada\b ## llamada que nadie puede hacer (A-002)
+B \b(parece|est[aá]) libre\b ## dominio: solo si se ha comprobado en el registro, no por DNS
+B \bprimer[oa] (del listado|de la lista|en (google|treatwell|booksy))\b ## el orden de un marketplace no es un ranking
+B \b0 p[aá]ginas\b ## «0 páginas que controléis»: su ficha de Google es suya (Menchu)
+R \b(siempre|nunca|nadie|todos|todas|ning[uú]n|ninguna)\b ## absoluto: ¿hay fuente?
+R \b(la mayor[ií]a|suele|suelen|normalmente|cada vez m[aá]s|hoy en d[ií]a)\b ## generalización sin fuente (Puri R10–R23)
+R \b(pocas?|muchos|muchas|casi)\b ## cuantificador sin contar: dar la cifra del script o quitarlo
+R \b(el|la|los|las) mejor(es)?\b|\b[uú]nic[oa]s?\b|\bl[ií]der\b|\bn[uú]mero 1\b ## superlativo sin prueba
+R c[eé]ntric ## valoración sin fuente («zona céntrica»)
+R \bmisma manzana\b ## 250 m son varias manzanas (Menchu)
+R \bdesde hace (m[aá]s de )?\d+|\bm[aá]s de \d+ a[nñ]os\b ## antigüedad: ¿del negocio o de una reseña?
+R \bgeneraciones?\b|\bdel abuelo al nieto\b|\btoda la familia\b ## historia familiar: confirmar con el cliente
+R \bsin esperas?\b|\bno esperas\b|\bpuntual ## compromiso de servicio sacado de una reseña
+R \bespecialistas? en\b ## especialidad: ¿la dice el negocio?
+R \b(en|desde) el m[oó]vil\b|\bj[oó]ven(es)?\b ## generalización sobre clientes («el joven, que es el que busca en el móvil»)
+R \d+([.,]\d+)?\s?% ## porcentaje: ¿de dónde sale?
+R \bp[uú]blico parecido\b|\bmismo p[uú]blico\b ## decirlo con el criterio de censo.py o quitarlo

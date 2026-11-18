@@ -1,0 +1,11 @@
+{
+  "name": "herramientas-empresadewebs",
+  "private": true,
+  "description": "Dependencias de Node de las herramientas comunes. Solo Lighthouse (A-008). Se instala con herramientas/instalar.sh lighthouse.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "engines": { "node": ">=22.19" },
+  "dependencies": {
+    "lighthouse": "13.6.0"
+  }
+}

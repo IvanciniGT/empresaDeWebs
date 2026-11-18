@@ -30,7 +30,7 @@ export const RUTA_CHROME = process.env.CHROME
 
 // Se añade al User-Agent de Chrome para que el dueño de la web pueda saber quién
 // le visita. Cuando la empresa tenga web y correo propios, cambiarlos aquí y en mapa.py.
-export const FIRMA = 'empresaDeWebs/0.2 (+mailto:ivan.osuna.ayuste@gmail.com)';
+export const FIRMA = 'empresaDeWebs/0.3 (+mailto:ivan.osuna.ayuste@gmail.com)';
 
 // Medidores y anuncios: si los cargáramos, cada visita nuestra contaría como una
 // visita real en las estadísticas del cliente o de la competencia.
@@ -303,6 +303,37 @@ export class Pestana {
       adaptadaMovil,
       motivo,
     };
+  }
+
+  /**
+   * Captura solo una zona de la página: la de un elemento (`selector` CSS) o una
+   * caja en píxeles de la página ({x, y, ancho, alto}). Para el informe, donde una
+   * captura entera a 85 mm de ancho no se lee (lo pidió Puri, R57).
+   */
+  async capturarZona(ruta, { selector, caja, margen = 0 } = {}) {
+    let zona = caja;
+    if (selector) {
+      zona = await this.evaluar((sel) => {
+        const el = document.querySelector(sel);
+        if (!el) return null;
+        el.scrollIntoView({ block: 'center' });
+        const r = el.getBoundingClientRect();
+        return { x: r.left + scrollX, y: r.top + scrollY, ancho: r.width, alto: r.height };
+      }, selector);
+      if (!zona) throw new Error(`No hay ningún elemento que encaje con «${selector}»`);
+      if (!zona.ancho || !zona.alto) throw new Error(`El elemento «${selector}» no se ve (mide 0)`);
+    }
+    const m = await this.enviar('Page.getLayoutMetrics');
+    const x = Math.max(0, zona.x - margen);
+    const y = Math.max(0, zona.y - margen);
+    const ancho = Math.min(zona.ancho + 2 * margen, m.cssContentSize.width - x);
+    const alto = Math.min(zona.alto + 2 * margen, m.cssContentSize.height - y);
+    if (ancho <= 0 || alto <= 0) throw new Error('La zona pedida queda fuera de la página');
+    const { data } = await this.enviar('Page.captureScreenshot', {
+      format: 'png', captureBeyondViewport: true, clip: { x, y, width: ancho, height: alto, scale: 1 },
+    });
+    writeFileSync(ruta, Buffer.from(data, 'base64'));
+    return { ancho: Math.round(ancho * this.opciones.escala), alto: Math.round(alto * this.opciones.escala), zona: { x, y, ancho, alto } };
   }
 
   async pdf(ruta) {

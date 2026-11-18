@@ -1,0 +1,7 @@
+# Lo que instala instalar.sh y no va a git: es grande, depende de esta máquina
+# y se reconstruye igual con el script (versiones y sumas fijadas).
+# Las fuentes y los iconos SÍ van a git: son pequeños, su licencia lo permite y
+# los documentos los necesitan para salir iguales en cualquier máquina.
+/node_modules/
+/vendor/
+/modelos/

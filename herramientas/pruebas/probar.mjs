@@ -227,6 +227,8 @@ prueba('html_a_pdf: avisa de la imagen rota y de la fuente que no carga', async 
   assert.match(stderr, /no ha cargado \S*imagen-que-no-existe\.png/, 'no avisa del fallo de red');
   assert.match(stderr, /imagen rota: imagen-que-no-existe\.png/, 'no avisa de la imagen sin dibujar');
   assert.match(stderr, /fuente sin cargar: Fuente Inexistente/);
+  // La que no lleva alt avisa; la decorativa (alt="") no: solo un aviso de alt.
+  assert.equal((stderr.match(/imagen sin texto alternativo \(alt\): tesela\.png/g) ?? []).length, 1, 'el aviso de alt no distingue alt vacío de alt ausente');
   await assert.rejects(ejecutar('node', [path.join(HERRAMIENTAS, 'html_a_pdf.mjs'), path.join(AQUI, 'pdf-prueba.html'), pdf, '--estricto']));
 });
 
@@ -307,6 +309,272 @@ w.guardar(w.nuevo_documento(), ${JSON.stringify(carpeta)} + "/" + ${JSON.stringi
   assert.equal(existsSync(path.join(carpeta, 'Cuestionario de prueba.docx')), false);
   await ejecutar(PYTHON, ['-c', codigo('Otro documento.docx')]);
   assert.ok(existsSync(path.join(carpeta, 'Otro documento.docx')));
+});
+
+// ───────────────────────────── captura de una zona (R57 de Puri)
+
+prueba('captura: --elemento recorta a ese elemento y --recorte a esa caja', () => conWebDePrueba(async (web) => {
+  const png = path.join(SALIDA, 'zona.png');
+  await ejecutar('node', [path.join(HERRAMIENTAS, 'captura.mjs'), `${web.url}/servicios.html`, png, '--elemento', '#final']);
+  const p = await pixeles(png);
+  assert.deepEqual([p.ancho, p.alto], [1366, 40]);
+  assert.deepEqual(p.abajo, [0, 255, 0], 'el recorte no es la franja verde del final');
+  await ejecutar('node', [path.join(HERRAMIENTAS, 'captura.mjs'), `${web.url}/`, png, '--recorte', '10,20,300,100']);
+  const q = await pixeles(png);
+  assert.deepEqual([q.ancho, q.alto], [300, 100]);
+  await assert.rejects(ejecutar('node', [path.join(HERRAMIENTAS, 'captura.mjs'), `${web.url}/`, png, '--elemento', '#no-existe']), /No hay ningún elemento/);
+}));
+
+// ───────────────────────────── números de página (para informe.css, R56 de Puri y Lola)
+
+prueba('html_a_pdf: Chrome imprime «Página X de Y» con @page y sin número en la portada', async () => {
+  const html = path.join(SALIDA, 'numeros.html');
+  writeFileSync(html, `<!doctype html><html lang="es"><meta charset="utf-8"><style>
+    @page { size: A5; margin: 15mm 12mm 18mm; @bottom-center { content: "Página " counter(page) " de " counter(pages); font: 8pt sans-serif; } }
+    @page :first { @bottom-center { content: none; } }
+    section { break-after: page; }</style>
+    <section><h1>Portada</h1></section><section><h2>Uno</h2></section><section><h2>Dos</h2></section></html>`);
+  const pdf = path.join(SALIDA, 'numeros.pdf');
+  await ejecutar('node', [path.join(HERRAMIENTAS, 'html_a_pdf.mjs'), html, pdf]);
+  const pagina = async (n) => (await ejecutar('pdftotext', ['-f', String(n), '-l', String(n), pdf, '-'])).stdout;
+  assert.doesNotMatch(await pagina(1), /Página/);
+  assert.match(await pagina(2), /Página 2 de 3/);
+  assert.match(await pagina(3), /Página 3 de 3/);
+});
+
+// ───────────────────────────── lo instalado (A-008)
+
+prueba('instalado: fuentes con su licencia, iconos con la suya y Lighthouse 13.6.0', async () => {
+  for (const [carpeta, minimo] of [['fuentes/inter', 18], ['fuentes/fraunces', 24]]) {
+    const ttf = readdirSync(path.join(HERRAMIENTAS, carpeta)).filter((f) => f.endsWith('.ttf'));
+    assert.ok(ttf.length >= minimo, `${carpeta}: ${ttf.length} fuentes`);
+    assert.match(readFileSync(path.join(HERRAMIENTAS, carpeta, 'OFL.txt'), 'utf8'), /SIL OPEN FONT LICENSE/i);
+  }
+  assert.match(readFileSync(path.join(HERRAMIENTAS, 'iconos/phone.svg'), 'utf8'), /<svg/);
+  assert.match(readFileSync(path.join(HERRAMIENTAS, 'iconos/LICENSE.txt'), 'utf8'), /ISC License/);
+  const { stdout } = await ejecutar(path.join(HERRAMIENTAS, 'node_modules/.bin/lighthouse'), ['--version']);
+  assert.equal(stdout.trim(), '13.6.0');
+});
+
+prueba('instalado: si una descarga no cuadra con su suma, instalar.sh no instala nada', async () => {
+  const copia = path.join(SALIDA, 'instalar-copia');
+  await ejecutar('mkdir', ['-p', path.join(copia, 'vendor/descargas'), path.join(copia, 'iconos')]);
+  await ejecutar('cp', [path.join(HERRAMIENTAS, 'instalar.sh'), copia]);
+  writeFileSync(path.join(copia, 'iconos/testigo.svg'), 'lo que había antes');
+  writeFileSync(path.join(copia, 'vendor/descargas/lucide-icons-1.75.0.zip'), 'esto no es el zip de Lucide');
+  await assert.rejects(ejecutar(path.join(copia, 'instalar.sh'), ['iconos']), /no coincide/);
+  assert.equal(readFileSync(path.join(copia, 'iconos/testigo.svg'), 'utf8'), 'lo que había antes', 'ha tocado los iconos con una descarga mala');
+});
+
+// ───────────────────────────── ortografia.py (hunspell)
+
+prueba('ortografía: señala las erratas y no lo que es de la empresa, del cliente, siglas o unidades', async () => {
+  const codigo = `
+import sys, json
+sys.path.insert(0, ${JSON.stringify(HERRAMIENTAS)})
+import ortografia
+print(json.dumps(ortografia.palabras_dudosas(
+  "¿Prefierís hablarlo por WhatsApp? Abrimos a las 9 h, a 200 m de la Plaza. Hay una herrata. La RGPD manda. Peluquería Cotillas.",
+  extra=["Cotillas"])))`;
+  const dudosas = JSON.parse((await ejecutar('/usr/bin/python3', ['-c', codigo])).stdout);
+  assert.deepEqual(Object.keys(dudosas).sort(), ['Prefierís', 'herrata']);
+});
+
+// ───────────────────────────── transcribir.sh (whisper.cpp)
+
+async function notaDeVoz() {
+  // Voz sintética de macOS con un texto inventado, en Ogg/Opus como WhatsApp.
+  // Mónica: con la voz «Eddy» whisper falla cifras (comprobado), y no es lo que se prueba.
+  const aiff = path.join(SALIDA, 'nota.aiff');
+  const opus = path.join(SALIDA, 'nota.opus');
+  if (existsSync(opus)) return opus;
+  await ejecutar('say', ['-v', 'Mónica', '-o', aiff, 'Abrimos de martes a sábado. El corte de caballero cuesta doce euros.']);
+  await ejecutar('ffmpeg', ['-loglevel', 'error', '-y', '-i', aiff, '-c:a', 'libopus', '-b:a', '24k', '-ar', '48000', '-ac', '1', opus]);
+  return opus;
+}
+
+prueba('transcribir: nota de voz de WhatsApp (Ogg/Opus) a texto, en local', async () => {
+  const opus = await notaDeVoz();
+  await ejecutar(path.join(HERRAMIENTAS, 'transcribir.sh'), [opus]);
+  const texto = readFileSync(`${opus}.txt`, 'utf8');
+  assert.match(texto, /Transcripción automática/);
+  assert.match(texto, /martes a sábado/i);
+  assert.match(texto, /12 euros|doce euros/i);
+});
+
+prueba('transcribir: no deja la transcripción donde iría a git', async () => {
+  const opus = await notaDeVoz();
+  const carpeta = path.join(RAIZ, 'clientes', `prueba-paco-${process.pid}`);
+  await ejecutar('mkdir', ['-p', path.join(carpeta, 'privado')]);
+  try {
+    await assert.rejects(ejecutar(path.join(HERRAMIENTAS, 'transcribir.sh'), [opus, '--salida', carpeta]), /entraría en git/);
+    assert.equal(existsSync(path.join(carpeta, 'nota.opus.txt')), false);
+    await ejecutar(path.join(HERRAMIENTAS, 'transcribir.sh'), [opus, '--salida', path.join(carpeta, 'privado')]);
+    assert.ok(existsSync(path.join(carpeta, 'privado', 'nota.opus.txt')));
+  } finally { rmSync(carpeta, { recursive: true, force: true }); }
+});
+
+// ───────────────────────────── medir_web.mjs (Lighthouse)
+
+prueba('medir: cuatro notas en móvil y ordenador, firmado y sin medidores de visitas', () => conWebDePrueba(async (web) => {
+  const carpeta = path.join(SALIDA, 'medir');
+  await ejecutar('node', [path.join(HERRAMIENTAS, 'medir_web.mjs'), `${web.url}/contacto.html`, carpeta, '--nombre', 'prueba']).catch((e) => e);
+  const r = JSON.parse(readFileSync(path.join(carpeta, 'prueba-resumen.json'), 'utf8'));
+  for (const d of ['movil', 'ordenador']) {
+    assert.deepEqual(Object.keys(r.dispositivos[d].notas).sort(), ['accessibility', 'best-practices', 'performance', 'seo']);
+    assert.ok(Object.values(r.dispositivos[d].notas).every((n) => n > 0 && n <= 100));
+  }
+  const ajustes = JSON.parse(readFileSync(path.join(carpeta, 'prueba-movil.json'), 'utf8')).configSettings;
+  assert.ok(ajustes.blockedUrlPatterns.includes('*google-analytics.com*'), 'no bloquea los medidores de visitas');
+  const agentes = web.visitas.filter((v) => v.ruta === '/contacto.html').map((v) => v.agente);
+  assert.ok(agentes.length >= 2 && agentes.every((a) => a.includes('empresaDeWebs/')), 'Lighthouse no se identifica');
+}));
+
+// ───────────────────────────── overpass.mjs (contra un Overpass falso)
+
+prueba('overpass: guarda consulta, respuesta y metadatos; no repite; espera ante un 429', async () => {
+  const { consultar } = await import('../overpass.mjs');
+  const recibidas = [];
+  let ocupado = 1;
+  const falso = await servir(AQUI, {}, async (ruta, peticion, respuesta) => {
+    if (ruta !== '/api/interpreter') return false;
+    let cuerpo = '';
+    for await (const t of peticion) cuerpo += t;
+    recibidas.push({ agente: peticion.headers['user-agent'], consulta: new URLSearchParams(cuerpo).get('data'), hora: Date.now() });
+    if (ocupado-- > 0) { respuesta.writeHead(429).end('Too Many Requests'); return true; }
+    respuesta.writeHead(200, { 'content-type': 'application/json' }).end(JSON.stringify({
+      osm3s: { timestamp_osm_base: '2026-11-18T10:00:00Z' },
+      elements: [{ type: 'node', id: 1 }, { type: 'node', id: 2 }, { type: 'way', id: 3 }],
+    }));
+    return true;
+  });
+  const carpeta = path.join(SALIDA, 'overpass');
+  const consulta = '[out:json][timeout:60];\nnode["shop"="hairdresser"](around:1500,38.99,-1.85);\nout;';
+  const opciones = { nombre: 'censo', servidor: `${falso.url}/api/interpreter`, espera: 200, avisar: () => {} };
+  try {
+    const m = await consultar(consulta, carpeta, opciones);
+    assert.equal(recibidas.length, 2, 'tras el 429 debería reintentar una vez');
+    assert.ok(recibidas[1].hora - recibidas[0].hora >= 200, 'no ha esperado antes de reintentar');
+    assert.ok(recibidas.every((r) => r.agente.startsWith('empresaDeWebs/')));
+    assert.equal(m.elementos, 3);
+    assert.deepEqual(m.porTipo, { node: 2, way: 1 });
+    assert.equal(readFileSync(path.join(carpeta, 'censo.overpassql'), 'utf8'), consulta + '\n');
+    const meta = JSON.parse(readFileSync(path.join(carpeta, 'censo.meta.json'), 'utf8'));
+    assert.equal(meta.datosOsmDe, '2026-11-18T10:00:00Z');
+    assert.match(meta.licencia, /openstreetmap\.org\/copyright/);
+    await consultar(consulta, carpeta, opciones);
+    assert.equal(recibidas.length, 2, 'ha repetido una consulta que ya estaba guardada');
+    await assert.rejects(consultar('[out:json];\nnode["email"="ana@ejemplo.es"];\nout;', carpeta, { ...opciones, nombre: 'mal' }), /datos personales/);
+    assert.equal(recibidas.length, 2, 'ha enviado una consulta con un correo');
+  } finally { await falso.cerrar(); }
+});
+
+prueba('overpass: por defecto, la instancia que admite uso comercial (A-015)', async () => {
+  const { SERVIDOR } = await import('../overpass.mjs');
+  assert.equal(SERVIDOR, 'https://overpass.private.coffee/api/interpreter');
+});
+
+// ───────────────────────────── cuestionario con ID (Reme) y lector
+
+async function cuestionarioConIds(nombre) {
+  const docx = path.join(SALIDA, `${nombre}.docx`);
+  await ejecutar(PYTHON, ['-c', `
+import sys
+sys.path.insert(0, ${JSON.stringify(HERRAMIENTAS)})
+import docx_util as w
+doc = w.nuevo_documento(titulo="Prueba", autor="Paco")
+w.opciones(doc, ["Clientes nuevos", "Horario y cómo llegar", "Reservas"], id="A 4.1")
+w.opciones(doc, ["Mañanas", "Tardes", "Sábados", "Domingos"], por_fila=2, id="A 4.4")
+w.hueco(doc, "¿Para cuándo?", lineas=3, id="A 4.5")
+w.tabla_respuestas(doc, ["Lo que hemos visto", "¿Bien?", "Si no, lo bueno"],
+    [["Horario", "[ ]", ""], ["Teléfono", "[ ]", ""]], [8, 2.5, 6.1], columnas_respuesta=(2,), ids=["A 1.4", "A 1.3"])
+w.propuesta_texto(doc, "Quiénes somos", "Texto propuesto", id="B 6.3")
+w.guardar(doc, ${JSON.stringify(docx)})`]);
+  return docx;
+}
+
+async function rellenar(entrada, salida, respuestas) {
+  const json = path.join(SALIDA, `${path.basename(salida)}.json`);
+  writeFileSync(json, JSON.stringify(respuestas));
+  await ejecutar(PYTHON, [path.join(AQUI, 'rellenar_docx.py'), entrada, salida, json]);
+}
+
+async function leer(docx, ...mas) {
+  return (await ejecutar('/usr/bin/python3', [path.join(HERRAMIENTAS, 'leer_cuestionario.py'), docx, ...mas])).stdout;
+}
+
+const RESPUESTAS = {
+  'A 4.1|1': true, 'A 4.1|3': true, 'A 4.4|2': true, 'A 4.5': 'Para marzo (inventado)',
+  'A 1.4|¿Bien?': false, 'A 1.4|Si no, lo bueno': 'L-V 10-19', 'A 1.3|¿Bien?': true,
+  'B 6.3|Cambiadlo así': true, 'B 6.3|cambio': 'Somos tres hermanos', __fuera__: ['Nota escrita fuera de los recuadros'],
+};
+
+function comprobarLectura(md) {
+  const fila = (id) => md.split('\n').find((l) => l.startsWith(`| ${id} |`)) ?? '';
+  assert.match(fila('A 4.1'), /Clientes nuevos, Reservas \|$/);
+  assert.match(fila('A 4.4'), /Tardes \|$/);
+  assert.match(fila('A 4.5'), /Para marzo \(inventado\) \|$/);
+  assert.match(fila('A 1.4'), /¿Bien\?: ☐ · Si no, lo bueno: L-V 10-19/);
+  assert.match(fila('A 1.3'), /¿Bien\?: ☒ · Si no, lo bueno: \(vacío\)/);
+  assert.match(fila('B 6.3'), /Me gusta así: ☐ · Cambiadlo así: ☒ · cambio: Somos tres hermanos/);
+}
+
+prueba('cuestionario: cada respuesta llega con su ID, y lo escrito fuera también se ve', async () => {
+  const enviado = await cuestionarioConIds('enviado');
+  const { stdout } = await ejecutar(PYTHON, [path.join(AQUI, 'revisar_docx.py'), enviado]).catch((e) => e);
+  assert.match(stdout, /sin problemas/, stdout);
+  const recibido = path.join(SALIDA, 'recibido.docx');
+  await rellenar(enviado, recibido, RESPUESTAS);
+  const md = await leer(recibido, '--original', enviado, '--catalogo', path.join(AQUI, 'catalogo-prueba.md'));
+  comprobarLectura(md);
+  assert.match(md, /## Escrito fuera de los recuadros\n\n- Nota escrita fuera de los recuadros\n/);
+  assert.match(md, /\| A 4\.1 \| ¿Para qué queréis la web\? \|/, 'no ha sacado la pregunta del catálogo');
+});
+
+prueba('cuestionario: sin contestar, sale vacío (no «Escribid aquí»)', async () => {
+  const enviado = await cuestionarioConIds('vacio');
+  const md = await leer(enviado);
+  assert.doesNotMatch(md, /Escribid/);
+  assert.match(md, /\| A 4\.5 \|  \| \(vacío\) \|/);
+  assert.match(md, /\| A 4\.1 \|  \| \(ninguna marcada\) \|/);
+});
+
+prueba('cuestionario: las respuestas sobreviven a guardarlo con LibreOffice', async () => {
+  const enviado = await cuestionarioConIds('lo-enviado');
+  const recibido = path.join(SALIDA, 'lo-recibido.docx');
+  await rellenar(enviado, recibido, RESPUESTAS);
+  const salida = path.join(SALIDA, 'libreoffice');
+  await ejecutar('soffice', [`-env:UserInstallation=file://${path.join(SALIDA, 'perfil-lo')}`, '--headless',
+    '--convert-to', 'docx:MS Word 2007 XML', '--outdir', salida, recibido], { timeout: 120000 });
+  const md = await leer(path.join(salida, 'lo-recibido.docx'), '--original', enviado);
+  comprobarLectura(md);
+  assert.doesNotMatch(md.split('## Escrito fuera')[1] ?? '', /Para marzo|L-V 10-19|tres hermanos/, 'las respuestas han salido de sus controles');
+});
+
+prueba('cuestionario: lee los dos formatos del catálogo y no los ID retirados', async () => {
+  const codigo = `
+import sys, json
+sys.path.insert(0, ${JSON.stringify(HERRAMIENTAS)})
+import leer_cuestionario as l
+print(json.dumps(sorted(l.leer_catalogo(${JSON.stringify(path.join(AQUI, 'catalogo-prueba.md'))}))))`;
+  const ids = JSON.parse((await ejecutar('/usr/bin/python3', ['-c', codigo])).stdout);
+  assert.deepEqual(ids, ['A 1.1', 'A 1.2', 'A 1.3', 'A 4.1', 'B 6.9', 'B1 1.4']);
+});
+
+prueba('cuestionario: no escribe las respuestas donde irían a git; sin ID, avisa', async () => {
+  const enviado = await cuestionarioConIds('git');
+  const dentro = path.join(RAIZ, 'clientes', `prueba-paco-${process.pid}`, 'respuestas.md');
+  try {
+    await assert.rejects(leer(enviado, '-o', dentro), /entraría en git/);
+    assert.equal(existsSync(dentro), false);
+  } finally { rmSync(path.dirname(dentro), { recursive: true, force: true }); }
+  const sinIds = path.join(SALIDA, 'sin-ids.docx');
+  await ejecutar(PYTHON, ['-c', `
+import sys
+sys.path.insert(0, ${JSON.stringify(HERRAMIENTAS)})
+import docx_util as w
+doc = w.nuevo_documento(); w.hueco(doc, "Sin ID"); w.guardar(doc, ${JSON.stringify(sinIds)})`]);
+  await assert.rejects(leer(sinIds), /no tiene controles con ID/);
 });
 
 // ───────────────────────────── ejecución
