@@ -1,0 +1,4 @@
+{"_nota": "Ronda 2 sin capturas de Google ni censo (Overpass no respondió el 2026-11-19). Cada valor, con su fuente del expediente.",
+ "dominios_probados_sin_respuesta": {"valor": 7, "fuente": "expediente §6 (dig y curl)", "fecha": "2026-11-18 18:36"},
+ "meses_desde_comprobacion_horario_osm": {"valor": 7, "fuente": "OSM nodo 13516520881, check_date:opening_hours=2026-04-12", "fecha": "2026-11-19 14:20"},
+ "datos_del_local_en_osm": {"valor": 4, "detalle": "dirección, horario, público y accesibilidad", "fuente": "OSM nodo 13516520881 v6", "fecha": "2026-11-19 14:20"}}

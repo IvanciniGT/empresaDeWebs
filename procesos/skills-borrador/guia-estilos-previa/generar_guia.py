@@ -83,7 +83,9 @@ def comprobar(datos):
             errores.append(f"{para}: {paleta[delante]['nombre']} sobre {paleta[fondo]['nombre']} "
                            f"da {_coma(r)} : 1 y necesita {_coma(minimo)} : 1")
     accion = datos["accion_principal"]
-    if not accion.get("comprobado"):
+    # «pendiente» es honesto: no hay ningún canal comprobado y la guía lo dice; lo que no vale
+    # es presentar como comprobado un canal que no lo está.
+    if not accion.get("comprobado") and not accion.get("pendiente"):
         errores.append(f"la acción principal («{accion['etiqueta']}») usa un canal sin comprobar: "
                        "usad el teléfono hasta que el cliente confirme otro (regla 3)")
     return errores, filas
@@ -180,6 +182,10 @@ def documento(datos, filas):
     iconos = "".join(f"<span class='icono'>{_icono(n)}<code>{e(n)}</code></span>" for n in datos["iconos"])
 
     a = datos["accion_principal"]
+    if a.get("comprobado"):
+        canal = f"canal comprobado: {e(a['dato'])}"
+    else:
+        canal = f"<strong>[a confirmar]</strong>: {e(a['dato'])}"
     secciones = "".join(
         f"<li><strong>{e(s['nombre'])}</strong>: {e(s['que'])}"
         + (f" <span class='nota'>· solo si {e(s['si'])}</span>" if s.get("si") else "") + "</li>"
@@ -271,7 +277,7 @@ def documento(datos, filas):
     <div class="movil">
       <div class="barra">{e(datos['negocio'])}</div>
       <div class="zona">[Frase principal · Chema · 40–45 caracteres]</div>
-      <div class="boton principal">{e(a['etiqueta'])}</div>
+      <div class="boton principal">{e(a['etiqueta'])}{'' if a.get('comprobado') else ' [a confirmar]'}</div>
       <div class="zona">Hoy: [horario de hoy] · <u>Ver horario</u></div>
       <div class="boton secundario">Cómo llegar</div>
       <div class="pliegue">fin de la primera pantalla</div>
@@ -281,7 +287,7 @@ def documento(datos, filas):
     <div>
       <h3>Regla de los tres segundos</h3>
       <ul><li>Llamar: un toque (acción principal: <strong>{e(a['etiqueta'])}</strong>,
-      canal comprobado: {e(a['dato'])}).</li><li>Horario de hoy, a la vista.</li><li>Cómo llegar: un toque al mapa.</li></ul>
+      {canal}).</li><li>Horario de hoy, a la vista.</li><li>Cómo llegar: un toque al mapa.</li></ul>
       <h3>Secciones, en este orden</h3><ol>{secciones}</ol>
       <p class="nota">Esquema en grises y a baja fidelidad a propósito. El diseño de verdad se hace al contratar.</p>
     </div>

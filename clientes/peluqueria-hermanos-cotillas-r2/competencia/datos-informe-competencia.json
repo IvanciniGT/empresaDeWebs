@@ -1,0 +1,110 @@
+{
+ "excluidos_suministro": 9,
+ "total_json": 283,
+ "pelu": 273,
+ "anillos": {
+  "250": 33,
+  "500": 85,
+  "1000": 206,
+  "1500": 273
+ },
+ "dir500": [
+  [
+   79,
+   "Barber Shop Gentleman"
+  ],
+  [
+   106,
+   "The Barber Shop Toño"
+  ],
+  [
+   119,
+   "The Boyz"
+  ],
+  [
+   208,
+   "The Yisus"
+  ],
+  [
+   219,
+   "Sempiterno"
+  ],
+  [
+   221,
+   "Barber Woman Noelia Expósito"
+  ],
+  [
+   246,
+   "Barbershop Miami"
+  ],
+  [
+   286,
+   "Jumani Barber"
+  ],
+  [
+   317,
+   "Barber Shop Villalba"
+  ],
+  [
+   338,
+   "Barbería Central"
+  ],
+  [
+   355,
+   "GRS Black"
+  ],
+  [
+   377,
+   "Wassim"
+  ],
+  [
+   404,
+   "Carlos Conde"
+  ],
+  [
+   407,
+   "Omar Rabii"
+  ],
+  [
+   437,
+   "Mateu Barber"
+  ],
+  [
+   463,
+   "Barbería Ash"
+  ]
+ ],
+ "cerca": [
+  [
+   41,
+   "Actuall"
+  ],
+  [
+   46,
+   "My Bell"
+  ],
+  [
+   51,
+   "MG Peluqueros"
+  ],
+  [
+   79,
+   "Barber Shop Gentleman"
+  ],
+  [
+   92,
+   "Tonos"
+  ]
+ ],
+ "barb_cerca": [
+  79,
+  "Barber Shop Gentleman"
+ ],
+ "pts500": 85,
+ "pts_dir": 16,
+ "con_web": 2,
+ "con_insta": 2,
+ "dir500_web": [
+  "The Barber Shop Toño"
+ ]
+}

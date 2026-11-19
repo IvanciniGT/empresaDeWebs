@@ -1,0 +1,112 @@
+/* Peluquería Hermanos Cotillas · esqueleto (E-022) · primero el móvil.
+   Colores y tipos de la guía previa (ronda 1). Fuentes locales (SIL OFL, en fuentes/).
+   Sin cookies, sin medidores y sin nada cargado de fuera. */
+
+@font-face { font-family: "Inter"; font-weight: 400; src: url("fuentes/Inter-Regular.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Inter"; font-weight: 600; src: url("fuentes/Inter-SemiBold.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Inter"; font-weight: 700; src: url("fuentes/Inter-Bold.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Fraunces"; font-weight: 600; src: url("fuentes/Fraunces72pt-SemiBold.ttf") format("truetype"); font-display: swap; }
+@font-face { font-family: "Fraunces"; font-weight: 800; src: url("fuentes/Fraunces72pt-Black.ttf") format("truetype"); font-display: swap; }
+
+:root {
+  --tinta: #1F2A37; --papel: #F6F0E6; --cobre: #9A5B2E; --rojo: #9E2B25;
+  --piedra: #5E6670; --blanco: #FFFFFF; --linea: #E2D8C8;
+  --ancho: 68rem;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--papel); color: var(--tinta);
+  font: 400 1.0625rem/1.6 "Inter", system-ui, sans-serif; padding-bottom: 5rem; }
+h1, h2, h3 { font-family: "Fraunces", Georgia, serif; line-height: 1.15; margin: 0 0 .6rem; }
+h1 { font-weight: 800; font-size: 2rem; }
+h2 { font-weight: 600; font-size: 1.5rem; margin-top: 2rem; }
+h3 { font-weight: 600; font-size: 1.15rem; }
+p { margin: 0 0 1rem; }
+a { color: var(--cobre); }
+a:focus-visible, .boton:focus-visible { outline: 3px solid var(--rojo); outline-offset: 2px; }
+img { max-width: 100%; height: auto; }
+.contenedor { max-width: var(--ancho); margin: 0 auto; padding: 0 1.25rem; }
+.saltar { position: absolute; left: -999px; }
+.saltar:focus { left: 1rem; top: 1rem; background: var(--blanco); padding: .5rem 1rem; z-index: 10; }
+
+/* Franja de poste de barbero: el rojo, solo en detalles pequeños. */
+.franja { height: 6px; background: repeating-linear-gradient(-45deg, var(--rojo) 0 10px, var(--papel) 10px 20px, var(--tinta) 20px 30px, var(--papel) 30px 40px); }
+
+/* Cabecera y menú (sin JavaScript: <details> en el móvil) */
+.cabecera { background: var(--tinta); color: var(--papel); }
+.cabecera .contenedor { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 3.75rem; }
+.marca { color: var(--papel); text-decoration: none; font: 800 1.2rem/1.1 "Fraunces", Georgia, serif; }
+.marca small { display: block; font: 600 .7rem/1.3 "Inter", sans-serif; letter-spacing: .2em; color: #d9b896; text-transform: uppercase; }
+.menu summary { list-style: none; cursor: pointer; color: var(--papel); font-weight: 600; padding: .6rem .9rem; border: 1.5px solid #4a5868; border-radius: .5rem; }
+.menu summary::-webkit-details-marker { display: none; }
+.menu ul { list-style: none; margin: 0; padding: .5rem 0; position: absolute; left: 0; right: 0; top: 3.75rem; background: var(--tinta); z-index: 5; }
+.menu li a { display: block; padding: .85rem 1.25rem; color: var(--papel); text-decoration: none; border-top: 1px solid #33414f; }
+.menu-escritorio { display: none; list-style: none; margin: 0; padding: 0; gap: .25rem; }
+.menu-escritorio a { color: var(--papel); text-decoration: none; padding: .5rem .7rem; border-radius: .4rem; font-weight: 600; font-size: .95rem; }
+.menu-escritorio a[aria-current="page"] { color: #e6c29f; text-decoration: underline; text-underline-offset: .3em; }
+.menu a[aria-current="page"] { color: #e6c29f; font-weight: 700; }
+
+/* Botones */
+.boton { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 3rem;
+  padding: .75rem 1.25rem; border-radius: .6rem; font-weight: 700; text-decoration: none; }
+.boton svg { width: 1.25rem; height: 1.25rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.boton.principal { background: var(--cobre); color: var(--blanco); }
+.boton.secundario { background: var(--blanco); color: var(--tinta); border: 2px solid var(--tinta); }
+.botones { display: grid; gap: .75rem; margin: 1.25rem 0; }
+
+/* Barra fija abajo en el móvil: llamar y WhatsApp a un toque */
+.barra-accion { position: fixed; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: 1fr 1fr;
+  gap: .5rem; padding: .6rem; background: var(--tinta); z-index: 4; }
+.barra-accion .boton { min-width: 0; padding: .75rem .5rem; }
+.barra-accion .boton { min-height: 3.25rem; }
+
+/* Portada */
+.portada { background: var(--tinta); color: var(--papel); padding: 2rem 0 2.5rem; }
+.portada h1 { color: var(--papel); }
+.portada .entradilla { color: #d8dde3; }
+.foto-pendiente { aspect-ratio: 4 / 3; border-radius: .8rem; display: grid; place-items: center; text-align: center; padding: 1rem;
+  background: repeating-linear-gradient(45deg, #d9cbb8 0 12px, #e6dccd 12px 24px); color: var(--tinta); font-size: .9rem; }
+.portada .foto-pendiente { margin-top: 1.5rem; }
+
+/* Tarjetas */
+.tarjetas { display: grid; gap: 1rem; margin: 1rem 0; }
+.tarjeta { background: var(--blanco); border-radius: .8rem; padding: 1.25rem; border: 1px solid var(--linea); }
+.tarjeta h3 { display: flex; align-items: center; gap: .5rem; }
+.tarjeta h3 svg { width: 1.4rem; height: 1.4rem; fill: none; stroke: var(--cobre); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+/* Huecos y borradores: VISIBLES a propósito. Se quitan al tener el dato real. */
+.hueco { background: #FFF1B8; color: #5a4300; border: 1.5px dashed #a07d00; border-radius: .3rem; padding: 0 .35rem; font-weight: 600; white-space: normal; }
+.borrador { border-left: 5px solid var(--rojo); background: #fbe9e7; padding: .75rem 1rem; border-radius: .4rem; margin: 1rem 0; font-size: .95rem; }
+.borrador strong { color: var(--rojo); }
+.aviso-esqueleto { background: #FFF1B8; color: #3d2e00; text-align: center; font-size: .85rem; padding: .4rem 1rem; }
+
+/* Servicios */
+.servicios { list-style: none; padding: 0; margin: 0; background: var(--blanco); border-radius: .8rem; border: 1px solid var(--linea); }
+.servicios li { display: flex; justify-content: space-between; gap: 1rem; padding: .85rem 1.1rem; border-bottom: 1px dashed var(--linea); }
+.servicios li:last-child { border-bottom: 0; }
+
+/* Horario */
+.horario { width: 100%; border-collapse: collapse; background: var(--blanco); border-radius: .8rem; overflow: hidden; }
+.horario th, .horario td { text-align: left; padding: .7rem 1rem; border-bottom: 1px solid var(--linea); }
+.horario th { font-weight: 600; }
+
+/* Pie */
+.pie { background: var(--tinta); color: #d8dde3; margin-top: 3rem; padding: 2rem 0 1.5rem; font-size: .9rem; }
+.pie a { color: #e6c29f; }
+.pie ul { list-style: none; padding: 0; margin: .75rem 0; display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; }
+.nota { color: var(--piedra); font-size: .9rem; }
+.pie .nota { color: #aab3bd; }
+
+/* A partir de tableta / ordenador */
+@media (min-width: 48rem) {
+  body { padding-bottom: 0; }
+  h1 { font-size: 3.25rem; }
+  h2 { font-size: 2rem; }
+  .barra-accion { display: none; }
+  .menu { display: none; }
+  .menu-escritorio { display: flex; }
+  .portada .contenedor { display: grid; grid-template-columns: 1.1fr 1fr; gap: 2.5rem; align-items: center; }
+  .portada .foto-pendiente { margin-top: 0; }
+  .botones { grid-template-columns: auto auto; justify-content: start; }
+  .tarjetas { grid-template-columns: repeat(3, 1fr); }
+}
